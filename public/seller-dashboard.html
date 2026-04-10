@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Seller Dashboard</title>
+<link rel="stylesheet" href="css/seller-dashboard.css">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Seller Panel</h2>
+        <ul>
+            <li>Dashboard</li>
+            <li id="addProductBtn">Add Product</li>
+            <li>My Products</li>
+            <li>Orders</li>
+        </ul>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+
+        <!-- Top Cards -->
+        <div class="cards">
+            <div class="card">
+                <h3>Total Sales</h3>
+                <p>৳ 25,000</p>
+            </div>
+            <div class="card">
+                <h3>Orders</h3>
+                <p>120</p>
+            </div>
+            <div class="card">
+                <h3>Products</h3>
+                <p id="totalProducts">0</p>
+            </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="chart">
+            <h3>Sales Overview</h3>
+            <canvas id="myChart"></canvas>
+        </div>
+
+        <!-- Product Table -->
+        <div class="table">
+            <h3>My Products</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>District</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="productTable"></tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/seller-dashboard.js"></script>
+<script>
+    document.getElementById('addProductBtn').addEventListener('click', () => {
+    window.location.href = 'add-product.html';
+});
+</script>
+</body>
+</html>

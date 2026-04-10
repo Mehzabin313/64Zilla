@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Product Details</title>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/product_container.css">
+    <link rel="stylesheet" href="css/discount-sale.css">
+    <link rel="stylesheet" href="css/store.css">
+    <link rel="stylesheet" href="css/footer.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+
+
+
+
+
+<style>
+body{
+  font-family: Arial, Helvetica, sans-serif;
+  background:#ffffff;
+  margin:0;
+  padding:30px;
+}
+
+.product-wrapper{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  gap:30px;
+}
+
+/* LEFT IMAGE SECTION */
+.left{
+  width:45%;
+}
+
+.main-img{
+  width:100%;
+  border-radius:6px;
+}
+
+.thumb-row{
+  display:flex;
+  gap:10px;
+  margin-top:12px;
+}
+
+.thumb-row img{
+  width:70px;
+  height:70px;
+  border-radius:6px;
+  border:1px solid #ddd;
+  object-fit:cover;
+  cursor:pointer;
+}
+
+/* RIGHT CONTENT */
+.right{
+  width:55%;
+}
+
+.location{
+  font-size:14px;
+  color:#666;
+}
+
+.title{
+  font-size:22px;
+  font-weight:700;
+  color:#0a7c3b;
+  margin:6px 0;
+}
+
+.rating{
+  font-size:14px;
+  color:#444;
+  margin:6px 0;
+}
+
+.rating span{
+  color:#f4b400;
+  font-weight:600;
+}
+
+.price{
+  font-size:22px;
+  font-weight:700;
+  margin:12px 0;
+}
+
+.qty-box{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:10px 0;
+}
+
+.qty-btn{
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  border:1px solid #9ccc65;
+  background:#e8f5e9;
+  color:#2e7d32;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.qty-value{
+  width:26px;
+  text-align:center;
+}
+
+.meta{
+  font-size:14px;
+  margin:6px 0;
+}
+
+.meta span{
+  color:#888;
+}
+
+.sold{
+  color:#d32f2f;
+  font-size:14px;
+  margin-top:4px;
+}
+
+.option{
+  font-size:14px;
+  margin-top:10px;
+}
+
+.order-btn{
+  margin-top:14px;
+  padding:10px 18px;
+  background:#7cb342;
+  border:none;
+  border-radius:6px;
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.order-btn:hover{
+  background:#689f38;
+}
+
+/* DELIVERY BOX */
+.delivery{
+  margin-top:20px;
+  border-top:1px solid #eee;
+  padding-top:12px;
+}
+
+.delivery h4{
+  margin:0 0 8px 0;
+  font-size:15px;
+  color:#2e7d32;
+}
+
+.address{
+  font-size:13px;
+  color:#555;
+}
+</style>
+</head>
+
+<body>
+    <div class="home-page">
+
+    <!-- Navbar -->
+    <div class="nav">
+        <div class="logo">
+            <h4>64Zilla!</h4>
+        </div>
+
+        <div class="navmenu">
+            <ul class="navul">
+                <li class="navli"><a href="home.html">HOME</a></li>
+                <li class="navli"><a href="#main">SHOP</a></li>
+                <li class="navli"><a href="#contactus">CONTACT</a></li>
+                <li class="navli"><a href="#">FAQ</a></li>
+                <li class="navli"><a href="seller-register.html">SELLER</a></li>
+                <li class="navli"><a href="profile.html">PROFILE</a></li>
+            </ul>
+
+            <div class="navbtn">
+                <button type="button" id="login-btn">LOGIN</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Menu -->
+    <div class="nav2">
+        <div class="menu">
+            <button id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+        </div>
+
+        <div class="search">
+            <input type="text" id="search" placeholder="Search">
+            <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+
+        <div class="cart" id="cartdiv">
+    <button type="button" id="cart" onclick="window.location.href='cart-item.html'">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span id="cart-count">0</span>
+    </button>
+</div>
+
+    </div>
+
+
+<div class="product-wrapper"style="margin-top:30px ;">
+
+  <!-- LEFT -->
+  <div class="left">
+    <img src="images/chomchom-cart.jpg" class="main-img" alt="Chomchom">
+
+    <div class="thumb-row">
+      <img src="images/chomchom-cart.jpg">
+      <img src="images/chomchom-cart.jpg">
+      <img src="images/chomchom-cart.jpg">
+      <img src="images/chomchom-cart.jpg">
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right">
+
+    <div class="location">Tangail</div>
+
+    <div class="title">
+      Chomchom – Traditional Bengali Sweets (Premium Quality)
+    </div>
+
+    <div class="rating">
+      <span>★ 4.5</span> Rating &nbsp; (150 Reviews)
+    </div>
+
+    <div class="price">৳ 400</div>
+
+    <div class="qty-box">
+      <button class="qty-btn">−</button>
+      <div class="qty-value">2</div>
+      <button class="qty-btn">+</button>
+    </div>
+
+    <div class="meta"><span>SKU:</span> CHM2025</div>
+    <div class="meta"><span>Availability:</span> In Stock</div>
+    <div class="meta"><span>Type:</span> Bengali Traditional Sweet</div>
+
+    <div class="sold">400kg sold in last 7 days</div>
+
+    <div class="option"><span>Options:</span> 500g</div>
+
+    <button class="order-btn">Order Now</button>
+
+    <div class="delivery">
+      <h4>Delivery information</h4>
+      <div class="address">
+        Delivery to <br>
+        Dhaka, Dhanmondi <br>
+        Banani Road No. 12 - 19
+      </div>
+    </div>
+
+  </div>
+
+</div>
+<!-- Footer -->
+<footer class="site-footer "style="margin-top:30px ;">
+    <div class="footer-top">
+        <div class="footer-column brand-info">
+            <h2>Hatbondhu</h2>
+            <p>Premium Fruits (PF) is an Agritech fruit chain initiative by BD Assistant Ltd...</p>
+
+            <p>e-TIN **61486639816**</p>
+            <p>Trade License No **2303JR/2400040011**</p>
+
+            <p class="join-community">JOIN OUR COMMUNITY</p>
+        </div>
+
+        <div class="contact-us">
+            <h2>Contact Us</h2>
+            <p>Head Office: House #108, Road #01, Rangpur-5400</p>
+            <p>Dhaka Warehouse: Millennium City, Keraniganj</p>
+            <p>+88 09677**67</p>
+            <p>Hatbondhu@gmail.com</p>
+        </div>
+
+        <div class="useful-link">
+            <h2 style="color:#A5F927">Useful Link</h2>
+            <ul>
+                <li><a href="#">FAQs</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Terms & Condition</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Refund Policy</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <hr class="separator-line">
+
+    <div class="footer-bottom">
+        <img src="images/gerwbakpsj298.png">
+    </div>
+</footer>
+
+<!-- JS Files -->
+<script src="js/login.js"></script>
+<script src="js/index.js"></script>
+<script src="js/product.js"></script>
+<script src="js/discount-sale.js"></script>
+<script src="js/store.js"></script>
+<script src="js/container2.js"></script>
+</body>
+</html>

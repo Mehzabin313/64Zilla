@@ -1,0 +1,76 @@
+ * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #02532B;
+    }
+
+    .register-container {
+        background-color: #96d85d56;
+        padding: 40px 30px;
+        width: 380px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .register-container img {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 15px;
+    }
+
+    .register-container h2 {
+        color: #02532B;
+        margin-bottom: 25px;
+        font-weight: normal;
+        letter-spacing: 1px;
+    }
+
+    .register-container input {
+        width: 100%;
+        padding: 12px 15px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 5px;
+    }
+
+    .register-container input:focus {
+        outline: none;
+        border: 2px solid #4f6cb3;
+    }
+
+    .register-container .register-btn {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        background-color: #96D85D;
+        color: #02532B;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .register-container .register-btn:hover {
+        background-color:  #96D85D;
+    }
+
+    .register-container .login {
+        margin-top: 15px;
+        color: #e0e0e0;
+        font-size: 14px;
+    }
+
+    .register-container .login a {
+        color: #fff;
+        text-decoration: underline;
+        font-weight: bold;
+    }

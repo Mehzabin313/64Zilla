@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product Dashboard</title>
+    <link rel="stylesheet" href="css/seller-product_detail.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+    <header class="dashboard-nav">
+        <div class="logo">
+            <img src="path/to/hatbondhu-logo.png" alt="Hatbondhu Logo">
+        </div>
+        <nav class="dash-links">
+            <a href="#">STORE</a>
+            <a href="#">DASHBOARD</a>
+            <a href="#">CONFIGURATION</a>
+            <a href="#">PRODUCTS</a>
+            <a href="#">ORDERS</a>
+            <a href="#">PROFILE</a>
+            <button class="logout-btn">LOGOUT</button>
+        </nav>
+    </header>
+
+    <section class="secondary-nav-dash">
+        <button class="menu-icon"><i class="fas fa-bars"></i></button>
+        <div class="search-bar">
+            <input type="text" placeholder="Search">
+            <button class="search-icon"><i class="fas fa-search"></i></button>
+        </div>
+    </section>
+
+    <main class="dashboard-content-area">
+        <div class="page-header">
+            <p class="breadcrumbs">Products/Add products</p>
+            <h1 class="page-title">Add Product</h1>
+        </div>
+
+        <form class="add-product-form">
+            <div class="product-details-box">
+                <h2 class="box-title">PRODUCT DETAILS</h2>
+                <p class="box-subtitle">Add product details here</p>
+
+                <input type="text" placeholder="Enter Product Name">
+                <input type="text" placeholder="Enter District">
+                <input type="number" placeholder="Enter Quantity">
+                <input type="number" placeholder="Enter Price">
+                <input type="number" placeholder="Enter Discount">
+            </div>
+
+            <div class="product-image-box">
+                <h2 class="box-title">PRODUCT IMAGE</h2>
+                <p class="box-subtitle">here you can upload images of product. You are allowed to upload 1 images at a time</p>
+
+                <div class="image-upload-area">
+                    </div>
+                
+                <button type="button" class="upload-btn">UPLOAD IMAGE</button>
+            </div>
+        </form>
+    </main>
+
+</body>
+</html>

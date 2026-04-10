@@ -1,0 +1,97 @@
+<!-- CART BUTTON -->
+<div class="cart" id="cartdiv" style="position:relative;">
+  <button type="button" id="cart">
+    <i class="fa-solid fa-cart-shopping"></i>
+    <span id="cart-count">0</span>
+  </button>
+</div>
+
+<!-- CART DROPDOWN -->
+<div id="order-review" style="display:none; 
+position:absolute; top:50px; right:0; width:300px;
+max-height:400px; overflow-y:auto; 
+background:white; border:1px solid #ccc; 
+padding:10px; z-index:1000;">
+  <!-- Products will appear here -->
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  let totalCart = 0;
+  let cartItems = [];
+
+  const cartCount = document.getElementById("cart-count");
+  const orderReview = document.getElementById("order-review");
+  const cartBtn = document.getElementById("cart");
+
+  // example product
+  const product2 = [
+    { name: "Chomchom", image: "images/Tangail-Chomchom.jpg", district:"Tangail", weight:"500gm", price:250 },
+    { name: "Jamdani Saree", image: "images/jamdani.jpeg", district:"Dhaka", weight:"1 Piece", price:10000 }
+  ];
+
+  // Create products in container2
+  const container2 = document.getElementById("container2");
+  product2.forEach((item, index)=>{
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <h6>${item.name}</h6>
+      <p>৳ ${item.price}</p>
+      <button id="add-${index}">Add to Cart</button>
+    `;
+    container2.appendChild(div);
+
+    document.getElementById(`add-${index}`).addEventListener("click", ()=>{
+      let existing = cartItems.find(p => p.name===item.name);
+      if(existing){ existing.quantity++; } 
+      else { cartItems.push({...item, quantity:1}); }
+      totalCart++;
+      cartCount.textContent = totalCart;
+      renderCart();
+    });
+  });
+
+  // Render cart
+  function renderCart(){
+    orderReview.innerHTML="";
+    cartItems.forEach((item,index)=>{
+      const div = document.createElement("div");
+      div.innerHTML = `
+        <p>${item.name} x ${item.quantity} - ৳ ${item.price*item.quantity}</p>
+        <button onclick="plusItem(${index})">+</button>
+        <button onclick="minusItem(${index})">-</button>
+      `;
+      orderReview.appendChild(div);
+    });
+  }
+
+  // Plus / Minus functions
+  window.plusItem = function(index){
+    cartItems[index].quantity++;
+    totalCart++;
+    cartCount.textContent=totalCart;
+    renderCart();
+  };
+  window.minusItem = function(index){
+    if(cartItems[index].quantity>1){ cartItems[index].quantity--; totalCart--; }
+    else{ totalCart -= 1; cartItems.splice(index,1); }
+    cartCount.textContent=totalCart;
+    renderCart();
+  };
+
+  // Toggle cart dropdown
+  cartBtn.addEventListener("click", e=>{
+    e.stopPropagation(); // prevent document click
+    orderReview.style.display = orderReview.style.display==="block" ? "none" : "block";
+  });
+
+  // Click outside to hide
+  document.addEventListener("click", e=>{
+    if(!orderReview.contains(e.target) && e.target!==cartBtn){
+      orderReview.style.display="none";
+    }
+  });
+
+});
+</script>

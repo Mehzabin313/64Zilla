@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login form</title>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/product_container.css">
+    <link rel="stylesheet" href="css/discount-sale.css">
+    <link rel="stylesheet" href="css/store.css">
+    <link rel="stylesheet" href="css/footer.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+</head>
+<body>
+
+<div class="home-page">
+
+    <!-- Navbar -->
+    <div class="nav">
+        <div class="logo">
+            <h4>64Zilla!</h4>
+        </div>
+
+        <div class="navmenu">
+            <ul class="navul">
+                <li class="navli"><a href="home.html">HOME</a></li>
+                <li class="navli"><a href="#main">SHOP</a></li>
+                <li class="navli"><a href="#contactus">CONTACT</a></li>
+                <li class="navli"><a href="#">FAQ</a></li>
+                <li class="navli"><a href="seller-register.html">SELLER</a></li>
+                <li class="navli"><a href="profile.html">PROFILE</a></li>
+            </ul>
+
+            <div class="navbtn">
+                <button type="button" id="login-btn">LOGIN</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Menu -->
+    <div class="nav2">
+        <div class="menu">
+            <button id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+        </div>
+
+        <div class="search">
+            <input type="text" id="search" placeholder="Search">
+            <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+
+        <div class="cart" id="cartdiv">
+    <button type="button" id="cart" onclick="window.location.href='order-review.html'">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span id="cart-count">0</span>
+    </button>
+</div>
+
+    </div>
+
+    <!-- Banner -->
+    <div class="landinglogo">
+        <img src="images/Jamdani_Saree_2.webp">
+    </div>
+
+    <!-- Category Buttons -->
+    <div class="category">
+        <a href="tangail.html" class="category-btn" 
+           style="background-color: #02532B; min-height: 80px; color:white; width: 100px; border: solid #02532B; border-radius: 20px;">
+           Tangail
+        </a>
+
+        <a href="dhaka.html" class="category-btn">Dhaka</a>
+        <a href="rajshahi.html" class="category-btn">Rajshahi</a>
+        <a href="dhaka.html" class="category-btn">Bogura</a>
+        <a href="dhaka.html" class="category-btn">Natore</a>
+        <a href="dhaka.html" class="category-btn">Norshindi</a>
+        <a href="dhaka.html" class="category-btn">Barisal</a>
+        <a href="dhaka.html" class="category-btn">Jamalpur</a>
+        <a href="dhaka.html" class="category-btn">Khulna</a>
+    </div>
+
+    <!-- Product Category -->
+    <div class="product-heading">
+        <h5 class="mb-3">Explore products</h5>
+
+        <div class="category-buttons">
+            <button class="cat-btn active" data-category="all">All</button>
+            <button class="cat-btn" data-category="fruits">Fruits</button>
+            <button class="cat-btn" data-category="clothes">Clothes</button>
+            <button class="cat-btn" data-category="crafts">Crafts</button>
+            <button class="cat-btn" data-category="sweets">Sweets</button>
+        </div>
+    </div>
+
+    <div class="product-row" id="product-container"></div>
+
+    
+
+    <!-- Discount and Sale -->
+    <div class="dis-container">
+        <h5 class="mb-3; padding: 0 30px;">Discount and Sale</h5>
+        <div id="container3" class="row2"></div>
+    </div>
+   
+    <!-- Store Section -->
+    <div id="store-section" class="store">
+        <div class="store-menu">
+            <h5>Featured store</h5>
+            <h5>View all store</h5>
+        </div>
+        <div id="store" class="row2"></div>
+    </div>
+
+    <div id="store-grid"></div>
+
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+    <div class="footer-top">
+        <div class="footer-column brand-info">
+            <h2>Hatbondhu</h2>
+            <p>Premium Fruits (PF) is an Agritech fruit chain initiative by BD Assistant Ltd...</p>
+
+            <p>e-TIN **61486639816**</p>
+            <p>Trade License No **2303JR/2400040011**</p>
+
+            <p class="join-community">JOIN OUR COMMUNITY</p>
+        </div>
+
+        <div class="contact-us">
+            <h2>Contact Us</h2>
+            <p>Head Office: House #108, Road #01, Rangpur-5400</p>
+            <p>Dhaka Warehouse: Millennium City, Keraniganj</p>
+            <p>+88 09677**67</p>
+            <p>Hatbondhu@gmail.com</p>
+        </div>
+
+        <div class="useful-link">
+            <h2 style="color:#A5F927">Useful Link</h2>
+            <ul>
+                <li><a href="#">FAQs</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Terms & Condition</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Refund Policy</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <hr class="separator-line">
+
+    <div class="footer-bottom">
+        <img src="images/gerwbakpsj298.png">
+    </div>
+</footer>
+
+<!-- JS Files -->
+<script src="js/login.js"></script>
+<script src="js/index.js"></script>
+<script src="js/product.js"></script>
+<script src="js/discount-sale.js"></script>
+<script src="js/store.js"></script>
+<script src="js/container2.js"></script>
+<script src="js/seller-login.js"></script>
+
+</body>
+</html>

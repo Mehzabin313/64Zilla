@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Form</title>
+</head>
+<body>
+    <div class="login-container">
+        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="User Icon">
+        <h2>Sign in</h2>
+       <form id="registerForm">
+        <input type="text" id="username" placeholder="Username" required><br><br>
+        <input type="email" id="email" placeholder="Email" required><br><br>
+        <input type="password" id="password" placeholder="Password" required><br><br>
+        <button type="submit">Register</button>
+    
+            <div class="options">
+                <label><input type="checkbox"> Remember me</label>
+                <a href="#">Forgot password?</a>
+            </div>
+             <div class="register">
+            <a href="seller-login.html" id="seller-register">Register</a>
+        </div>
+        </form>
+        <div class="register">
+            have an account? <a href="seller2.html">login</a>
+        </div>
+    </div>
+     <script src="login.js"></script>
+
+    <h2>Register User</h2>
+    
+    
+
+    <p id="message"></p>
+
+    <script>
+        const form = document.getElementById('registerForm');
+        const messageDisplay = document.getElementById('message');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Page reload bondho korar jonno
+
+            // Form theke data neya
+            const formData = {
+                username: document.getElementById('username').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value
+            };
+
+            try {
+                // Backend API call (Tomar route-e)
+                const response = await fetch('http://localhost:3000/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (response.status === 201) {
+                    messageDisplay.innerText = "Registration Successful!";
+                    messageDisplay.style.color = "green";
+                    form.reset(); // Form clear kore deya
+                } else {
+                    messageDisplay.innerText = "Error: " + JSON.stringify(result);
+                    messageDisplay.style.color = "red";
+                }
+            } catch (error) {
+                messageDisplay.innerText = "Server connection failed!";
+                messageDisplay.style.color = "red";
+            }
+        });
+    </script>
+
+</body>
+</html>

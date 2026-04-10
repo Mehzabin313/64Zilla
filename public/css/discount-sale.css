@@ -1,0 +1,26 @@
+#container3 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;            /* space between cards */
+    padding: 10px;
+   justify-content: center;
+    width: 100%;          /* full responsive width */
+    height: auto;         /* allow height to grow */
+}
+
+.card {
+    width: 220px;
+    height: 280px;
+    border-radius: 12px;
+   padding: 20px;
+    color: black;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    gap: 20px;
+}
+
+/* Hover effect */
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.28);
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Registration</title>
+    <link rel="stylesheet" href="css/Login.css">
+    <link rel="stylesheet" href="css/seller-dashboard.css">
+</head>
+<body>
+    <div class="login-container">
+        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="User Icon">
+        <h2>Seller Registration</h2>
+        
+        <form id="sellerRegForm">
+            <input type="text" id="username" placeholder="Full Name" required>
+            <input type="email" id="email" placeholder="Email Address" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <input type="text" id="nid" placeholder="NID Number (Unique)" required>
+            
+            <select id="district" required>
+                <option value="" disabled selected>Select Your District</option>
+                <option value="Dhaka">Dhaka</option>
+                <option value="Tangail">Tangail</option>
+                <option value="Chittagong">Chittagong</option>
+                <option value="Rajshahi">Rajshahi</option>
+                <option value="Sylhet">Sylhet</option>
+            </select>
+
+            <input type="text" id="productCategory" placeholder="What will you sell? (e.g. Honey, Saree)" required>
+
+            <button type="submit" class="login-btn" id="regBtn">Register as Seller</button>
+        </form>
+
+        <div class="register">
+            Already have a seller account? <a href="seller-login.html">Login here</a>
+        </div>
+    </div>
+
+    <script src="js/register-seller.js"></script>
+</body>
+</html>

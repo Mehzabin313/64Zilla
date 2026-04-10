@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+<title>Order Review</title>
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/product_container.css">
+    <link rel="stylesheet" href="css/discount-sale.css">
+    <link rel="stylesheet" href="css/store.css">
+    <link rel="stylesheet" href="css/footer.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+
+
+
+<style>
+body{
+  margin:0;
+  padding:30px;
+  background:#f7fbf7;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.wrapper{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  gap:30px;
+}
+
+/* LEFT PANEL */
+.left-panel{
+  width:60%;
+  background:#ffffff;
+  border-radius:12px;
+  padding:20px;
+}
+
+.left-panel h3{
+  margin:0 0 14px 0;
+  font-size:16px;
+  font-weight:600;
+}
+
+.store{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.store-icon{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  background:#e53935;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:12px;
+  font-weight:bold;
+}
+
+.store-name{
+  font-size:14px;
+  font-weight:600;
+}
+
+.delivery-time{
+  font-size:12px;
+  color:#777;
+}
+
+/* ITEM CARD */
+.item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border:1px solid #eee;
+  border-radius:10px;
+  padding:10px;
+  margin-bottom:10px;
+}
+
+.item-left{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.item img{
+  width:50px;
+  height:50px;
+  border-radius:6px;
+  object-fit:cover;
+}
+
+.item-title{
+  font-size:13px;
+  font-weight:600;
+}
+
+.item-price{
+  font-size:13px;
+  color:#333;
+}
+
+.qty{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.qty-btn{
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  border:1px solid #ccc;
+  background:#f5f5f5;
+  font-size:14px;
+  cursor:pointer;
+}
+
+.qty-value{
+  font-size:13px;
+}
+
+/* RIGHT PANEL */
+.right-panel{
+  width:40%;
+  background:#ffffff;
+  border-radius:12px;
+  padding:20px;
+}
+
+.right-panel h3{
+  margin:0 0 14px 0;
+  font-size:16px;
+}
+
+.payment{
+  font-size:13px;
+  margin-bottom:10px;
+}
+
+.payment span{
+  color:#2e7d32;
+  font-weight:600;
+}
+
+.voucher{
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #eee;
+  margin:10px 0 16px 0;
+  font-size:13px;
+}
+
+.summary-row{
+  display:flex;
+  justify-content:space-between;
+  font-size:13px;
+  margin-bottom:8px;
+}
+
+.total{
+  font-weight:700;
+  font-size:14px;
+}
+
+.pay-btn{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  background:#ffcc9c;
+  color:#d84315;
+  font-weight:700;
+  margin-top:10px;
+  cursor:pointer;
+}
+
+.confirm-btn{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  background:#b2ff59;
+  color:#33691e;
+  font-weight:700;
+  margin-top:10px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+    <div class="home-page">
+
+    <!-- Navbar -->
+    <div class="nav">
+        <div class="logo">
+            <h4>64Zilla!</h4>
+        </div>
+
+        <div class="navmenu">
+            <ul class="navul">
+                <li class="navli"><a href="home.html">HOME</a></li>
+                <li class="navli"><a href="#main">SHOP</a></li>
+                <li class="navli"><a href="#contactus">CONTACT</a></li>
+                <li class="navli"><a href="#">FAQ</a></li>
+                <li class="navli"><a href="seller-register.html">SELLER</a></li>
+                <li class="navli"><a href="profile.html">PROFILE</a></li>
+            </ul>
+
+            <div class="navbtn">
+                <button type="button" id="login-btn">LOGIN</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Menu -->
+    <div class="nav2">
+        <div class="menu">
+            <button id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+        </div>
+
+        <div class="search">
+            <input type="text" id="search" placeholder="Search">
+            <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+
+        <div class="cart" id="cartdiv">
+    <button type="button" id="cart" onclick="window.location.href='cart-item.html'">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span id="cart-count">0</span>
+    </button>
+</div>
+
+    </div>
+
+
+<div class="wrapper"style="margin-top:30px ;">
+
+  <!-- LEFT -->
+  <div class="left-panel">
+    <h3>Review item by store</h3>
+
+    <div class="store">
+      <div class="store-icon">M</div>
+      <div>
+        <div class="store-name">Muslims Mistanno vhandar</div>
+        <div class="delivery-time">Delivery in 1 day</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-left">
+        <img src="images/chomchom-cart.jpg">
+        <div>
+          <div class="item-title">Chomchom – Traditional Bengali Sweets</div>
+          <div class="item-price">৳ 400</div>
+        </div>
+      </div>
+      <div class="qty">
+        <button class="qty-btn">−</button>
+        <div class="qty-value">1</div>
+        <button class="qty-btn">+</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-left">
+        <img src="images/saree.jpg">
+        <div>
+          <div class="item-title">Saree</div>
+          <div class="item-price">৳ 700</div>
+        </div>
+      </div>
+      <div class="qty">
+        <button class="qty-btn">−</button>
+        <div class="qty-value">1</div>
+        <button class="qty-btn">+</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-left">
+        <img src="images/mistydoi.jpg">
+        <div>
+          <div class="item-title">Misty Doi</div>
+          <div class="item-price">৳ 120</div>
+        </div>
+      </div>
+      <div class="qty">
+        <button class="qty-btn">−</button>
+        <div class="qty-value">1</div>
+        <button class="qty-btn">+</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right-panel">
+    <h3>Order summary</h3>
+
+    <div class="payment">
+      ● <span>Online Payment</span><br>
+      ○ Cash on delivery
+    </div>
+
+    <input class="voucher" placeholder="Add Voucher">
+
+    <div class="summary-row">
+      <span>Subtotal</span>
+      <span>৳1220</span>
+    </div>
+
+    <div class="summary-row">
+      <span>Delivery fee</span>
+      <span>৳100</span>
+    </div>
+
+    <div class="summary-row">
+      <span>Coupon Discount</span>
+      <span>৳0</span>
+    </div>
+
+    <div class="summary-row total">
+      <span>Total</span>
+      <span>৳1320</span>
+    </div>
+
+    <button class="pay-btn">Pay now</button>
+    <button class="confirm-btn">Confirm order</button>
+  </div>
+
+</div>
+<!-- Footer -->
+<footer class="site-footer"style="margin-top:30px ;">
+    <div class="footer-top">
+        <div class="footer-column brand-info">
+            <h2>Hatbondhu</h2>
+            <p>Premium Fruits (PF) is an Agritech fruit chain initiative by BD Assistant Ltd...</p>
+
+            <p>e-TIN **61486639816**</p>
+            <p>Trade License No **2303JR/2400040011**</p>
+
+            <p class="join-community">JOIN OUR COMMUNITY</p>
+        </div>
+
+        <div class="contact-us">
+            <h2>Contact Us</h2>
+            <p>Head Office: House #108, Road #01, Rangpur-5400</p>
+            <p>Dhaka Warehouse: Millennium City, Keraniganj</p>
+            <p>+88 09677**67</p>
+            <p>Hatbondhu@gmail.com</p>
+        </div>
+
+        <div class="useful-link">
+            <h2 style="color:#A5F927">Useful Link</h2>
+            <ul>
+                <li><a href="#">FAQs</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Terms & Condition</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Refund Policy</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <hr class="separator-line">
+
+    <div class="footer-bottom">
+        <img src="images/gerwbakpsj298.png">
+    </div>
+</footer>
+
+<!-- JS Files -->
+<script src="js/login.js"></script>
+<script src="js/index.js"></script>
+<script src="js/product.js"></script>
+<script src="js/discount-sale.js"></script>
+<script src="js/store.js"></script>
+<script src="js/container2.js"></script>
+</body>
+</html>

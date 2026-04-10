@@ -1,0 +1,322 @@
+/* --- VARIABLES --- */
+:root {
+    --color-primary-green: #02532B; /* Dark Green */
+    --color-secondary-green: #96D85D; /* Light/Lime Green */
+    --color-text-dark: #333333;
+    --color-rating-yellow: #FFC107; /* Yellow for stars */
+    --border-color: #E0E0E0;
+    --font-stack: Arial, sans-serif;
+}
+
+/* --- GENERAL & UTILITIES --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-stack);
+    color: var(--color-text-dark);
+}
+
+/* Ensures content is centered and doesn't stretch full width unnecessarily */
+.product-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 50px; /* Matches the overall design spacing */
+    display: flex;
+    gap: 40px;
+}
+
+/* --- 1. TOP NAVIGATION BAR --- */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color-primary-green);
+    height: 60px;
+    padding: 0 50px;
+    color: white;
+}
+
+.logo img {
+    height: 35px; /* Adjust based on actual logo size */
+    vertical-align: middle;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.login-btn {
+    background-color: var(--color-secondary-green);
+    color: var(--color-primary-green); /* Dark text on light button */
+    border: none;
+    padding: 8px 18px;
+    margin-left: 25px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* --- 2. SECONDARY NAV/SEARCH BAR --- */
+.secondary-nav {
+    display: flex;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 50px;
+    min-height: 80px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.menu-icon, .cart-icon {
+    font-size: 1.5em;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--color-primary-green); /* Icons match design */
+}
+
+.menu-icon {
+    margin-right: 20px;
+}
+
+.cart-icon {
+    margin-left: 20px;
+}
+
+.search-bar {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    max-width: 700px;
+    height: 40px;
+}
+
+.search-bar input {
+    border: none;
+    flex-grow: 1;
+    padding: 0 15px;
+    font-size: 1em;
+    height: 100%;
+}
+
+.search-bar input:focus {
+    outline: none;
+}
+
+.search-icon {
+    background-color: white; /* Matches design - no background on search button */
+    border: none;
+    padding: 0 15px;
+    color: var(--color-primary-green);
+    font-size: 1.1em;
+    height: 100%;
+    cursor: pointer;
+}
+
+/* --- 3. PRODUCT CONTENT LAYOUT --- */
+.product-left {
+    flex: 0 0 450px; /* Fixed width for the image section */
+}
+
+.product-right {
+    flex-grow: 1;
+    padding-top: 5px; /* Alignment with image column */
+}
+
+/* --- IMAGE GALLERY --- */
+.main-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.thumbnail-gallery {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    gap: 10px;
+}
+
+.thumbnail {
+    width: 80px;
+    height: 80px;
+    border: 1px solid var(--border-color); /* Light border for thumbnails */
+    border-radius: 5px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* --- DELIVERY INFO --- */
+.delivery-info {
+    margin-top: 30px;
+    padding: 20px 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.delivery-info h4 {
+    display: inline-block;
+    color: var(--color-primary-green);
+    font-size: 1em;
+    margin-bottom: 10px;
+}
+
+.edit-link {
+    float: right;
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+.location-details {
+    display: flex;
+    align-items: flex-start;
+    font-size: 0.9em;
+}
+
+.location-details i {
+    color: #999;
+    margin-right: 10px;
+    margin-top: 3px;
+}
+
+/* --- PRODUCT DETAILS (Right Column) --- */
+.product-location {
+    color: #999;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.product-title {
+    color: var(--color-primary-green);
+    font-size: 1.8em;
+    font-weight: bold;
+    line-height: 1.3;
+    margin-bottom: 15px;
+}
+
+.rating-box {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.rating-stars {
+    color: var(--color-rating-yellow);
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.review-count {
+    color: #999;
+    font-size: 0.9em;
+}
+
+/* PRICE AND QUANTITY ROW */
+.price-quantity-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.price-tag {
+    font-size: 2.2em;
+    font-weight: bold;
+    color: var(--color-primary-green);
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--color-secondary-green);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.qty-btn {
+    background-color: var(--color-secondary-green);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    font-size: 1.1em;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.qty-display {
+    padding: 0 15px;
+    font-weight: bold;
+    color: var(--color-primary-green);
+}
+
+/* PRODUCT META */
+.sales-count {
+    color: red;
+    font-style: italic;
+    font-size: 0.9em;
+    text-align: right;
+    margin-bottom: 15px;
+}
+
+.product-meta p {
+    margin-bottom: 8px;
+    font-size: 0.95em;
+}
+
+.product-meta strong {
+    color: #666;
+    font-weight: normal;
+    display: inline-block;
+    width: 120px;
+}
+
+/* ORDER BUTTON */
+.order-btn {
+    background-color: var(--color-secondary-green);
+    color: white;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+/* --- MEDIA QUERY FOR RESPONSIVENESS --- */
+@media (max-width: 992px) {
+    .product-container {
+        flex-direction: column;
+        padding: 0 20px;
+    }
+    .product-left {
+        flex: auto;
+        width: 100%;
+    }
+    .product-right {
+        padding-top: 20px;
+    }
+    .top-nav, .secondary-nav {
+        padding: 0 20px;
+    }
+    .search-bar {
+        max-width: none;
+    }
+}

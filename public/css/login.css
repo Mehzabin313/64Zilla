@@ -1,0 +1,92 @@
+
+    /* Reset default styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color:  #02532B; /* light blue background */
+    }
+
+    .login-container {
+        background-color:  #96d85d56;
+        padding: 40px 30px;
+        width: 350px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .login-container img {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 15px;
+    }
+
+    .login-container h2 {
+        color: #fff;
+        margin-bottom: 25px;
+        font-weight: normal;
+        letter-spacing: 1px;
+    }
+
+    .login-container input[type="email"],
+    .login-container input[type="password"] {
+        width: 100%;
+        padding: 12px 15px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 5px;
+    }
+
+    .login-container input[type="checkbox"] {
+        margin-right: 5px;
+    }
+
+    .login-container .options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+        color: #fff;
+        margin-bottom: 20px;
+    }
+
+    .login-container .options a {
+        color: #e0e0e0;
+        text-decoration: none;
+    }
+
+    .login-container .login-btn {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        background-color: #96D85D;
+        color: #02532B;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .login-container .login-btn:hover {
+        background-color: #3e5493;
+    }
+
+    .login-container .register {
+        margin-top: 15px;
+        color: #e0e0e0;
+        font-size: 14px;
+    }
+
+    .login-container .register a {
+        color: #fff;
+        text-decoration: underline;
+        font-weight: bold;
+    }

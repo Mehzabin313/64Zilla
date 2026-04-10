@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Checkout — Review & Order Summary</title>
+  <link rel="stylesheet" href="css/cart-item.css" />
+</head>
+<body>
+  <div class="page-bg">
+    <div class="container">
+      <!-- LEFT: Review by store -->
+      <section class="card review-card">
+        <header class="store-header">
+          <div class="store-left">
+            <span class="store-badge" aria-hidden="true"></span>
+            <div class="store-title">
+              <div class="store-name">Muslims Mistanno vhandar</div>
+              <div class="store-meta">Delivery in 1 day</div>
+            </div>
+          </div>
+          <button class="toggle-btn" aria-label="toggle store items">▾</button>
+        </header>
+
+        <hr class="divider" />
+
+        <div class="product-list">
+          <!-- Product item (repeat as needed) -->
+          <article class="product">
+            <img class="thumb" src="images/chomchom-cart.jpg" alt="Chamcham">
+            <div class="product-info">
+              <div class="title">Chamcham — Traditional Bengali Sweets (Premium Quality)</div>
+              <div class="meta">
+                <span class="weight">1000gm</span>
+                <span class="price">৳400</span>
+              </div>
+            </div>
+
+            <div class="qty">
+              <button class="qty-btn" aria-label="decrease">−</button>
+              <div class="qty-count">2</div>
+              <button class="qty-btn" aria-label="increase">+</button>
+            </div>
+          </article>
+
+          <article class="product">
+            <img class="thumb" src="images/misty doi.jpg" alt="Misty Doi">
+            <div class="product-info">
+              <div class="title">Misty Doi — Traditional Bengali Sweets (Premium Quality)</div>
+              <div class="meta">
+                <span class="weight">1000gm</span>
+                <span class="price">৳800</span>
+              </div>
+            </div>
+
+            <div class="qty">
+              <button class="qty-btn">−</button>
+              <div class="qty-count">2</div>
+              <button class="qty-btn">+</button>
+            </div>
+          </article>
+
+          <article class="product">
+            <img class="thumb" src="images/jamalpu-kamij.jpeg" alt="Chamcham">
+            <div class="product-info">
+              <div class="title">Jamalpur-embrodary kamij</div>
+              <div class="meta">
+                <span class="weight">3pecic</span>
+                <span class="price">৳120</span>
+              </div>
+            </div>
+
+            <div class="qty">
+              <button class="qty-btn">−</button>
+              <div class="qty-count">2</div>
+              <button class="qty-btn">+</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- RIGHT: Order summary -->
+      <aside class="card summary-card">
+        <h3 class="summary-title">Order summary</h3>
+        <hr>
+
+        <div class="payment-methods">
+          <label class="radio">
+            <input type="radio" name="payment" checked>
+            <span class="radio-dot"></span>
+            <span class="label-text">Online Payment</span>
+          </label>
+
+          <label class="radio disabled">
+            <input type="radio" name="payment" disabled>
+            <span class="radio-dot"></span>
+            <span class="label-text">Cash on delivery</span>
+          </label>
+        </div>
+
+        <div class="voucher">
+          <input type="text" placeholder="Add Voucher" aria-label="Voucher code" />
+        </div>
+
+        <div class="totals">
+          <div class="tot-row">
+            <span>Subtotal</span>
+            <span class="muted">৳1220</span>
+          </div>
+          <div class="tot-row">
+            <span>Delivery fee</span>
+            <span class="muted">৳100</span>
+          </div>
+          <div class="tot-row">
+            <span>Coupon Discount</span>
+            <span class="muted">৳0</span>
+          </div>
+
+          <div class="tot-row total">
+            <span>Total</span>
+            <span class="total-amount">৳1320</span>
+          </div>
+        </div>
+
+        <div class="cta-area">
+          <button class="btn btn-pay">Pay now</button>
+          <button class="btn btn-confirm">Confirm order</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</body>
+</html>
