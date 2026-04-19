@@ -10,7 +10,7 @@ body{
   
   box-sizing: border-box;
   font-family: sans-serif;
-  background-color:#fffffff3 ;
+  background:#f9f9c7bf !important;
 }
 
 h2{
@@ -20,7 +20,7 @@ h2{
    max-width: 1200px;     /* center width */
     margin: 0 auto;        /* center the container */
     padding: 0 30px;       /* left-right padding */
-    background: white;
+    background:#f9f9c7bf;
 }
 .nav{
     display: flex;
@@ -768,6 +768,10 @@ transition:1s;
     align-items: center;
     font-weight: bold;
 }
+.category-btn:hover{
+  background-color:#2d7a2d;
+  color: #f1f1f1;
+}
 
 /* --- existing code above --- */
 
@@ -824,6 +828,12 @@ transition:1s;
     padding: 20px !important;
     overflow-y: auto !important;
     border: 1px solid #eeeeee !important;
+    
+}
+
+
+#order-review.active {
+  display: block;
 }
 
 /* কার্ট আইটেমগুলোর স্টাইল (JS রেন্ডারিং এর জন্য) */
