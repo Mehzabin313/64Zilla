@@ -18,7 +18,7 @@
 </head>
 <body>
 
-<div class="home-page">
+
 
     <!-- Navbar -->
     <div class="nav">
@@ -41,7 +41,7 @@
             </div>
         </div>
     </div>
-
+<div class="home-page">
     <!-- Second Menu -->
     <div class="nav2">
         <div class="menu">
@@ -78,13 +78,13 @@
  
     <!-- Banner -->
     <div class="landinglogo">
-        <img src="images/Jamdani_Saree_2.webp">
+        <img src="images/banner.webp">
     </div>
 
     <!-- Category Buttons -->
     <div class="category">
         <a href="tangail.html" class="category-btn" 
-           style="background-color: #02532B; min-height: 80px; color:white; width: 100px; border: solid #02532B; border-radius: 20px;">
+           >
            Tangail
         </a>
 
@@ -115,7 +115,7 @@
 
     <!-- Container 2 -->
     <div class="container my-4">
-        <h5>Container</h5>
+        <h5>Categories</h5>
         <div id="container2" class="row"></div>
     </div>
 
@@ -317,13 +317,18 @@ if (localStorage.getItem('isLoggedIn')) {
     loginBtn.onclick = () => window.location.href = "login.html";
 }
 </script>
+<script>
+console.log("HOME JS LOADED");
+</script>
 
-<script src="js/login.js"></script>
-<script src="js/index.js"></script>
 <script src="js/product.js"></script>
 <script src="js/discount-sale.js"></script>
 <script src="js/store.js"></script>
 <script src="js/container2.js"></script>
+<script src="js/add-product.js"></script>
+<script src="js/container.js"></script>
+
+<script src="js/search.js"></script>
 
 </body>
 </html>
