@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const data = await response.json();
 
                 if (data.success) {
+                      localStorage.setItem("sellerId", data.seller._id);
                     window.location.href = 'seller-dashboard.html';
                 } else {
                     alert(data.message);

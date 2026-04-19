@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (result.success) {
             alert("সেলার রেজিস্ট্রেশন সফল হয়েছে!");
-            window.location.href = 'seller.html'; // সাকসেস হলে লগইন পেজে পাঠাবে
+            window.location.href = 'seller-login.html'; // সাকসেস হলে লগইন পেজে পাঠাবে
         } else {
             alert("এরর: " + result.message);
         }
