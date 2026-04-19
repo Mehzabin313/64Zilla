@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Payment</title>
+</head>
+<body>
+
+<h2>bKash Payment Simulation</h2>
+
+<p>Click confirm to simulate payment</p>
+
+<button onclick="confirmPayment()">Confirm Payment</button>
+
+<script>
+function confirmPayment() {
+
+  const order = JSON.parse(localStorage.getItem("pendingOrder"));
+
+  fetch("http://localhost:3000/orders", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(order)
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert("Payment Successful & Order Placed!");
+
+    localStorage.removeItem("cart");
+    localStorage.removeItem("pendingOrder");
+
+    window.location.href = "home.html";
+  });
+}
+</script>
+
+</body>
+</html>
