@@ -1,0 +1,113 @@
+<!--<!DOCTYPE html>
+<html>
+<head>
+  <title>Seller Orders</title>
+  <style>
+    body { font-family: Arial; padding:20px; }
+    .order {
+      border:1px solid #ddd;
+      padding:10px;
+      margin-bottom:10px;
+    }
+    .pending { color: orange; }
+    .done { color: green; }
+  </style>
+</head>
+
+<body>
+
+<h2>Seller Order Dashboard</h2>
+
+<div id="orders"></div>
+
+<script>
+async function loadOrders() {
+
+  const res = await fetch("http://localhost:3000/seller/orders");
+  const orders = await res.json();
+
+  const div = document.getElementById("orders");
+  div.innerHTML = "";
+
+  orders.forEach(order => {
+
+    div.innerHTML += `
+      <div class="order">
+        <h3>Order ID: ${order.id}</h3>
+
+        <p>Name: ${order.customer.name}</p>
+        <p>Phone: ${order.customer.phone}</p>
+        <p>Address: ${order.customer.address}</p>
+
+        <p>Total: ৳ ${order.total}</p>
+
+        <p>Status: <b class="${order.status}">${order.status}</b></p>
+
+        <button onclick="updateStatus(${order.id}, 'confirmed')">Confirm</button>
+        <button onclick="updateStatus(${order.id}, 'shipped')">Ship</button>
+        <button onclick="updateStatus(${order.id}, 'delivered')">Deliver</button>
+
+        <hr>
+      </div>
+    `;
+  });
+}
+
+async function updateStatus(id, status) {
+
+  await fetch(`http://localhost:3000/seller/orders/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status })
+  });
+
+  loadOrders();
+}
+
+loadOrders();
+</script>
+
+</body>
+</html>-->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Seller Orders</title>
+</head>
+<body>
+
+<h2>Orders</h2>
+
+<div id="orders"></div>
+
+<script>
+const sellerId = localStorage.getItem("sellerId");
+
+async function loadOrders() {
+
+  const res = await fetch(`http://localhost:3000/seller/orders/${sellerId}`);
+  const orders = await res.json();
+
+  const div = document.getElementById("orders");
+  div.innerHTML = "";
+
+  orders.forEach(order => {
+
+    div.innerHTML += `
+      <div style="border:1px solid #ccc; padding:10px; margin:10px;">
+        <p><b>Name:</b> ${order.customer.name}</p>
+        <p><b>Phone:</b> ${order.customer.phone}</p>
+        <p><b>Address:</b> ${order.customer.address}</p>
+
+        <p><b>Total:</b> ৳ ${order.total}</p>
+        <p><b>Status:</b> ${order.status}</p>
+      </div>
+    `;
+  });
+}
+
+loadOrders();
+</script>
+
+</body>
+</html>
