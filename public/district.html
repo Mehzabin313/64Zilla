@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>District Products</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/product_container.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+</head>
+
+<body>
+
+<!-- NAV -->
+<div class="nav">
+    <div class="logo">
+        <h4>64Zilla!</h4>
+    </div>
+</div>
+
+<!-- DISTRICT TITLE -->
+<h2 id="districtName" style="text-align:center; margin:20px 0;"></h2>
+
+<!-- PRODUCTS -->
+<div id="productList" class="row" style="padding:20px;"></div>
+
+<!-- JS -->
+<script>
+const BASE_URL = "https://six4zilla.onrender.com";
+
+// 1. GET DISTRICT FROM URL
+const params = new URLSearchParams(window.location.search);
+let district = params.get("district");
+
+// 2. ALLOWED DISTRICTS
+const allowed = [
+    "dhaka",
+    "tangail",
+    "rajshahi",
+    "bogura",
+    "natore",
+    "narsingdi",
+    "barisal",
+    "jamalpur",
+    "khulna"
+];
+
+// 3. DEFAULT FIX
+if (!district || !allowed.includes(district.toLowerCase())) {
+    district = "dhaka";
+}
+
+district = district.toLowerCase();
+
+// 4. SHOW TITLE
+document.getElementById("districtName").innerText =
+    district.charAt(0).toUpperCase() + district.slice(1);
+
+// 5. LOAD PRODUCTS
+async function loadProducts() {
+    const container = document.getElementById("productList");
+
+    try {
+        const res = await fetch(`${BASE_URL}/products/district/${district}`);
+        const products = await res.json();
+
+        container.innerHTML = "";
+
+        if (!products.length) {
+            container.innerHTML = "<h3>No products found</h3>";
+            return;
+        }
+
+        products.forEach(p => {
+            container.innerHTML += `
+                <div class="product-card" style="border:1px solid #ddd; margin:10px; padding:10px;">
+                    <img src="${BASE_URL}/uploads/${p.image}" width="150">
+                    <h3>${p.name}</h3>
+                    <p>৳ ${p.price}</p>
+                    <p>${p.district}</p>
+                </div>
+            `;
+        });
+
+    } catch (err) {
+        console.log(err);
+        container.innerHTML = "<h3>Server Error</h3>";
+    }
+}
+
+loadProducts();
+</script>
+
+</body>
+</html>
