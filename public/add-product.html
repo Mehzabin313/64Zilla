@@ -11,8 +11,13 @@
 <form id="addProductForm">
 
 <input type="text" id="name" name="name" placeholder="Name" required><br><br>
-
-<input type="text" id="district" name="district" placeholder="District" required><br><br>
+<select id="district" required>
+  <option value="">Select District</option>
+  <option value="tangail">Tangail</option>
+  <option value="dhaka">Dhaka</option>
+  <option value="chittagong">Chittagong</option>
+  <option value="rajshahi">Rajshahi</option>
+</select>
 
 <input type="number" id="price" name="price" placeholder="Price" required><br><br>
 
