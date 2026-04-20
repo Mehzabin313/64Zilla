@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const productCategory = document.getElementById('productCategory').value;
 
     try {
-        const response = await fetch('http://localhost:3000/register-seller', {
+        const response = await fetch('https://six4zilla.onrender.com/register-seller', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 

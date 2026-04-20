@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const password = document.getElementById("password").value;
 
             try {
-                const response = await fetch('http://localhost:3000/seller-login', {
+                const response = await fetch('https://six4zilla.onrender.com/seller-login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })

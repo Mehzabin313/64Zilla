@@ -85,7 +85,7 @@ const sellerId = localStorage.getItem("sellerId");
 
 async function loadOrders() {
 
-  const res = await fetch(`http://localhost:3000/seller/orders/${sellerId}`);
+  const res = await fetch(`https://six4zilla.onrender.com/seller/orders/${sellerId}`);
   const orders = await res.json();
 
   const div = document.getElementById("orders");

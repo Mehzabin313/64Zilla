@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
-    const res = await fetch(`http://localhost:3000/search-products?q=${query}`);
+    const res = await fetch(`https://six4zilla.onrender.com/search-products?q=${query}`);
     const products = await res.json();
 
     if (products.length === 0) {
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     products.forEach((item, index) => {
 
       const img = item.image
-        ? `http://localhost:3000/uploads/${item.image}`
+        ? `https://six4zilla.onrender.com/uploads/${item.image}`
         : "images/default.png";
 
       container.innerHTML += `

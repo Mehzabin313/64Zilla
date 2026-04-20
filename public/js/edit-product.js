@@ -31,7 +31,7 @@ async function updateProduct() {
     formData.append("image", file);
   }
 
-  await fetch(`http://localhost:3000/update-product/${id}`, {
+  await fetch(`https://six4zilla.onrender.com/update-product/${id}`, {
     method: "PUT",
     body: formData
   });

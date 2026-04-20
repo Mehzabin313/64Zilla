@@ -709,7 +709,7 @@ async function loadOrders() {
 
     if (!sellerId) return;
 
-    const res = await fetch(`http://localhost:3000/seller/orders/${sellerId}`);
+    const res = await fetch(`https://six4zilla.onrender.com/seller/orders/${sellerId}`);
     const orders = await res.json();
 
     const orderDiv = document.getElementById("orders");
@@ -766,7 +766,7 @@ async function loadOrders() {
 }
 
 async function updateOrder(id, status) {
-  await fetch(`http://localhost:3000/orders/${id}`, {
+  await fetch(`https://six4zilla.onrender.com/orders/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ status })

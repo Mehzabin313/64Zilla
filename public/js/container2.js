@@ -347,3 +347,40 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });*/
+async function loadDistrictProducts() {
+
+    const districtEl = document.getElementById("districtName");
+
+    if (!districtEl) return;
+
+    const district = districtEl.innerText.trim();
+
+    try {
+        const res = await fetch(`https://six4zilla.onrender.com/products/district/${district}`);
+        const products = await res.json();
+
+        const container = document.getElementById("container2");
+        container.innerHTML = "";
+
+        if (!products || products.length === 0) {
+            container.innerHTML = "<p>No products found</p>";
+            return;
+        }
+
+        products.forEach(p => {
+            container.innerHTML += `
+                <div class="product-card">
+                    <img src="http://localhost:3000/uploads/${p.image}" width="160">
+                    <h4>${p.name}</h4>
+                    <p>৳ ${p.price}</p>
+                    <small>${p.district}</small>
+                </div>
+            `;
+        });
+
+    } catch (err) {
+        console.log("District load error:", err);
+    }
+}
+
+loadDistrictProducts();

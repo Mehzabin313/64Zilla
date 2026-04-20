@@ -16,7 +16,7 @@ function confirmPayment() {
 
   const order = JSON.parse(localStorage.getItem("pendingOrder"));
 
-  fetch("http://localhost:3000/orders", {
+  fetch("https://six4zilla.onrender.com/orders", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

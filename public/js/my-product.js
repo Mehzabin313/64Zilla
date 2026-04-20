@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   `;
 
   try {
-    const res = await fetch('http://localhost:3000/products');
+    const res = await fetch('https://six4zilla.onrender.com/products');
     const products = await res.json();
 
     container2.innerHTML = "";
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       row.innerHTML = `
         <div class="product-card text-center">
-          <img src="http://localhost:3000/uploads/${item.image}" class="img-fluid rounded">
+          <img src="https://six4zilla.onrender.com/uploads/${item.image}" class="img-fluid rounded">
           <h6>${item.name}</h6>
           <h6>${item.district}</h6>
           <h6>${item.size || ''}</h6>
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       div.innerHTML = `
         <div style="display:flex; gap:10px; margin-bottom:10px;">
-          <img src="http://localhost:3000/uploads/${item.image}" width="50">
+          <img src="https://six4zilla.onrender.com/uploads/${item.image}" width="50">
           <div>
             <h6>${item.name}</h6>
             <p>${item.district}</p>
