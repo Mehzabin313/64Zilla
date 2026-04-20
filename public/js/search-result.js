@@ -65,6 +65,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
   const container = document.getElementById("result-container");
+   const BASE_URL = "https://six4zilla.onrender.com";
   if (!container) return;
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -92,9 +93,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     products.forEach((item, index) => {
 
-      const img = item.image
-        ? `https://six4zilla.onrender.com/uploads/${item.image}`
+    const img = item.image
+        ? `${BASE_URL}/uploads/${item.image}`
         : "images/default.png";
+
 
       container.innerHTML += `
         <div style="border:1px solid #ccc; padding:10px; margin:10px;">
