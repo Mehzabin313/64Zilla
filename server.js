@@ -23,8 +23,9 @@ const Product = require("./models/product");
 const Order = require("./models/order");
 
 // ================= Middleware =================
-app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -362,10 +363,10 @@ app.get("/product/:id", async (req, res) => {
 });
 // ================= GET PRODUCTS BY DISTRICT =================
 app.get("/products/district/:district", async (req, res) => {
-    const district = req.params.district.trim().toLowerCase();
+    const district = req.params.district;
 
     const products = await Product.find({
-        district: district
+        district: { $regex: `^${district}$`, $options: "i" }
     });
 
     res.json(products);
@@ -424,7 +425,8 @@ app.post("/orders", async (req, res) => {
 
     const order = new Order({
       customer: req.body.name,
-       customer: req.body.address,
+      
+       
 
       paymentMethod: req.body.paymentMethod,
       bkashNumber: req.body.bkashNumber,
