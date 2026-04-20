@@ -102,7 +102,8 @@ if (form) {
             alert("Error adding product");
         }
     });
-}*/
+}
+    //main final-----------
 const sellerId = localStorage.getItem("sellerId");
 
 const form = document.getElementById("addProductForm");
@@ -181,6 +182,82 @@ if (form) {
             alert("❌ " + err.message);
         } finally {
             // 🔄 reset button
+            const btn = form.querySelector("button");
+            btn.innerText = "Add Product";
+            btn.disabled = false;
+        }
+    });
+}*/
+const BASE_URL = "https://six4zilla.onrender.com";
+
+// seller id from login
+const sellerId = localStorage.getItem("sellerId");
+
+const form = document.getElementById("addProductForm");
+
+if (form) {
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // ======================
+        // VALIDATION
+        // ======================
+        if (!sellerId) {
+            alert("Seller not logged in!");
+            return;
+        }
+
+        const name = document.getElementById("name").value.trim();
+        const price = document.getElementById("price").value.trim();
+        const district = document.getElementById("district").value.trim();
+        const size = document.getElementById("size").value.trim();
+        const availability = document.getElementById("availability").value;
+        const image = document.getElementById("image").files[0];
+
+        if (!name || !price || !district || !image) {
+            alert("Fill all fields + image required!");
+            return;
+        }
+
+        // ======================
+        // FORM DATA (MULTER)
+        // ======================
+        const formData = new FormData();
+
+        formData.append("sellerId", sellerId);
+        formData.append("name", name);
+        formData.append("price", price);
+        formData.append("district", district.toLowerCase());
+        formData.append("size", size);
+        formData.append("availability", availability);
+        formData.append("image", image);
+
+        try {
+            const btn = form.querySelector("button");
+            btn.innerText = "Uploading...";
+            btn.disabled = true;
+
+            const res = await fetch(`${BASE_URL}/add-product`, {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await res.json();
+
+            if (!res.ok || !data.success) {
+                throw new Error(data.message || "Upload failed");
+            }
+
+            alert("Product Added Successfully!");
+            form.reset();
+
+            window.location.href = "seller-dashboard.html";
+
+        } catch (err) {
+            console.error(err);
+            alert("Error: " + err.message);
+
+        } finally {
             const btn = form.querySelector("button");
             btn.innerText = "Add Product";
             btn.disabled = false;

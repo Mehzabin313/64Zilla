@@ -249,6 +249,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const orderReview = document.getElementById("order-review");
   const cartDiv = document.getElementById("cart");
   const container2 = document.getElementById("container2");
+  
 
   if (!container2) return;
 
@@ -258,7 +259,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   // ================= FETCH PRODUCTS =================
-  const res = await fetch("http://localhost:3000/products");
+  const res = await fetch("https://six4zilla.onrender.com/products");
   const products = await res.json();
 
   function renderProducts() {
@@ -272,7 +273,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       row.innerHTML = `
         <div class="product-card text-center">
-          <img src="http://localhost:3000/uploads/${item.image}">
+          <img src="https://six4zilla.onrender.com/uploads/${item.image}">
           <h6>${item.name}</h6>
           <h6>${item.district}</h6>
           <h6>৳ ${item.price}</h6>
@@ -348,7 +349,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       div.innerHTML = `
         <div style="display:flex;gap:10px;margin-top:10px;">
-          <img src="http://localhost:3000/uploads/${item.image}" width="50">
+          <img src="https://six4zilla.onrender.com/uploads/${item.image}" width="50">
           <div>
             <h6>${item.name}</h6>
             <p>Qty: ${item.quantity}</p>
