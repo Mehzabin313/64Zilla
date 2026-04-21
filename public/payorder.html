@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout</title>
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    body { font-family: Arial; margin: 0; background: #f5f5f5; }
+
+    .navbar {
+      display: flex; justify-content: space-between;
+      padding: 15px 30px; background: #111; color: white;
+    }
+
+    .container {
+      display: flex; gap: 20px;
+      padding: 20px;
+    }
+
+    .left, .right {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .left { width: 65%; }
+    .right { width: 35%; }
+
+    .item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      gap: 10px;
+    }
+
+    .item img {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+    }
+
+    .qty button {
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .summary p, .summary h4 {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .pay, .confirm {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .pay { background: orange; }
+    .confirm { background: green; color: white; }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <div>64Zilla</div>
+  <button onclick="window.location.href='login.html'">LOGIN</button>
+</div>
+
+<div class="container">
+
+  <!-- LEFT -->
+  <div class="left">
+    <h3>Review Items</h3>
+    <div id="cart-items"></div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right">
+    <h3>Order Summary</h3>
+
+    <input type="text" id="name" placeholder="Your Name">
+    <input type="text" id="phone" placeholder="Phone">
+    <input type="text" id="address" placeholder="Address">
+
+    <select id="paymentMethod">
+      <option value="COD">Cash on Delivery</option>
+      <option value="bkash">bKash</option>
+    </select>
+
+    <input type="text" id="bkashNumber" placeholder="bKash Number (optional)">
+
+    <div class="summary">
+      <p>Subtotal <span id="subtotal">৳0</span></p>
+      <p>Delivery <span>৳100</span></p>
+      <hr>
+      <h4>Total <span id="total">৳0</span></h4>
+    </div>
+
+    <button class="confirm" onclick="placeOrder()">Confirm Order</button>
+  </div>
+
+</div>
+
+<script>
+const API = "https://six4zilla.onrender.com";
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+const container = document.getElementById("cart-items");
+const subtotalEl = document.getElementById("subtotal");
+const totalEl = document.getElementById("total");
+
+function renderCart() {
+  container.innerHTML = "";
+  let subtotal = 0;
+
+  cart.forEach((item, index) => {
+    let total = item.price * item.quantity;
+    subtotal += total;
+
+    const div = document.createElement("div");
+    div.classList.add("item");
+
+    div.innerHTML = `
+      <img src="${item.image}">
+      <div>
+        <p>${item.name}</p>
+        <p>৳${item.price}</p>
+      </div>
+
+      <div class="qty">
+        <button onclick="minus(${index})">-</button>
+        <span>${item.quantity}</span>
+        <button onclick="plus(${index})">+</button>
+      </div>
+    `;
+
+    container.appendChild(div);
+  });
+
+  subtotalEl.innerText = "৳" + subtotal;
+  totalEl.innerText = "৳" + (subtotal + 100);
+}
+
+function plus(i) {
+  cart[i].quantity++;
+  save();
+}
+
+function minus(i) {
+  if (cart[i].quantity > 1) {
+    cart[i].quantity--;
+  } else {
+    cart.splice(i, 1);
+  }
+  save();
+}
+
+function save() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+}
+
+renderCart();
+
+async function placeOrder() {
+
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value;
+  const address = document.getElementById("address").value;
+  const payment = document.getElementById("paymentMethod").value;
+  const bkash = document.getElementById("bkashNumber").value;
+
+  if (!name || !phone || !address) {
+    alert("Fill all fields");
+    return;
+  }
+
+  if (cart.length === 0) {
+    alert("Cart empty");
+    return;
+  }
+
+  const order = {
+    customer: { name, phone, address },
+    paymentMethod: payment,
+    bkashNumber: bkash,
+
+    items: cart.map(item => ({
+      productId: item._id || item.productId,
+      sellerId: item.sellerId,
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity
+    })),
+
+    total: cart.reduce((sum, i) => sum + i.price * i.quantity, 0)
+  };
+
+  try {
+    const res = await fetch(`${API}/orders`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(order)
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert("Order placed successfully");
+      localStorage.removeItem("cart");
+      window.location.href = "home.html";
+    } else {
+      alert("Order failed");
+    }
+
+  } catch (err) {
+    console.log(err);
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,133 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f5f5f5;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #0b5d2a;
+  color: white;
+  padding: 15px 40px;
+}
+
+.navbar ul {
+  display: flex;
+  gap: 25px;
+  list-style: none;
+}
+
+.login {
+  background: #9be15d;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* Layout */
+.container {
+  display: flex;
+  padding: 30px;
+  gap: 30px;
+}
+
+/* Left */
+.left {
+  flex: 2;
+}
+
+.store {
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.store-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dot {
+  width: 15px;
+  height: 15px;
+  background: red;
+  border-radius: 50%;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 15px;
+  background: #f2f2f2;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.item img {
+  width: 70px;
+  border-radius: 10px;
+}
+
+.info {
+  flex: 1;
+  margin-left: 10px;
+}
+
+.qty button {
+  padding: 5px 10px;
+}
+
+/* Right */
+.right {
+  flex: 1;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.payment p {
+  margin: 5px 0;
+}
+
+.payment .active {
+  color: green;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 15px 0;
+  border-radius: 20px;
+  border: none;
+  background: #eee;
+}
+
+.summary p,
+.summary h4 {
+  display: flex;
+  justify-content: space-between;
+}
+
+.pay {
+  width: 100%;
+  padding: 12px;
+  background: #f4b183;
+  border: none;
+  border-radius: 10px;
+  margin-top: 15px;
+}
+
+.confirm {
+  width: 100%;
+  padding: 12px;
+  background: #9be15d;
+  border: none;
+  border-radius: 10px;
+  margin-top: 10px;
+}
