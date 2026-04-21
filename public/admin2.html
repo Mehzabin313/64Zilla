@@ -1,0 +1,213 @@
+<!--<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>Admin Panel</h2>
+  <button onclick="showSection('dashboard')">Dashboard</button>
+  <button onclick="showSection('products')">Products</button>
+  <button onclick="showSection('orders')">Orders</button>
+  <button onclick="logout()">Logout</button>
+</div>
+<h2>admin</h2>
+<div class="main">
+
+  <!-- DASHBOARD 
+  <div id="dashboard" class="section">
+    <h1>Welcome Admin</h1>
+    <p>Total Products: <span id="totalProducts">0</span></p>
+    <p>Total Orders: <span id="totalOrders">0</span></p>
+  </div>
+
+  <!-- PRODUCTS 
+  <div id="products" class="section" style="display:none;">
+    <h2>All Products</h2>
+    <div id="productList"></div>
+  </div>
+
+  <!-- ORDERS 
+  <div id="orders" class="section" style="display:none;">
+    <h2>All Orders</h2>
+    <div id="orderList"></div>
+  </div>
+
+</div>
+
+<script src="js/admin.js"></script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>Admin</h2>
+  <button onclick="show('dashboard')">Dashboard</button>
+  <button onclick="show('users')">Users</button>
+  <button onclick="show('sellers')">Sellers</button>
+  <button onclick="show('products')">Products</button>
+  <button onclick="show('orders')">Orders</button>
+</div>
+
+<div class="main">
+
+  <!-- DASHBOARD 
+  <div id="dashboard" class="section">
+    <h1>Dashboard</h1>
+    <div class="card">Users: <span id="totalUsers"></span></div>
+    <div class="card">Sellers: <span id="totalSellers"></span></div>
+    <div class="card">Products: <span id="totalProducts"></span></div>
+    <div class="card">Orders: <span id="totalOrders"></span></div>
+  </div>
+
+  <!-- USERS 
+  <div id="users" class="section" style="display:none;">
+    <h2>Users</h2>
+    <div id="userList"></div>
+  </div>
+
+  <!-- SELLERS 
+  <div id="sellers" class="section" style="display:none;">
+    <h2>Sellers</h2>
+    <div id="sellerList"></div>
+  </div>
+
+  <!-- PRODUCTS 
+  <div id="products" class="section" style="display:none;">
+    <h2>Products</h2>
+    <div id="productList"></div>
+  </div>
+
+  <!-- ORDERS 
+  <div id="orders" class="section" style="display:none;">
+    <h2>Orders</h2>
+    <div id="orderList"></div>
+  </div>
+
+</div>
+
+<script src="js/admin.js"></script>
+
+</body>
+</html>-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Panel</title>
+<link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>ADMIN</h2>
+    <ul>
+        <li onclick="showTab('dashboard')">Dashboard</li>
+        <li onclick="showTab('users')">Users</li>
+        <li onclick="showTab('sellers')">Sellers</li>
+        <li onclick="showTab('products')">Products</li>
+        <li onclick="showTab('orders')">Orders</li>
+    </ul>
+</div>
+
+<div class="main">
+
+    <!-- DASHBOARD -
+    <div id="dashboard" class="tab active">
+        <h2>Dashboard</h2>
+        <div class="cards">
+            <div class="card">Users: <span id="userCount">0</span></div>
+            <div class="card">Sellers: <span id="sellerCount">0</span></div>
+            <div class="card">Products: <span id="productCount">0</span></div>
+            <div class="card">Orders: <span id="orderCount">0</span></div>
+        </div>
+    </div>
+
+    
+    <div id="users" class="tab">
+        <h2>Users</h2>
+        <div id="userList"></div>
+    </div>
+
+   
+    <div id="sellers" class="tab">
+        <h2>Sellers</h2>
+        <div id="sellerList"></div>
+    </div>
+
+  
+    <div id="products" class="tab">
+        <h2>Products</h2>
+        <div id="productList"></div>
+    </div>
+
+
+    <div id="orders" class="tab">
+        <h2>Orders</h2>
+        <div id="orderList"></div>
+    </div>
+
+</div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard</title>
+
+<link rel="stylesheet" href="css/admin.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="admin">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h2>Admin</h2>
+
+        <button onclick="loadSection('users')">Users</button>
+        <button onclick="loadSection('sellers')">Sellers</button>
+        <button onclick="loadSection('products')">Products</button>
+        <button onclick="loadSection('orders')">Orders</button>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+        <!-- STATS -->
+        <div class="stats">
+            <div>Total Users: <span id="totalUsers">0</span></div>
+            <div>Total Sellers: <span id="totalSellers">0</span></div>
+            <div>Total Products: <span id="totalProducts">0</span></div>
+            <div>Total Orders: <span id="totalOrders">0</span></div>
+        </div>
+
+        <!-- DYNAMIC CONTENT -->
+        <div id="content"></div>
+
+        <!-- CHART -->
+        <canvas id="chart"></canvas>
+
+    </div>
+</div>
+
+<script src="js/admin.js"></script>
+
+</body>
+</html>

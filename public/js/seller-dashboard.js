@@ -739,9 +739,9 @@ async function loadOrders() {
           
           <h4>Order ID: ${order._id}</h4>
 
-          <p><b>Name:</b> ${order.customer?.name || ""}</p>
-          <p><b>Phone:</b> ${order.customer?.phone || ""}</p>
-          <p><b>Address:</b> ${order.customer?.address || ""}</p>
+           <p><b>Name:</b> ${order.customer?.name || "N/A"}</p>
+          <p><b>Phone:</b> ${order.customer?.phone || "N/A"}</p>
+          <p><b>Address:</b> ${order.customer?.address || "N/A"}</p>
 
           ${itemsHTML}
 

@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-});*/
+});#//last final------------
 document.addEventListener("DOMContentLoaded", () => {
 
     const loginForm = document.getElementById("loginForm");
@@ -141,6 +141,51 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             alert("Login Failed");
         }
+    });
+
+});*/
+const BASE_URL = "https://six4zilla.onrender.com";
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const loginForm = document.getElementById("loginForm");
+
+    if (!loginForm) return;
+
+    loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        // 🔥 👉 এইখানেই তোর fetch কোড বসবে
+        const res = await fetch(`${BASE_URL}/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include", // 🔥 MUST
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+
+            if (data.role === "admin") {
+                window.location.href = "admin.html";
+            } 
+            else if (data.role === "seller") {
+                window.location.href = "/seller-dashboard.html";
+            } 
+            else {
+                window.location.href = "/home.html";
+            }
+
+        } else {
+            alert("Login Failed");
+        }
+
     });
 
 });
