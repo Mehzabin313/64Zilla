@@ -32,7 +32,7 @@ app.use(cookieParser());
 //----session cookie-----
 //app.use(cors({ origin: true, credentials: true }));
 app.use(cors({
-  origin: "true",
+  origin: "https://six4zilla.onrender.com",
   credentials: true
 }));
 app.use(session({
@@ -465,7 +465,12 @@ app.get("/products/district/:district", async (req, res) => {
 */
 app.post("/orders", async (req, res) => {
   try {
+const { customer, paymentMethod, bkashNumber, items, total } = req.body;
 
+    // validation (optional but recommended)
+    if (!customer || !customer.name || !customer.phone) {
+       return res.status(400).json({ success: false, message: "Customer details missing" });
+    }
     const order = new Order({
       customer: {
         name: req.body.customer?.name || "",
@@ -484,6 +489,7 @@ app.post("/orders", async (req, res) => {
 
       status: "pending",
       date: new Date()
+      
     });
 
     const saved = await order.save();
@@ -494,6 +500,7 @@ app.post("/orders", async (req, res) => {
     console.log(err);
     res.json({ success: false, error: err.message });
   }
+  console.log("Full Request Body:", req.body);
 });
 // 🔥 SELLER/ADMIN GET ALL ORDERS
 app.get("/seller/orders/:sellerId", async (req, res) => {
