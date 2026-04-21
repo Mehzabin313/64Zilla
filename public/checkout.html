@@ -60,7 +60,7 @@
   <button onclick="placeOrder()">Place Order</button>
 </div>
 
-<script>
+<!--<script>
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
   const cartDiv = document.getElementById("cartItems");
@@ -141,6 +141,90 @@ function placeOrder() {
   }
 }
   loadCart();
+</script>-->
+<script>
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  const cartDiv = document.getElementById("cartItems");
+
+  function loadCart() {
+    cartDiv.innerHTML = "";
+
+    cart.forEach(item => {
+      cartDiv.innerHTML += `
+        <div class="item">
+          <b>${item.name}</b><br>
+          Qty: ${item.quantity} | ৳ ${item.price * item.quantity}
+        </div>
+      `;
+    });
+  }
+  async function placeOrder() {
+    const API = "https://six4zilla.onrender.com";
+    const name = document.getElementById("name").value;
+    const phone = document.getElementById("phone").value;
+    const address = document.getElementById("address").value;
+    const payment = document.getElementById("paymentMethod").value;
+    const bkash = document.getElementById("bkashNumber").value;
+
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    if (!name || !phone || !address) {
+      alert("Fill all fields");
+      return;
+    }
+
+    if (cart.length === 0) {
+      alert("Cart empty");
+      return;
+    }
+
+    const order = {
+      customer: { name, phone, address },
+      paymentMethod: payment,
+      bkashNumber: bkash,
+
+      items: cart.map(item => ({
+        productId: item._id || item.productId,
+        sellerId: item.sellerId,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity || 1
+      })),
+
+      total: cart.reduce((sum, i) =>
+        sum + ((i.price || 0) * (i.quantity || 1)), 0)
+    };
+
+    try {
+
+      if (payment === "COD") {
+
+        const res = await fetch("${API}/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(order)
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          alert("Order placed successfully");
+          localStorage.removeItem("cart");
+          window.location.href = "home.html";
+        } else {
+          alert("Order failed");
+        }
+
+      } else {
+        localStorage.setItem("pendingOrder", JSON.stringify(order));
+        window.location.href = "payment.html";
+      }
+
+    } catch (err) {
+      console.log("ORDER ERROR:", err);
+    }
+  }
 </script>
 
 </body>
