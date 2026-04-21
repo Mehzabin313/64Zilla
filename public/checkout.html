@@ -144,9 +144,8 @@ function placeOrder() {
 </script>-->
 <script>
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const cartDiv = document.getElementById("cartItems");
 
-  const API = "https://six4zilla.onrender.com";
+  const cartDiv = document.getElementById("cartItems");
 
   function loadCart() {
     cartDiv.innerHTML = "";
@@ -160,14 +159,15 @@ function placeOrder() {
       `;
     });
   }
-
   async function placeOrder() {
+    const API = "https://six4zilla.onrender.com";
+    const name = document.getElementById("name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const address = document.getElementById("address").value.trim();
+    const payment = document.getElementById("paymentMethod").value.trim();
+    const bkash = document.getElementById("bkashNumber").value.trim();
 
-    const name = document.getElementById("name").value;
-    const phone = document.getElementById("phone").value;
-    const address = document.getElementById("address").value;
-    const payment = document.getElementById("paymentMethod").value;
-    const bkash = document.getElementById("bkashNumber").value;
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     if (!name || !phone || !address) {
       alert("Fill all fields");
@@ -200,15 +200,13 @@ function placeOrder() {
 
       if (payment === "COD") {
 
-        const res = await fetch(`${API}/orders`, {
+        const res = await fetch("${API}/orders", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(order)
         });
 
         const data = await res.json();
-
-        console.log("ORDER RESPONSE:", data);
 
         if (data.success) {
           alert("Order placed successfully");
@@ -227,8 +225,7 @@ function placeOrder() {
       console.log("ORDER ERROR:", err);
     }
   }
-
-  loadCart();
 </script>
+
 </body>
 </html>
