@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Checkout</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+   <link rel="stylesheet" href="css/home.css">
   <style>
     body { font-family: Arial; background:#f5f5f5; padding:20px; }
 
@@ -40,11 +40,51 @@
 </head>
 
 <body>
+    <div class="nav">
+        <div class="logo">
+            <h4>64Zilla!</h4>
+        </div>
+
+        <div class="navmenu">
+            <ul class="navul">
+                <li class="navli"><a href="home.html">HOME</a></li>
+                <li class="navli"><a href="#main">SHOP</a></li>
+                <li class="navli"><a href="#contactus">CONTACT</a></li>
+                <li class="navli"><a href="#">FAQ</a></li>
+                <li class="navli"><a href="seller-register.html">SELLER</a></li>
+                <li class="navli"><a href="profile.html">PROFILE</a></li>
+            </ul>
+
+            <div class="navbtn">
+                <button type="button" id="login-btn">LOGIN</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Menu -->
+    <div class="nav2">
+        <div class="menu">
+            <button id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+        </div>
+
+        <div class="search">
+            <input type="text" id="search" placeholder="Search">
+            <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+
+        <div class="cart" id="cartdiv">
+    <button type="button" id="cart" onclick="window.location.href='cart-item.html'">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span id="cart-count">0</span>
+    </button>
+</div>
+
+    </div>
 
 <div class="container">
   <h2>Place Order</h2>
 
-  <div id="cartItems"></div>
+  <div id="cartDiv"></div>
 
   <input type="text" id="name" placeholder="Full Name">
   <input type="text" id="phone" placeholder="Phone Number">
@@ -144,7 +184,7 @@ function placeOrder() {
 </script>-->
 <script>
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
+ const BASE_URL = "https://six4zilla.onrender.com";
   const cartDiv = document.getElementById("cartItems");
 
   function loadCart() {
@@ -153,10 +193,24 @@ function placeOrder() {
     cart.forEach(item => {
       cartDiv.innerHTML += `
         <div class="item">
-          <b>${item.name}</b><br>
-          Qty: ${item.quantity} | ৳ ${item.price * item.quantity}
+
+      <div class="item-left">
+        <img src="${BASE_URL}/uploads/${item.image}" alt="${item.name}">
+
+        <div>
+          <div class="item-title">${item.name}</div>
+          <div class="item-price">৳ ${item.price}</div>
+          <div>Qty: ${item.quantity}</div>
         </div>
-      `;
+      </div>
+
+      <div class="item-right">
+        ৳ ${item.price * item.quantity}
+      </div>
+
+    </div>
+    `;
+      
     });
   }
   async function placeOrder() {
