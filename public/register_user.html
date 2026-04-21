@@ -4,6 +4,97 @@
     <meta charset="UTF-8">
     <title>Registration Form</title>
 </head>
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container {
+    width: 350px;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.login-container img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 10px;
+}
+
+.login-container h2 {
+    margin-bottom: 15px;
+    color: #2e7d32;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #66bb6a;
+    box-shadow: 0 0 5px rgba(102,187,106,0.3);
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #43a047;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #2e7d32;
+}
+
+.options {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.options a {
+    text-decoration: none;
+    color: #2e7d32;
+}
+
+.register {
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.register a {
+    color: #1b5e20;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#message {
+    margin-top: 10px;
+    font-weight: bold;
+}
+</style>
 <body>
     <div class="login-container">
         <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="User Icon">
@@ -18,18 +109,17 @@
                 <label><input type="checkbox"> Remember me</label>
                 <a href="#">Forgot password?</a>
             </div>
-             <div class="register">
+             <!--<div class="register">
             <a href="seller-login.html" id="seller-register">Register</a>
-        </div>
+        </div>-->
         </form>
         <div class="register">
-            have an account? <a href="seller2.html">login</a>
+           Already have an account? <a href="login.html">login</a>
         </div>
     </div>
      <script src="login.js"></script>
 
-    <h2>Register User</h2>
-    
+   
     
 
     <p id="message"></p>
