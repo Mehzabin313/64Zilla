@@ -30,7 +30,11 @@ app.use(express.json());
 app.use(cookieParser());
 
 //----session cookie-----
-app.use(cors({ origin: true, credentials: true }));
+//app.use(cors({ origin: true, credentials: true }));
+app.use(cors({
+  origin: "true",
+  credentials: true
+}));
 app.use(session({
     secret: 'secret123',
     resave: false,
@@ -420,27 +424,29 @@ app.get("/products/district/:district", async (req, res) => {
     }
 });*/
 // ================= ORDER MODEL LOGIC FIX =================
-app.post("/orders", async (req, res) => {
+/*app.post("/orders", async (req, res) => {
   try {
 
+    const method = (req.body.paymentMethod || "").toLowerCase(); // ✅ HERE
+
     const order = new Order({
-      customer: req.body.name,
-      
-       
+      customer: {
+        name: req.body.customer?.name,
+        phone: req.body.customer?.phone,
+        address: req.body.customer?.address
+      },
 
       paymentMethod: req.body.paymentMethod,
-      bkashNumber: req.body.bkashNumber,
+
+      bkashNumber: req.body.bkashNumber || "",
 
       transactionId:
-        req.body.paymentMethod === "bKash"
-          ? "TXN" + Date.now()
-          : "",
+        method === "bkash" ? "TXN" + Date.now() : "",
 
       paymentStatus:
-        req.body.paymentMethod === "COD" ? "unpaid" : "paid",
+        method === "cod" ? "unpaid" : "paid",
 
-      items: req.body.items,
-
+      items: req.body.items || [],
       total: Number(req.body.total),
 
       status: "pending",
@@ -454,6 +460,39 @@ app.post("/orders", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.json({ success: false });
+  }
+});
+*/
+app.post("/orders", async (req, res) => {
+  try {
+
+    const order = new Order({
+      customer: {
+        name: req.body.customer?.name || "",
+        phone: req.body.customer?.phone || "",
+        address: req.body.customer?.address || ""
+      },
+
+      paymentMethod: req.body.paymentMethod,
+      bkashNumber: req.body.bkashNumber || "",
+
+      transactionId: "",
+      paymentStatus: req.body.paymentMethod === "COD" ? "unpaid" : "paid",
+
+      items: req.body.items || [],
+      total: Number(req.body.total) || 0,
+
+      status: "pending",
+      date: new Date()
+    });
+
+    const saved = await order.save();
+
+    res.json({ success: true, order: saved });
+
+  } catch (err) {
+    console.log(err);
+    res.json({ success: false, error: err.message });
   }
 });
 // 🔥 SELLER/ADMIN GET ALL ORDERS
@@ -493,6 +532,24 @@ app.put("/orders/:id", async (req, res) => {
 app.get("/orders", async (req, res) => {
   const orders = await Order.find();
   res.json(orders);
+});
+
+app.get("/users", async (req, res) => {
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.get("/sellers", async (req, res) => {
+    try {
+        const sellers = await Seller.find();
+        res.json(sellers);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 // ================= START SERVER =================
 app.listen(port, () => {
