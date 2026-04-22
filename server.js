@@ -23,6 +23,10 @@ const Product = require("./models/product");
 const Order = require("./models/order");
 
 // ================= Middleware =================
+app.use(cors({
+  origin: "https://six4zilla.onrender.com",
+  credentials: true
+}));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -31,10 +35,7 @@ app.use(cookieParser());
 
 //----session cookie-----
 //app.use(cors({ origin: true, credentials: true }));
-app.use(cors({
-  origin: "https://six4zilla.onrender.com",
-  credentials: true
-}));
+
 app.use(session({
     secret: 'secret123',
     resave: false,
