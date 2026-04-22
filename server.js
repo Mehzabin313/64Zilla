@@ -357,7 +357,7 @@ app.post('/add-product', upload.single('image'), async (req, res) => {
             district: req.body.district,
             size: req.body.size,
             availability: req.body.availability,
-            image: imageUrl
+            image: `/uploads/${req.file.filename}` 
         });
 
         await product.save();
