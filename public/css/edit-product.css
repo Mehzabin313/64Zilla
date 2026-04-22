@@ -1,58 +1,98 @@
-body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #4facfe, #00f2fe);
+/* ===== RESET ===== */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
-/* Container */
-.container {
-    width: 400px;
-    margin: 80px auto;
-    background: #fff;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+/* ===== BODY ===== */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #eef2f3, #dfe9f3);
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Title */
-.container h2 {
-    text-align: center;
+/* ===== TITLE ===== */
+h2 {
+    margin-top: 30px;
     margin-bottom: 20px;
+    font-size: 26px;
+    color: #333;
 }
 
-/* Inputs */
-.container input {
-    width: 100%;
-    padding: 10px;
+/* ===== WRAP EVERYTHING IN CENTER BOX EFFECT ===== */
+body > *:not(h2) {
+    width: 350px;
+}
+
+/* ===== CREATE BOX USING PADDING AREA ===== */
+body {
+    padding-top: 100px;
+}
+
+/* ===== BOX BACKGROUND USING DIV-LIKE EFFECT ===== */
+body::before {
+    content: "";
+    position: absolute;
+    top: 100px;
+    width: 400px;
+    height: 500px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    z-index: -1;
+}
+
+/* ===== INPUT ===== */
+input {
+    padding: 12px;
     margin: 8px 0;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    border: 1px solid #ccc;
+    font-size: 14px;
     outline: none;
     transition: 0.3s;
 }
 
-/* Focus effect */
-.container input:focus {
-    border-color: #4facfe;
-    box-shadow: 0 0 5px rgba(79,172,254,0.5);
+/* ===== FOCUS ===== */
+input:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 6px rgba(74, 144, 226, 0.4);
 }
 
-/* Button */
-.container button {
-    width: 100%;
+/* ===== FILE INPUT ===== */
+input[type="file"] {
+    padding: 6px;
+}
+
+/* ===== BUTTON ===== */
+button {
     padding: 12px;
-    margin-top: 10px;
-    background: #4facfe;
-    color: #fff;
+    background: #96D85D;
+    color: white;
     border: none;
     border-radius: 8px;
-    cursor: pointer;
     font-size: 16px;
+    cursor: pointer;
+    margin-top: 12px;
     transition: 0.3s;
 }
 
-/* Hover */
-.container button:hover {
-    background: #007bff;
+button:hover {
+    background: #02532B;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 420px) {
+    body > *:not(h2) {
+        width: 90%;
+    }
+
+    body::before {
+        width: 95%;
+    }
 }
