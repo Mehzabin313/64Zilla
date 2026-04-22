@@ -275,8 +275,8 @@ app.get("/my-products/:sellerId", async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-
-app.post('/add-product', upload.single('image'), async (req, res) => {
+//-----seller add product-------
+/*app.post('/add-product', upload.single('image'), async (req, res) => {
     try {
 
         const { sellerId, name, price, district, size, availability } = req.body;
@@ -317,6 +317,37 @@ app.post('/add-product', upload.single('image'), async (req, res) => {
 
     } catch (err) {
         console.error(err);
+        res.status(500).json({ error: err.message });
+    }
+});*/
+app.post('/add-product', upload.single('image'), async (req, res) => {
+    try {
+        console.log("BODY:", req.body);
+        console.log("FILE:", req.file); // 🔥 IMPORTANT
+
+        if (!req.file) {
+            return res.status(400).json({
+                success: false,
+                message: "Image not received by multer"
+            });
+        }
+
+        const product = new Product({
+            sellerId: req.body.sellerId,
+            name: req.body.name,
+            price: req.body.price,
+            district: req.body.district,
+            size: req.body.size,
+            availability: req.body.availability,
+            image: req.file.filename
+        });
+
+        await product.save();
+
+        res.json({ success: true });
+
+    } catch (err) {
+        console.log(err);
         res.status(500).json({ error: err.message });
     }
 });
