@@ -7,12 +7,14 @@ const bcrypt = require('bcryptjs');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const path = require('path');
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require('multer');
 const fs = require('fs');
 const session = require('express-session');
 
 const app = express();
-
+const BASE_URL = process.env.BASE_URL || "https://six4zilla.onrender.com";
 const port = process.env.PORT || 3000;
 const mongo = process.env.MONGO_URL;
 
@@ -48,8 +50,10 @@ app.use(session({
 }));
 
 // ================= Ensure uploads folder =================
-if (!fs.existsSync('uploads')) {
-    fs.mkdirSync('uploads');
+const uploadDir = path.join(__dirname, "uploads");
+
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
 }
 
 // ================= MongoDB =================
@@ -68,9 +72,20 @@ const connect = async () => {
 connect();
 
 // ================= Multer =================
-const storage = multer.diskStorage({
+/*const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        const uniqueName = Date.now() + path.extname(file.originalname);
+        cb(null, uniqueName);
+    }
+});
+
+const upload = multer({ storage });*/
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, uploadDir);   // ✅ MUST use absolute path
     },
     filename: (req, file, cb) => {
         const uniqueName = Date.now() + path.extname(file.originalname);
@@ -332,6 +347,8 @@ app.post('/add-product', upload.single('image'), async (req, res) => {
                 message: "Image not received by multer"
             });
         }
+        
+        const imageUrl = `${BASE_URL}/uploads/${req.file.filename}`;
 
         const product = new Product({
             sellerId: req.body.sellerId,
@@ -340,12 +357,15 @@ app.post('/add-product', upload.single('image'), async (req, res) => {
             district: req.body.district,
             size: req.body.size,
             availability: req.body.availability,
-            image: req.file.filename
+            image: imageUrl
         });
 
         await product.save();
 
-        res.json({ success: true });
+      res.json({
+            success: true,
+            image: imageUrl
+        });
 
     } catch (err) {
         console.log(err);
@@ -377,9 +397,10 @@ app.put('/update-product/:id', upload.single('image'), async (req, res) => {
         };
 
         // নতুন image আসে  replace হবে
-        if (req.file) {
-            updateData.image = req.file.filename;
+       if (req.file) {
+            updateData.image = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`; // ✅ FIXED
         }
+
 
         await Product.findByIdAndUpdate(req.params.id, updateData);
 
