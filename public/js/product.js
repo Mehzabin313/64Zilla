@@ -158,9 +158,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🍬 SWEETS
   { name: "Chomchom", image: "images/Tangail-Chomchom.jpg", category: "sweets" },
   { name: "Bogura Doi", image: "images/mistydoi.jpg", category: "sweets" },
-  { name: "Roshogolla", image: "images/roshogolla.jpg", category: "sweets" },
-  { name: "Kalojam", image: "images/kalojam.jpg", category: "sweets" },
-  { name: "Laddu", image: "images/laddu.jpg", category: "sweets" },
+ 
+  
+  
 
   // 👗 CLOTHES
   { name: "Jamdani Saree", image: "images/jamdani.jpeg", category: "clothes" },
@@ -172,14 +172,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🎨 CRAFTS
   { name: "Nakshi Kantha", image: "images/nokshikatha.jpg", category: "crafts" },
   { name: "Clay Pot", image: "images/claypot.jpg", category: "crafts" },
-  { name: "Handmade Bag", image: "images/handbag.jpg", category: "crafts" },
-  { name: "Wooden Art", image: "images/woodart.jpg", category: "crafts" },
+ 
   { name: "Bamboo Basket", image: "images/bambo.jpg", category: "crafts" },
 
   // 🍎 FRUITS
   { name: "Rajsahi Mango", image: "images/rajsahi am.jpeg", category: "fruits" },
   { name: "Narsingdi Lotkon", image: "images/lotkon.jpeg", category: "fruits" },
-  { name: "Banana", image: "images/banana.jpg", category: "fruits" },
+  
   { name: "Pineapple", image: "images/pinaapple.jpg", category: "fruits" },
   { name: "Guava", image: "images/guava.jpg", category: "fruits" }
 
