@@ -239,7 +239,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
 });
-*/
+//full and final one change korsos aitar por aita thik img prblm sudhu
 document.addEventListener("DOMContentLoaded", async () => {
 
   let cartItems = [];
@@ -412,6 +412,216 @@ document.addEventListener("DOMContentLoaded", async () => {
       totalCart -= cartItems[i].quantity;
       cartItems.splice(i, 1);
     }
+    cartCount.innerText = totalCart;
+    renderCart();
+  };
+
+  window.removeItem = (i) => {
+    totalCart -= cartItems[i].quantity;
+    cartItems.splice(i, 1);
+    cartCount.innerText = totalCart;
+    renderCart();
+  };
+
+});*/
+document.addEventListener("DOMContentLoaded", async () => {
+
+  let cartItems = [];
+  let totalCart = 0;
+
+  const BASE_URL = "https://six4zilla.onrender.com";
+
+  const cartCount = document.getElementById("cart-count");
+  const orderReview = document.getElementById("order-review");
+  const cartDiv = document.getElementById("cart");
+  const container2 = document.getElementById("container2");
+
+  if (!container2) return;
+
+  // ================= CART TOGGLE =================
+  cartDiv.addEventListener("click", () => {
+    orderReview.classList.toggle("active");
+  });
+
+  // ================= FETCH PRODUCTS =================
+  const res = await fetch(`${BASE_URL}/products`);
+  const products = await res.json();
+
+  function getImage(item) {
+    // ✅ FIX: mixed image format handle
+    // আগে তুমি direct item.image দিতেছিলে → 404 + mixed content হতো
+
+    if (!item.image) return "";
+
+    // যদি full URL হয়
+    if (item.image.startsWith("http")) {
+      return item.image;
+    }
+
+    // যদি filename থাকে
+    return `${BASE_URL}/uploads/${item.image}`;
+  }
+
+  function renderProducts() {
+
+    container2.innerHTML = "";
+
+    products.forEach((item, index) => {
+
+      const row = document.createElement("div");
+      row.classList.add("col-md-2", "col-6");
+
+      const imgSrc = getImage(item); // ✅ FIX HERE
+
+      row.innerHTML = `
+        <div class="product-card text-center">
+
+          <!-- ❌ FIX: আগে সরাসরি item.image use করছিলে -->
+          <img src="${imgSrc}" alt="${item.name}" />
+
+          <h6>${item.name}</h6>
+          <h6>${item.district}</h6>
+          <h6>৳ ${item.price}</h6>
+
+          <div>
+            <button id="minus-${index}">-</button>
+            <span id="count-${index}">0</span>
+            <button id="plus-${index}">+</button>
+          </div>
+
+          <button id="add-${index}">Add to Cart</button>
+        </div>
+      `;
+
+      container2.appendChild(row);
+
+      let count = 0;
+
+      document.getElementById(`plus-${index}`).onclick = () => {
+        count++;
+        document.getElementById(`count-${index}`).innerText = count;
+      };
+
+      document.getElementById(`minus-${index}`).onclick = () => {
+        if (count > 0) count--;
+        document.getElementById(`count-${index}`).innerText = count;
+      };
+
+      document.getElementById(`add-${index}`).onclick = () => {
+
+        let qty = count === 0 ? 1 : count;
+
+        let exist = cartItems.find(p => p._id === item._id);
+
+        if (exist) {
+          exist.quantity += qty;
+        } else {
+          cartItems.push({ ...item, quantity: qty });
+        }
+
+        totalCart += qty;
+        cartCount.innerText = totalCart;
+
+        count = 0;
+        document.getElementById(`count-${index}`).innerText = 0;
+
+        renderCart();
+      };
+
+    });
+  }
+
+  renderProducts();
+
+  // ================= CART RENDER =================
+  function renderCart() {
+
+    orderReview.innerHTML = `
+      <div style="text-align:right;">
+        <button id="close-cart" style="border:none;background:none;font-size:18px;cursor:pointer;">
+          ❌
+        </button>
+      </div>
+    `;
+
+    let totalPrice = 0;
+
+    cartItems.forEach((item, index) => {
+
+      totalPrice += item.price * item.quantity;
+
+      const imgSrc = getImage(item); // ✅ FIX HERE
+
+      const div = document.createElement("div");
+
+      div.innerHTML = `
+        <div style="display:flex;gap:10px;margin-top:10px;">
+          
+          <!-- ❌ FIX: image path bug -->
+          <img src="${imgSrc}" width="50">
+
+          <div>
+            <h6>${item.name}</h6>
+            <p>Qty: ${item.quantity}</p>
+            <p>৳ ${item.price * item.quantity}</p>
+
+            <button onclick="plusItem(${index})">+</button>
+            <button onclick="minusItem(${index})">-</button>
+            <button onclick="removeItem(${index})">Remove</button>
+          </div>
+
+        </div>
+        <hr>
+      `;
+
+      orderReview.appendChild(div);
+    });
+
+    orderReview.innerHTML += `
+      <h3>Total: ৳ ${totalPrice}</h3>
+
+      <button id="checkoutBtn"
+        style="width:100%;padding:10px;background:green;color:white;border:none;cursor:pointer;">
+        Checkout
+      </button>
+    `;
+  }
+
+  // ================= CLOSE + CHECKOUT =================
+  orderReview.addEventListener("click", (e) => {
+
+    if (e.target && e.target.id === "close-cart") {
+      orderReview.classList.remove("active");
+    }
+
+    if (e.target && e.target.id === "checkoutBtn") {
+      if (cartItems.length === 0) {
+        alert("Cart is empty!");
+        return;
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cartItems));
+      window.location.href = "checkout.html";
+    }
+  });
+
+  // ================= CART ACTIONS =================
+  window.plusItem = (i) => {
+    cartItems[i].quantity++;
+    totalCart++;
+    cartCount.innerText = totalCart;
+    renderCart();
+  };
+
+  window.minusItem = (i) => {
+    if (cartItems[i].quantity > 1) {
+      cartItems[i].quantity--;
+      totalCart--;
+    } else {
+      totalCart -= cartItems[i].quantity;
+      cartItems.splice(i, 1);
+    }
+
     cartCount.innerText = totalCart;
     renderCart();
   };
