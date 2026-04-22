@@ -351,15 +351,15 @@ app.post('/add-product', upload.single('image'), async (req, res) => {
         
         const imageUrl = `${BASE_URL}/uploads/${req.file.filename}`;
 
-        const product = new Product({
-            sellerId: req.body.sellerId,
-            name: req.body.name,
-            price: req.body.price,
-            district: req.body.district,
-            size: req.body.size,
-            availability: req.body.availability,
-            image: `/uploads/${req.file.filename}` 
-        });
+const product = new Product({
+    sellerId: req.body.sellerId,
+    name: req.body.name,
+    price: req.body.price,
+    district: req.body.district,
+    size: req.body.size,
+    availability: req.body.availability,
+    image: imageUrl
+});
 
         await product.save();
 
@@ -397,10 +397,9 @@ app.put('/update-product/:id', upload.single('image'), async (req, res) => {
             availability
         };
 
-        // নতুন image আসে  replace হবে
-       if (req.file) {
-            updateData.image = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`; // ✅ FIXED
-        }
+      if (req.file) {
+    updateData.image = `${BASE_URL}/uploads/${req.file.filename}`;
+}
 
 
         await Product.findByIdAndUpdate(req.params.id, updateData);
