@@ -215,7 +215,7 @@ function placeOrder() {
     });
   }
   async function placeOrder() {
-    const API = "https://six4zilla.onrender.com";
+    const BASE_URL = "https://six4zilla.onrender.com";
     const name = document.getElementById("name").value.trim();
     const phone = document.getElementById("phone").value.trim();
     const address = document.getElementById("address").value.trim();
@@ -255,7 +255,7 @@ function placeOrder() {
 
       if (payment === "COD") {
 
-        const res = await fetch("${API}/orders", {
+        const res = await fetch("${BASE_URL}/orders", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(order)
