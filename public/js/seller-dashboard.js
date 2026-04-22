@@ -554,7 +554,7 @@ loadProducts();*/
 // SELLER ID
 // =======================
 const sellerId = localStorage.getItem("sellerId");
-
+const BASE_URL = "https://six4zilla.onrender.com";
 // =======================
 // ELEMENTS
 // =======================
@@ -579,7 +579,7 @@ async function loadProducts() {
             return;
         }
 
-        const res = await fetch(`http://localhost:3000/my-products/${sellerId}`);
+        const res = await fetch(`${BASE_URL}/my-products/${sellerId}`);
         const products = await res.json();
 
         const totalEl = document.getElementById("totalProducts");
@@ -593,7 +593,7 @@ async function loadProducts() {
         products.forEach(p => {
             table.innerHTML += `
 <tr>
-    <td><img src="http://localhost:3000/uploads/${p.image}" width="50"></td>
+    <td><img src="${BASE_URL}/uploads/${p.image}" width="50"></td>
     <td>${p.name}</td>
     <td>${p.district || "-"}</td>
     <td>${p.size || "-"}</td>
@@ -626,7 +626,7 @@ async function deleteProduct(id) {
     const confirmDelete = confirm("Are you sure?");
     if (!confirmDelete) return;
 
-    await fetch(`http://localhost:3000/delete-product/${id}`, {
+    await fetch(`${BASE_URL}/delete-product/${id}`, {
         method: "DELETE"
     });
 
@@ -709,7 +709,7 @@ async function loadOrders() {
 
     if (!sellerId) return;
 
-    const res = await fetch(`https://six4zilla.onrender.com/seller/orders/${sellerId}`);
+    const res = await fetch(`${BASE_URL}/seller/orders/${sellerId}`);
     const orders = await res.json();
 
     const orderDiv = document.getElementById("orders");
@@ -766,7 +766,7 @@ async function loadOrders() {
 }
 
 async function updateOrder(id, status) {
-  await fetch(`https://six4zilla.onrender.com/orders/${id}`, {
+  await fetch(`${BASE_URL}/orders/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ status })
