@@ -213,6 +213,7 @@ if (form) {
         const size = document.getElementById("size").value.trim();
         const availability = document.getElementById("availability").value;
         const image = document.getElementById("image").files[0];
+        
 
         if (!name || !price || !district || !image) {
             alert("Fill all fields + image required!");
@@ -243,8 +244,11 @@ if (form) {
             });
 
             const data = await res.json();
+            if (!res.ok) {
+                throw new Error("Server error");
+            }
 
-            if (!res.ok || !data.success) {
+           if (!data.success) {
                 throw new Error(data.message || "Upload failed");
             }
 
