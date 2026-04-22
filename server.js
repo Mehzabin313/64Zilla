@@ -14,8 +14,9 @@ const fs = require('fs');
 const session = require('express-session');
 
 const app = express();
-const BASE_URL = process.env.BASE_URL || `http://localhost:${port}`;
 const port = process.env.PORT || 3000;
+const BASE_URL = process.env.BASE_URL || `http://localhost:${port}`;
+
 const mongo = process.env.MONGO_URL;
 
 // Models
