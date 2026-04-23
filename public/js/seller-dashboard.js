@@ -593,7 +593,7 @@ async function loadProducts() {
         products.forEach(p => {
             table.innerHTML += `
 <tr>
-    <td><img src="${BASE_URL}/uploads/${p.image}" width="50"></td>
+    <td><img src="${getImage(p.image)}">width="50"></td>
     <td>${p.name}</td>
     <td>${p.district || "-"}</td>
     <td>${p.size || "-"}</td>

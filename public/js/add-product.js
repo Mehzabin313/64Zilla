@@ -239,10 +239,9 @@ if (form) {
             btn.disabled = true;
 
             const res = await fetch(`${BASE_URL}/add-product`, {
-                method: "POST",
-                body: formData
-            });
-
+            method: "POST",
+            body: formData
+        });
             const data = await res.json();
             if (!res.ok) {
                 throw new Error("Server error");
