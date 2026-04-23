@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });*/
 //final before new render profile login 
-/*
+
 const BASE_URL = "https://six4zilla.onrender.com";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -188,47 +188,6 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Login Failed");
         }
 
-    });
-
-});*/
-const BASE_URL = "https://six4zilla.onrender.com";
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    const loginForm = document.getElementById("loginForm");
-
-    loginForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-
-        const res = await fetch(`${BASE_URL}/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "include",   // 🔥 SESSION IMPORTANT
-            body: JSON.stringify({ email, password })
-        });
-
-        const data = await res.json();
-
-        if (data.success) {
-
-            localStorage.setItem("isLoggedIn", "true");
-               if (data.role === "admin") {
-                window.location.href = "admin.html";
-            } 
-            if (data.role === "seller") {
-                window.location.href = "seller-dashboard.html";
-            } else {
-                window.location.href = "home.html";
-            }
-
-        } else {
-            alert("Login Failed");
-        }
     });
 
 });
