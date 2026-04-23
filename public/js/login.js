@@ -217,7 +217,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data.success) {
 
             localStorage.setItem("isLoggedIn", "true");
-
+               if (data.role === "admin") {
+                window.location.href = "admin.html";
+            } 
             if (data.role === "seller") {
                 window.location.href = "seller-dashboard.html";
             } else {
