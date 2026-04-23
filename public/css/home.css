@@ -874,7 +874,6 @@ transition:1s;
 #result-container{
   display: flex;
   flex-direction: row;
-  background: #08336b;
-  width: 200px;
+ 
 
 }
