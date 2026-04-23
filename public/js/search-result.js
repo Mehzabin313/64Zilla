@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     products.forEach((item, index) => {
 
     const img = item.image
-        ? `${BASE_URL}/${item.image}`
+        ? `${BASE_URL}/uploads/${item.image}`
         : "images/default.png";
 
 
