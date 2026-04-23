@@ -410,6 +410,7 @@ app.delete('/delete-product/:id', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });*/
+/*//abr final one
 app.put('/update-product/:id', (req, res) => {
 
   upload.single('image')(req, res, async function (err) {
@@ -470,6 +471,44 @@ app.put('/update-product/:id', (req, res) => {
 
   });
 
+});*/
+app.put('/update-product/:id', async (req, res) => {
+  upload.single('image')(req, res, async function (err) {
+    try {
+
+      if (err) {
+        console.log("MULTER ERROR:", err);
+        return res.status(500).json({ success: false, message: "Upload failed" });
+      }
+
+      const id = req.params.id;
+
+      const updateData = {
+        name: req.body.name,
+        price: req.body.price,
+        district: req.body.district,
+        size: req.body.size,
+        availability: req.body.availability
+      };
+
+      // 🔥 image optional safe handling
+      if (req.file && req.file.path) {
+        updateData.image = req.file.path;
+      }
+
+      const updated = await Product.findByIdAndUpdate(id, updateData, { new: true });
+
+      if (!updated) {
+        return res.status(404).json({ success: false, message: "Product not found" });
+      }
+
+      return res.json({ success: true, product: updated });
+
+    } catch (err) {
+      console.log("UPDATE ERROR:", err);
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
 });
 app.get("/product/:id", async (req, res) => {
     try {
