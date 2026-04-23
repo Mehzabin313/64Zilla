@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FAQ</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f5f5f5;
+    margin: 0;
+}
+
+/* CONTAINER */
+.container {
+    width: 90%;
+    max-width: 800px;
+    margin: auto;
+    padding: 30px;
+}
+
+h2 {
+    text-align: center;
+}
+
+/* FAQ BOX */
+.faq {
+    background: white;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.faq-question {
+    padding: 15px;
+    background: #eee;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.faq-answer {
+    padding: 15px;
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>FAQ</h2>
+
+    <div class="faq">
+        <div class="faq-question">How to order?</div>
+        <div class="faq-answer">Select product → Add to cart → Checkout.</div>
+    </div>
+
+    <div class="faq">
+        <div class="faq-question">Delivery time?</div>
+        <div class="faq-answer">2-5 days depending on district.</div>
+    </div>
+
+    <div class="faq">
+        <div class="faq-question">Payment method?</div>
+        <div class="faq-answer">Cash on delivery and online payment.</div>
+    </div>
+
+    <div class="faq">
+        <div class="faq-question">Can I return product?</div>
+        <div class="faq-answer">Yes, within 24 hours if damaged.</div>
+    </div>
+
+</div>
+
+<script>
+const questions = document.querySelectorAll(".faq-question");
+
+questions.forEach(q => {
+    q.addEventListener("click", () => {
+        const answer = q.nextElementSibling;
+
+        answer.style.display =
+            answer.style.display === "block" ? "none" : "block";
+    });
+});
+</script>
+
+</body>
+</html>

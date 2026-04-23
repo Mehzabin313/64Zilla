@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Contact Us</title>
+
+<style>
+body {
+    font-family: Arial;
+    margin: 0;
+    background: #f5f5f5;
+}
+
+/* CONTAINER */
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: auto;
+    padding: 30px;
+}
+
+/* TITLE */
+h2 {
+    text-align: center;
+}
+
+/* GRID */
+.contact-box {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* LEFT INFO */
+.contact-info {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* FORM */
+.contact-form {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background: green;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+button:hover {
+    background: darkgreen;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Contact Us</h2>
+
+    <div class="contact-box">
+
+        <!-- INFO -->
+        <div class="contact-info">
+            <h3>Our Information</h3>
+            <p><b>Address:</b> Rangpur Head Office</p>
+            <p><b>Warehouse:</b> Keraniganj, Dhaka</p>
+            <p><b>Phone:</b> +880123456789</p>
+            <p><b>Email:</b> support@64zilla.com</p>
+            <p><b>Hours:</b> 9AM - 9PM</p>
+        </div>
+
+        <!-- FORM -->
+        <div class="contact-form">
+            <h3>Send Message</h3>
+
+            <form id="contactForm">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <textarea placeholder="Your Message" rows="5" required></textarea>
+                <button type="submit">Send</button>
+            </form>
+
+            <p id="msg"></p>
+        </div>
+
+    </div>
+</div>
+
+<script>
+document.getElementById("contactForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    document.getElementById("msg").innerText = "Message sent successfully!";
+});
+</script>
+
+</body>
+</html>
