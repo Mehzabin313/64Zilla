@@ -52,6 +52,11 @@ app.use(session({
     }
 }));
 
+
+if (!fs.existsSync("uploads")) {
+  fs.mkdirSync("uploads");
+}
+
 // ================= CLOUDINARY CONFIG =================
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -746,6 +751,9 @@ app.post("/change-password", async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
+});
+process.on("uncaughtException", (err) => {
+  console.log("🔥 UNCAUGHT ERROR:", err);
 });
 // ================= START SERVER =================
 app.listen(port, () => {
