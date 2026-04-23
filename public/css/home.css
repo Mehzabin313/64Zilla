@@ -874,6 +874,6 @@ transition:1s;
 #result-container{
   display: flex;
   flex-direction: row;
- 
+  align-items: center;
 
 }
