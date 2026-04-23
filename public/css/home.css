@@ -874,6 +874,11 @@ transition:1s;
 #result-container{
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
 
+}
+#cat-btn{
+   width: 100px;;
+  max-height: 500px;
 }
