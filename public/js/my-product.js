@@ -195,10 +195,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (!container2) return;
 
   // ================= CART TOGGLE =================
+ if (cartDiv && orderReview) {
   cartDiv.addEventListener("click", () => {
     orderReview.classList.toggle("active");
   });
-
+}
+ document.addEventListener("click", (e) => {
+  if (e.target.id === "close-cart") {
+    orderReview.classList.remove("active");
+  }
+});
   // ================= FETCH PRODUCTS =================
   const res = await fetch(`${BASE_URL}/products`);
   const products = await res.json();
@@ -212,10 +218,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const row = document.createElement("div");
       row.classList.add("col-md-2", "col-6");
 
-      const imgUrl = item.image
-        ? `${BASE_URL}/uploads/${item.image}`
-        : "images/default.png";
-
+      const imgUrl = item.image || "images/default.png";
       row.innerHTML = `
         <div class="product-card text-center">
           <img src="${imgUrl}" class="img-fluid rounded">
@@ -292,7 +295,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       div.innerHTML = `
         <div style="display:flex;gap:10px;margin-top:10px;">
-          <img src="${BASE_URL}/uploads/${item.image}" width="50">
+          <img src="${item.image}" width="50">
           <div>
             <h6>${item.name}</h6>
             <p>Qty: ${item.quantity}</p>
