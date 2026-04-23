@@ -15,7 +15,7 @@ const session = require('express-session');
 
 const app = express();
 const port = process.env.PORT || 3000;
-const BASE_URL = process.env.BASE_URL || `http://localhost:${port}`;
+
 
 const mongo = process.env.MONGO_URL;
 
@@ -30,7 +30,8 @@ app.use(cors({
   origin: "https://six4zilla.onrender.com",
   credentials: true
 }));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+//app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.json());
@@ -54,8 +55,9 @@ app.use(session({
 const uploadDir = path.join(__dirname, "uploads");
 
 if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
+  fs.mkdirSync(uploadDir, { recursive: true });
 }
+app.use("/uploads", express.static(uploadDir));
 
 // ================= MongoDB =================
 const connect = async () => {
@@ -85,13 +87,12 @@ connect();
 
 const upload = multer({ storage });*/
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, uploadDir);   // ✅ MUST use absolute path
-    },
-    filename: (req, file, cb) => {
-        const uniqueName = Date.now() + path.extname(file.originalname);
-        cb(null, uniqueName);
-    }
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
 });
 
 const upload = multer({ storage });
@@ -342,14 +343,11 @@ app.post('/add-product', upload.single('image'), async (req, res) => {
         console.log("BODY:", req.body);
         console.log("FILE:", req.file); // 🔥 IMPORTANT
 
-        if (!req.file) {
-            return res.status(400).json({
-                success: false,
-                message: "Image not received by multer"
-            });
-        }
+       
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: "No image uploaded" });
+    }
         
-        const imageUrl = `${BASE_URL}/uploads/${req.file.filename}`;
 
 const product = new Product({
     sellerId: req.body.sellerId,
@@ -358,15 +356,15 @@ const product = new Product({
     district: req.body.district,
     size: req.body.size,
     availability: req.body.availability,
-    image: imageUrl
+    image: req.file.filename
 });
 
         await product.save();
 
       res.json({
-            success: true,
-            image: imageUrl
-        });
+      success: true,
+      message: "Product added"
+    });
 
     } catch (err) {
         console.log(err);
@@ -398,8 +396,8 @@ app.put('/update-product/:id', upload.single('image'), async (req, res) => {
         };
 
       if (req.file) {
-    updateData.image = `${BASE_URL}/uploads/${req.file.filename}`;
-}
+      updateData.image = req.file.filename;
+    }
 
 
         await Product.findByIdAndUpdate(req.params.id, updateData);
@@ -607,6 +605,41 @@ app.get("/sellers", async (req, res) => {
     try {
         const sellers = await Seller.find();
         res.json(sellers);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+//-----user profile details------
+app.get("/me", async (req, res) => {
+    if (!req.session.user) {
+        return res.json({ success: false });
+    }
+
+    const user = await User.findById(req.session.user.id).select("-password");
+
+    res.json({ success: true, user });
+});
+app.post("/change-password", async (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.json({ success: false, message: "Not logged in" });
+        }
+
+        const user = await User.findById(req.session.user.id);
+
+        const match = await bcrypt.compare(req.body.oldPassword, user.password);
+
+        if (!match) {
+            return res.json({ success: false, message: "Old password wrong" });
+        }
+
+        const hashed = await bcrypt.hash(req.body.newPassword, 10);
+
+        user.password = hashed;
+        await user.save();
+
+        res.json({ success: true });
+
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
