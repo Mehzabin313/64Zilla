@@ -344,7 +344,7 @@ async function checkUser() {
         const data = await res.json();
 
         if (data.success) {
-            loginBtn.textContent = "LOGIN";
+            loginBtn.textContent = "PROFILE";
             loginBtn.onclick = () => window.location.href = "profile.html";
         } else {
             loginBtn.textContent = "LOGIN";
