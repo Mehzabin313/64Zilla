@@ -570,7 +570,7 @@ if (addBtn) {
 }
 // IMAGE HANDLER (IMPORTANT FIX)
 // =======================
-function getImage(p) {
+/*function getImage(p) {
     if (!p?.image) return "";
 
     // already full URL (Cloudinary)
@@ -580,6 +580,20 @@ function getImage(p) {
 
     // fallback local server
     return `${BASE_URL}/uploads/${p.image}`;
+    
+}*/
+function getImage(item) {
+
+  // no image
+  if (!item.image) return "images/default.png";
+
+  // Cloudinary / full URL
+  if (item.image.startsWith("http")) {
+    return item.image;
+  }
+
+  // OLD DATA SUPPORT (optional)
+  return `${BASE_URL}/uploads/${item.image}`;
 }
 
 // =======================
@@ -606,7 +620,7 @@ async function loadProducts() {
         products.forEach(p => {
             table.innerHTML += `
 <tr>
-    <td> <img src="${p.image}" width="50" /></td>
+    <td> <img src="${getImage(p)}" width="50" /></td>
     <td>${p.name}</td>
     <td>${p.district || "-"}</td>
     <td>${p.size || "-"}</td>
