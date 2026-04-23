@@ -376,13 +376,15 @@ const product = new Product({
 });*/
 app.post("/add-product", upload.single("image"), async (req, res) => {
   try {
+
     console.log("BODY:", req.body);
     console.log("FILE:", req.file);
 
-    if (!req.body.name || !req.body.price || !req.body.sellerId) {
+    // 🔥 image check
+    if (!req.file) {
       return res.status(400).json({
         success: false,
-        message: "Missing fields"
+        message: "Image missing (multer failed)"
       });
     }
 
@@ -393,17 +395,17 @@ app.post("/add-product", upload.single("image"), async (req, res) => {
       district: req.body.district,
       size: req.body.size,
       availability: req.body.availability,
-      image: req.file ? req.file.path : ""
+      image: req.file.path
     });
 
     await product.save();
 
-    return res.json({ success: true });
+    res.json({ success: true });
 
   } catch (err) {
     console.log("ADD PRODUCT ERROR:", err);
 
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
       message: err.message
     });
