@@ -339,7 +339,8 @@ app.get("/my-products/:sellerId", async (req, res) => {
         console.error(err);
         res.status(500).json({ error: err.message });
     }
-});*/
+});
+//last final
 app.post('/add-product', upload.single('image'), async (req, res) => {
     try {
         console.log("BODY:", req.body);
@@ -372,6 +373,41 @@ const product = new Product({
         console.log(err);
         res.status(500).json({ error: err.message });
     }
+});*/
+app.post("/add-product", upload.single("image"), async (req, res) => {
+  try {
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
+
+    if (!req.body.name || !req.body.price || !req.body.sellerId) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing fields"
+      });
+    }
+
+    const product = new Product({
+      sellerId: req.body.sellerId,
+      name: req.body.name,
+      price: req.body.price,
+      district: req.body.district,
+      size: req.body.size,
+      availability: req.body.availability,
+      image: req.file ? req.file.path : ""
+    });
+
+    await product.save();
+
+    return res.json({ success: true });
+
+  } catch (err) {
+    console.log("ADD PRODUCT ERROR:", err);
+
+    return res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
 });
 
 // ================= DELETE PRODUCT =================
