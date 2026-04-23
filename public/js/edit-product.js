@@ -80,7 +80,8 @@ async function loadProduct() {
 loadProduct();
 
 // ================= UPDATE PRODUCT =================
-async function updateProduct() {
+//final clear version update one
+/*async function updateProduct() {
 
     try {
         const formData = new FormData();
@@ -101,18 +102,11 @@ async function updateProduct() {
             method: "PUT",
             body: formData
         });
-let data;
-        try {
-            data = JSON.parse(text); // 🔥 safe parse
-        } catch {
-            console.error("❌ Not JSON response:", text);
-            alert("Server error (not JSON)");
-            return;
-        }
+
         const data = await res.json();
 
         if (!data.success) {
-           throw new Error(data.message || "Update failed");
+            throw new Error("Update failed");
         }
 
         alert("Product updated successfully");
@@ -122,4 +116,38 @@ let data;
         console.log(err);
         alert(err.message);
     }
-}
+}*/
+window.updateProduct = async function () {
+    try {
+        const formData = new FormData();
+
+        formData.append("name", document.getElementById("name").value);
+        formData.append("price", document.getElementById("price").value);
+        formData.append("district", document.getElementById("district").value);
+        formData.append("size", document.getElementById("size").value);
+        formData.append("availability", document.getElementById("availability").value);
+
+        const file = document.getElementById("image").files[0];
+        if (file) {
+            formData.append("image", file);
+        }
+
+        const res = await fetch(`${BASE_URL}/update-product/${id}`, {
+            method: "PUT",
+            body: formData
+        });
+
+        const result = await res.json(); // 🔥 no duplicate
+
+        if (!result.success) {
+            throw new Error("Update failed");
+        }
+
+        alert("Updated successfully");
+        window.location.href = "seller-dashboard.html";
+
+    } catch (err) {
+        console.log(err);
+        alert("Error updating product");
+    }
+};
