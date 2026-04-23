@@ -418,7 +418,17 @@ app.put('/update-product/:id', (req, res) => {
 
       if (err) {
         console.log("MULTER ERROR:", err);
-        return res.status(500).json({ success: false, message: "Upload error" });
+        return res.status(500).json({
+          success: false,
+          message: "Upload failed"
+        });
+      }
+
+      if (!req.params.id) {
+        return res.status(400).json({
+          success: false,
+          message: "ID missing"
+        });
       }
 
       const { name, price, district, size, availability } = req.body;
@@ -432,16 +442,30 @@ app.put('/update-product/:id', (req, res) => {
       };
 
       if (req.file) {
-        updateData.image = req.file.path; // ✅ cloudinary URL
+        updateData.image = req.file.path;
       }
 
-      await Product.findByIdAndUpdate(req.params.id, updateData);
+      const updated = await Product.findByIdAndUpdate(
+        req.params.id,
+        updateData,
+        { new: true }
+      );
+
+      if (!updated) {
+        return res.status(404).json({
+          success: false,
+          message: "Product not found"
+        });
+      }
 
       res.json({ success: true });
 
     } catch (err) {
       console.log("UPDATE ERROR:", err);
-      res.status(500).json({ success: false, message: err.message });
+      res.status(500).json({
+        success: false,
+        message: err.message
+      });
     }
 
   });
