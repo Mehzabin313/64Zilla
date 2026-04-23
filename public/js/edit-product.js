@@ -101,11 +101,18 @@ async function updateProduct() {
             method: "PUT",
             body: formData
         });
-
+let data;
+        try {
+            data = JSON.parse(text); // 🔥 safe parse
+        } catch {
+            console.error("❌ Not JSON response:", text);
+            alert("Server error (not JSON)");
+            return;
+        }
         const data = await res.json();
 
         if (!data.success) {
-            throw new Error("Update failed");
+           throw new Error(data.message || "Update failed");
         }
 
         alert("Product updated successfully");
