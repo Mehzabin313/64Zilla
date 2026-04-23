@@ -568,6 +568,19 @@ if (addBtn) {
         window.location.href = "add-product.html";
     };
 }
+// IMAGE HANDLER (IMPORTANT FIX)
+// =======================
+function getImage(p) {
+  if (!p?.image) return "";
+
+  // Cloudinary full URL
+  if (p.image.startsWith("http")) {
+    return p.image;
+  }
+
+  // Local server fallback
+  return `${BASE_URL}/uploads/${p.image}`;
+}
 
 // =======================
 // LOAD PRODUCTS
@@ -593,7 +606,7 @@ async function loadProducts() {
         products.forEach(p => {
             table.innerHTML += `
 <tr>
-    <td><img src="${p.image}" width="50"></td>
+    <td> <img src="${getImage(p)}" width="50" /></td>
     <td>${p.name}</td>
     <td>${p.district || "-"}</td>
     <td>${p.size || "-"}</td>
