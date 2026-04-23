@@ -80,7 +80,7 @@ button:hover {
     <h2>User Profile</h2>
 
     <div class="info">
-        
+        <p><b>Name:</b> <span id="name">Loading...</span></p>
         <p><b>Email:</b> <span id="email">Loading...</span></p>
         <p><b>Role:</b> <span id="role">Loading...</span></p>
     </div>
@@ -114,7 +114,7 @@ async function loadProfile() {
         return;
     }
 
-    document.getElementById("name").innerText = data.user.username;
+    document.getElementById("name").innerText = data.user.name;
     document.getElementById("email").innerText = data.user.email;
     document.getElementById("role").innerText = data.user.role;
 }
