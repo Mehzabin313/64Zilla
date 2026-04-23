@@ -384,7 +384,7 @@ app.delete('/delete-product/:id', async (req, res) => {
     }
 });
 // ================= EDIT PRODUCT =================
-app.put('/update-product/:id', upload.single('image'), async (req, res) => {
+/*app.put('/update-product/:id', upload.single('image'), async (req, res) => {
     try {
 
         const { name, price, district, size, availability } = req.body;
@@ -409,6 +409,43 @@ app.put('/update-product/:id', upload.single('image'), async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
+});*/
+app.put('/update-product/:id', (req, res) => {
+
+  upload.single('image')(req, res, async function (err) {
+
+    try {
+
+      if (err) {
+        console.log("MULTER ERROR:", err);
+        return res.status(500).json({ success: false, message: "Upload error" });
+      }
+
+      const { name, price, district, size, availability } = req.body;
+
+      const updateData = {
+        name,
+        price,
+        district,
+        size,
+        availability
+      };
+
+      if (req.file) {
+        updateData.image = req.file.path; // ✅ cloudinary URL
+      }
+
+      await Product.findByIdAndUpdate(req.params.id, updateData);
+
+      res.json({ success: true });
+
+    } catch (err) {
+      console.log("UPDATE ERROR:", err);
+      res.status(500).json({ success: false, message: err.message });
+    }
+
+  });
+
 });
 app.get("/product/:id", async (req, res) => {
     try {
