@@ -746,13 +746,13 @@ transition:1s;
 }*/
 .category {
     display: flex;
-    /* center all buttons horizontally */
+   
     align-items: center;
-    gap: 20px;               /* space between buttons */
-    flex-wrap: wrap;          /* wrap if screen is small */
-    margin: 25px 0;           /* optional vertical spacing */
+    gap: 20px;              
+    flex-wrap: wrap;         
+    margin: 25px 0;          
     padding: 0; 
-    padding-left: 25px;              /* remove left padding */
+    padding-left: 25px;             
 }
 
 .category-btn {
@@ -772,7 +772,6 @@ transition:1s;
   background-color:#2d7a2d;
   color: #f1f1f1;
 }
-
 /* --- existing code above --- */
 
 /* কার্ট বাটন এবং কাউন্ট ব্যাজ */
@@ -871,4 +870,11 @@ transition:1s;
 #order-review::-webkit-scrollbar-thumb {
     background: #cccccc;
     border-radius: 10px;
+}
+#result-container{
+  display: flex;
+  flex-direction: row;
+  background: #08336b;
+  width: 200px;
+
 }

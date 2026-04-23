@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
-    const res = await fetch(`https://six4zilla.onrender.com/search-products?q=${query}`);
+    const res = await fetch(`${BASE_URL}/search-products?q=${query}`);
     const products = await res.json();
 
     if (products.length === 0) {
