@@ -331,17 +331,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
+
 <script>
-    const loginBtn = document.getElementById("login-btn");
-if (localStorage.getItem('isLoggedIn')) {
-    loginBtn.textContent = "PROFILE";
-    loginBtn.onclick = () => window.location.href = "profile.html";
-} else {
-    loginBtn.onclick = () => window.location.href = "login.html";
+const loginBtn = document.getElementById("login-btn");
+
+async function checkUser() {
+    try {
+        const res = await fetch("https://six4zilla.onrender.com/me", {
+            credentials: "include"
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            loginBtn.textContent = "PROFILE";
+            loginBtn.onclick = () => window.location.href = "profile.html";
+        } else {
+            loginBtn.textContent = "LOGIN";
+            loginBtn.onclick = () => window.location.href = "login.html";
+        }
+
+    } catch (err) {
+        console.log(err);
+    }
 }
-</script>
-<script>
-console.log("HOME JS LOADED");
+
+checkUser();
 </script>
 
 <script src="js/product.js"></script>

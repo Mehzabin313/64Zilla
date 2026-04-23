@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+/*document.addEventListener("DOMContentLoaded", function () {
     const form = document.querySelector("form");
     const registerBtn = document.getElementById("register-btn");
 
@@ -41,4 +41,38 @@ document.addEventListener("DOMContentLoaded", function () {
         // Redirect to home page
         window.location.href = "home.html"; // Change file name if needed
     });
+});*/
+const BASE_URL = "https://six4zilla.onrender.com";
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const form = document.getElementById("registerForm");
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const data = {
+            username: document.getElementById("username").value,
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value
+        };
+
+        const res = await fetch(`${BASE_URL}/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+
+        if (res.status === 201 || result.success) {
+            alert("Registration Successful");
+            window.location.href = "login.html";
+        } else {
+            alert("Error: " + result.message);
+        }
+    });
+
 });

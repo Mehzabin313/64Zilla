@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>User Profile - 64Zilla</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #f2f6f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Card */
+.profile-card {
+    width: 380px;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* Header */
+h2 {
+    text-align: center;
+    color: #2e7d32;
+}
+
+/* Info box */
+.info p {
+    background: #f5f5f5;
+    padding: 10px;
+    border-radius: 6px;
+    margin: 8px 0;
+}
+
+/* Password section */
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+/* Button */
+button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border: none;
+    background: #43a047;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #2e7d32;
+}
+
+.logout {
+    background: #e53935;
+}
+
+.logout:hover {
+    background: #c62828;
+}
+</style>
+
+</head>
+<body>
+
+<div class="profile-card">
+
+    <h2>User Profile</h2>
+
+    <div class="info">
+        <p><b>Name:</b> <span id="name">Loading...</span></p>
+        <p><b>Email:</b> <span id="email">Loading...</span></p>
+        <p><b>Role:</b> <span id="role">Loading...</span></p>
+    </div>
+
+    <hr>
+
+    <h3>Change Password</h3>
+
+    <input type="password" id="oldPassword" placeholder="Old Password">
+    <input type="password" id="newPassword" placeholder="New Password">
+
+    <button onclick="changePassword()">Update Password</button>
+
+    <button class="logout" id="logoutBtn">Logout</button>
+
+</div>
+
+<script>
+const BASE_URL = "https://six4zilla.onrender.com";
+
+/* ================= LOAD PROFILE ================= */
+async function loadProfile() {
+    const res = await fetch(`${BASE_URL}/me`, {
+        credentials: "include"
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    document.getElementById("name").innerText = data.user.username;
+    document.getElementById("email").innerText = data.user.email;
+    document.getElementById("role").innerText = data.user.role;
+}
+
+loadProfile();
+
+/* ================= PASSWORD CHANGE ================= */
+async function changePassword() {
+
+    const oldPassword = document.getElementById("oldPassword").value;
+    const newPassword = document.getElementById("newPassword").value;
+
+    if (!oldPassword || !newPassword) {
+        alert("Fill both fields");
+        return;
+    }
+
+    const res = await fetch(`${BASE_URL}/change-password`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({
+            oldPassword,
+            newPassword
+        })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+        alert("Password updated successfully");
+        document.getElementById("oldPassword").value = "";
+        document.getElementById("newPassword").value = "";
+    } else {
+        alert(data.message || "Failed to update password");
+    }
+}
+
+/* ================= LOGOUT ================= */
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+
+    await fetch(`${BASE_URL}/logout`, {
+        method: "POST",
+        credentials: "include"
+    });
+
+    window.location.href = "login.html";
+});
+</script>
+
+</body>
+</html>
