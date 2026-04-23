@@ -7,9 +7,10 @@ const bcrypt = require('bcryptjs');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const path = require('path');
+const multer = require('multer');
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
-const multer = require('multer');
+
 const fs = require('fs');
 const session = require('express-session');
 
@@ -51,13 +52,23 @@ app.use(session({
     }
 }));
 
-// ================= Ensure uploads folder =================
-const uploadDir = path.join(__dirname, "uploads");
+// ================= CLOUDINARY CONFIG =================
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET
+});
 
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-app.use("/uploads", express.static(uploadDir));
+// ================= MULTER (CLOUDINARY STORAGE) =================
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "six4zilla-products",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"]
+  }
+});
+
+const upload = multer({ storage });
 
 // ================= MongoDB =================
 const connect = async () => {
@@ -86,16 +97,7 @@ connect();
 });
 
 const upload = multer({ storage });*/
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
-});
 
-const upload = multer({ storage });
 
 // ================= ROUTES =================
 //-----search product--------
@@ -356,7 +358,7 @@ const product = new Product({
     district: req.body.district,
     size: req.body.size,
     availability: req.body.availability,
-    image: req.file.filename
+    image: req.file.path
 });
 
         await product.save();
@@ -396,7 +398,7 @@ app.put('/update-product/:id', upload.single('image'), async (req, res) => {
         };
 
       if (req.file) {
-      updateData.image = req.file.filename;
+      updateData.image = req.file.path;
     }
 
 
