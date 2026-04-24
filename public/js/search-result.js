@@ -93,15 +93,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     products.forEach((item, index) => {
 
-    const img = item.image
-        ? `${BASE_URL}/uploads/${item.image}`
-        : "images/default.png";
+    const img = item.image || "images/default.png";
 
 
       container.innerHTML += `
         <div style="border:1px solid #ccc; padding:10px; margin:10px;" id="cat-btn">
           
-          <img src="${img}" width="150">
+          <img src="${img}" width="150"> 
           <h4>${item.name}</h4>
           <p>${item.district}</p>
           <p>৳ ${item.price}</p>
