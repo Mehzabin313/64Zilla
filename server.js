@@ -423,12 +423,18 @@ const product = new Product({
     });
   }
 });*/
-app.post("/add-product", upload.single("image"), async (req, res) => {
+// এটা দাও
+app.post("/add-product", (req, res, next) => {
+  if (!upload) {
+    console.log("UPLOAD IS UNDEFINED");
+    return res.status(500).json({ success: false, message: "Cloudinary not ready" });
+  }
+  upload.single("image")(req, res, next);
+}, async (req, res) => {
   console.log("=== ADD PRODUCT HIT ===");
   console.log("BODY:", JSON.stringify(req.body));
-console.log("FILE:", JSON.stringify(req.file));
-console.log("CLOUDINARY:", process.env.CLOUD_NAME, process.env.CLOUD_API_KEY);
-  
+  console.log("FILE:", JSON.stringify(req.file));
+
   try {
     if (!req.file) {
       return res.status(400).json({ success: false, message: "Image missing" });
