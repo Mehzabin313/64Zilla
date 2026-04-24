@@ -424,18 +424,17 @@ const product = new Product({
   }
 });*/
 // এটা দাও
-app.post("/add-product", (req, res, next) => {
-  if (!upload) {
-    console.log("UPLOAD IS UNDEFINED");
-    return res.status(500).json({ success: false, message: "Cloudinary not ready" });
-  }
-  upload.single("image")(req, res, next);
-}, async (req, res) => {
-  console.log("=== ADD PRODUCT HIT ===");
-  console.log("BODY:", JSON.stringify(req.body));
-  console.log("FILE:", JSON.stringify(req.file));
+app.post("/add-product", (req, res) => {
+  upload.single("image")(req, res, function(err) {
+    if (err) {
+      console.log("MULTER ERROR:", err.message);
+      return res.status(500).json({ success: false, message: err.message });
+    }
 
-  try {
+    console.log("=== ADD PRODUCT HIT ===");
+    console.log("BODY:", JSON.stringify(req.body));
+    console.log("FILE:", JSON.stringify(req.file));
+
     if (!req.file) {
       return res.status(400).json({ success: false, message: "Image missing" });
     }
@@ -450,13 +449,13 @@ app.post("/add-product", (req, res, next) => {
       image: req.file.path
     });
 
-    await product.save();
-    res.json({ success: true });
-
-  } catch (err) {
-    console.log("ADD PRODUCT ERROR:", err.message);
-    res.status(500).json({ success: false, message: err.message });
-  }
+    product.save()
+      .then(() => res.json({ success: true }))
+      .catch(err => {
+        console.log("DB ERROR:", err.message);
+        res.status(500).json({ success: false, message: err.message });
+      });
+  });
 });
 
 // ================= DELETE PRODUCT =================
