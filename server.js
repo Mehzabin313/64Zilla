@@ -379,7 +379,7 @@ const product = new Product({
         res.status(500).json({ error: err.message });
     }
 });*/
-app.post("/add-product", upload.single("image"), async (req, res) => {
+/*app.post("/add-product", upload.single("image"), async (req, res) => {
   try {
 
     console.log("BODY:", req.body);
@@ -414,6 +414,35 @@ app.post("/add-product", upload.single("image"), async (req, res) => {
       success: false,
       message: err.message
     });
+  }
+});*/
+app.post("/add-product", upload.single("image"), async (req, res) => {
+  console.log("=== ADD PRODUCT HIT ===");
+  console.log("BODY:", req.body);
+  console.log("FILE:", req.file);
+  console.log("CLOUDINARY ENV:", process.env.CLOUD_NAME, process.env.CLOUD_API_KEY);
+  
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: "Image missing" });
+    }
+
+    const product = new Product({
+      sellerId: req.body.sellerId,
+      name: req.body.name,
+      price: req.body.price,
+      district: req.body.district,
+      size: req.body.size,
+      availability: req.body.availability,
+      image: req.file.path
+    });
+
+    await product.save();
+    res.json({ success: true });
+
+  } catch (err) {
+    console.log("ADD PRODUCT ERROR:", err.message);
+    res.status(500).json({ success: false, message: err.message });
   }
 });
 
