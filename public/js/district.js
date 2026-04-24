@@ -293,7 +293,7 @@ async function loadProducts() {
     products.forEach(p => {
       container.innerHTML += `
         <div class="product-card">
-          <img src="${BASE_URL}/uploads/${p.image}">
+          <img src="${p.image}">
           <h3>${p.name}</h3>
           <p>৳ ${p.price}</p>
           <p>${p.district}</p>
