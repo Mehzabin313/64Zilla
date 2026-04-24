@@ -1,5 +1,6 @@
 
-
+console.log("SERVER STARTING...");
+console.log("ENV CHECK:", process.env.CLOUD_NAME, process.env.MONGO_URL ? "MONGO OK" : "MONGO MISSING");
 const express = require('express');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
