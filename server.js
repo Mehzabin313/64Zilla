@@ -418,9 +418,9 @@ const product = new Product({
 });*/
 app.post("/add-product", upload.single("image"), async (req, res) => {
   console.log("=== ADD PRODUCT HIT ===");
-  console.log("BODY:", req.body);
-  console.log("FILE:", req.file);
-  console.log("CLOUDINARY ENV:", process.env.CLOUD_NAME, process.env.CLOUD_API_KEY);
+  console.log("BODY:", JSON.stringify(req.body));
+console.log("FILE:", JSON.stringify(req.file));
+console.log("CLOUDINARY:", process.env.CLOUD_NAME, process.env.CLOUD_API_KEY);
   
   try {
     if (!req.file) {
