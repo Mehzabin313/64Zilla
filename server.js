@@ -794,8 +794,10 @@ app.post("/change-password", async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
 process.on("uncaughtException", (err) => {
-  console.log("🔥 UNCAUGHT ERROR:", err);
+  console.log("🔥 UNCAUGHT ERROR:", err.message);
+  console.log("🔥 STACK:", err.stack);
 });
 // ================= START SERVER =================
 app.listen(port, () => {
