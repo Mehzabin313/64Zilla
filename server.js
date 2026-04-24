@@ -66,15 +66,21 @@ cloudinary.config({
 });
 
 // ================= MULTER (CLOUDINARY STORAGE) =================
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: "six4zilla-products",
-    allowed_formats: ["jpg", "jpeg", "png", "webp"]
-  }
-});
-
-const upload = multer({ storage });
+// এটা দাও
+let upload;
+try {
+  const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+      folder: "six4zilla-products",
+      allowed_formats: ["jpg", "jpeg", "png", "webp"]
+    }
+  });
+  upload = multer({ storage });
+  console.log("MULTER CLOUDINARY READY");
+} catch (err) {
+  console.log("MULTER SETUP ERROR:", err.message);
+}
 
 // ================= MongoDB =================
 const connect = async () => {
