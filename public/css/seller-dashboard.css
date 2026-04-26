@@ -11,10 +11,11 @@ body {
 /* Sidebar */
 .sidebar {
     width: 220px;
-    background: #96D85D;
+    background: #030600;
     color: white;
     height: 100vh;
     padding: 20px;
+    position: fixed;
 }
 
 .sidebar ul {
