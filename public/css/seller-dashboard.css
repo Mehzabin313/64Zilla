@@ -10,7 +10,7 @@ body {
 
 /* Sidebar */
 .sidebar {
-    width: 180px;
+    width: 150px;
     background: #030600;
     color: white;
     height: 100vh;
@@ -59,8 +59,8 @@ body {
 /* Table */
 .table {
     background: white;
-    margin-top: 20px;
-    padding: 20px;
+   
+   
     border-radius: 10px;
 }
 
