@@ -10,7 +10,7 @@ body {
 
 /* Sidebar */
 .sidebar {
-    width: 200px;
+    width: 180px;
     background: #030600;
     color: white;
     height: 100vh;
@@ -48,13 +48,13 @@ body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* Chart */
+/* Chart 
 .chart {
     background: white;
     margin-top: 20px;
     padding: 20px;
     border-radius: 10px;
-}
+}*/
 
 /* Table */
 .table {
