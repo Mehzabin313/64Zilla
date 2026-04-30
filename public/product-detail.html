@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --green: #1D9E75;
+      --green-dark: #0F6E56;
+      --green-light: #E1F5EE;
+      --red-light: #FAECE7;
+      --red-text: #993C1D;
+      --border: #e0e0e0;
+      --text-muted: #888;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f8f9fa;
+      color: #222;
+    }
+
+    /* ======= NAVBAR ======= */
+    .navbar {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+    }
+    .navbar-brand {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--green) !important;
+    }
+    .back-link {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--green); }
+
+    /* ======= BREADCRUMB ======= */
+    .breadcrumb-area {
+      background: #fff;
+      padding: 10px 20px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .breadcrumb-area a { color: var(--green); text-decoration: none; }
+
+    /* ======= MAIN LAYOUT ======= */
+    .detail-wrapper {
+      max-width: 1100px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+
+    .detail-card {
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    /* ======= IMAGE SECTION ======= */
+    .main-img-wrap {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      aspect-ratio: 1;
+      background: #f1f1f1;
+      position: relative;
+    }
+    #mainProductImg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .main-img-wrap:hover #mainProductImg {
+      transform: scale(1.04);
+    }
+
+    .thumb-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .thumb-item {
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      background: #f1f1f1;
+    }
+    .thumb-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .thumb-item.active,
+    .thumb-item:hover {
+      border-color: var(--green);
+    }
+
+    /* ======= INFO SECTION ======= */
+    .shop-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--green-light);
+      color: var(--green-dark);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .shop-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--green);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .product-name {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 6px;
+    }
+    .product-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .price-main {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--green);
+    }
+    .price-old {
+      font-size: 15px;
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+    .discount-badge {
+      background: var(--red-light);
+      color: var(--red-text);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 20px;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 16px 0;
+    }
+
+    .detail-table {
+      width: 100%;
+      font-size: 14px;
+      border-collapse: collapse;
+    }
+    .detail-table tr td {
+      padding: 6px 0;
+    }
+    .detail-table tr td:first-child {
+      color: var(--text-muted);
+      width: 40%;
+    }
+    .detail-table tr td:last-child {
+      font-weight: 500;
+    }
+    .stock-yes { color: var(--green); font-weight: 600; }
+    .stock-no { color: #c0392b; font-weight: 600; }
+
+    .qty-section {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 16px 0;
+    }
+    .qty-label {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .qty-ctrl {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .qty-ctrl button {
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: #f5f5f5;
+      font-size: 18px;
+      cursor: pointer;
+      color: #333;
+      transition: background 0.2s;
+    }
+    .qty-ctrl button:hover { background: var(--green-light); color: var(--green); }
+    .qty-ctrl span {
+      width: 40px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 600;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+
+    .btn-add {
+      width: 100%;
+      padding: 13px;
+      background: var(--green);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-bottom: 10px;
+    }
+    .btn-add:hover { background: var(--green-dark); }
+    .btn-add:active { transform: scale(0.98); }
+
+    .btn-buy {
+      width: 100%;
+      padding: 13px;
+      background: #fff;
+      color: var(--green);
+      border: 2px solid var(--green);
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-buy:hover { background: var(--green-light); }
+
+    .delivery-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .delivery-info svg { flex-shrink: 0; }
+
+    .desc-box {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #555;
+      line-height: 1.7;
+      margin-top: 14px;
+      border: 1px solid var(--border);
+    }
+    .desc-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    /* ======= TOAST ======= */
+    .toast-wrap {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+    }
+    .toast-msg {
+      background: var(--green);
+      color: #fff;
+      padding: 11px 24px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .toast-msg.show { opacity: 1; }
+
+    /* ======= LOADING / ERROR ======= */
+    .loading-state {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 300px;
+      font-size: 15px;
+      color: var(--text-muted);
+      flex-direction: column;
+      gap: 14px;
+    }
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--green-light);
+      border-top-color: var(--green);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ======= RELATED PRODUCTS ======= */
+    .related-section {
+      max-width: 1100px;
+      margin: 28px auto 40px;
+      padding: 0 16px;
+    }
+    .related-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #222;
+    }
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 14px;
+    }
+    .related-card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .related-card:hover {
+      box-shadow: 0 4px 18px rgba(0,0,0,0.10);
+      transform: translateY(-2px);
+    }
+    .related-card img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+    }
+    .related-card-info {
+      padding: 10px 12px 12px;
+    }
+    .related-card-name {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .related-card-district {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .related-card-price {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--green);
+      margin-top: 4px;
+    }
+
+    /* ======= RESPONSIVE ======= */
+    @media (max-width: 768px) {
+      .detail-card {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 18px;
+      }
+      .detail-wrapper { margin: 12px auto; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar d-flex justify-content-between align-items-center">
+  <a class="navbar-brand" href="index.html">🛍 BanglarBazar</a>
+  <a class="back-link" href="javascript:history.back()">
+    ← Back to Products
+  </a>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb-area" id="breadcrumb">
+  <a href="index.html">Home</a> / <span id="breadcrumb-name">Loading...</span>
+</div>
+
+<!-- MAIN PRODUCT DETAIL -->
+<div class="detail-wrapper">
+  <div id="loadingState" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading product...</p>
+  </div>
+
+  <div class="detail-card" id="detailCard" style="display:none;">
+
+    <!-- LEFT: IMAGE SECTION -->
+    <div>
+      <div class="main-img-wrap">
+        <img id="mainProductImg" src="" alt="Product Image" />
+      </div>
+      <div class="thumb-row" id="thumbRow">
+        <!-- thumbnails injected by JS -->
+      </div>
+    </div>
+
+    <!-- RIGHT: INFO SECTION -->
+    <div>
+      <div class="shop-badge">
+        <span class="shop-dot"></span>
+        <span id="shopName">Loading...</span>
+      </div>
+
+      <h1 class="product-name" id="productName">—</h1>
+      <p class="product-subtitle" id="productSubtitle">—</p>
+
+      <div class="price-row">
+        <span class="price-main" id="productPrice">৳ 0</span>
+        <span class="price-old" id="productOldPrice" style="display:none;"></span>
+        <span class="discount-badge" id="discountBadge" style="display:none;"></span>
+      </div>
+
+      <hr class="divider" />
+
+      <table class="detail-table">
+        <tr>
+          <td>Weight / Size</td>
+          <td id="productWeight">—</td>
+        </tr>
+        <tr>
+          <td>District</td>
+          <td id="productDistrict">—</td>
+        </tr>
+        <tr>
+          <td>Category</td>
+          <td id="productCategory">—</td>
+        </tr>
+        <tr>
+          <td>Availability</td>
+          <td id="productStock">—</td>
+        </tr>
+      </table>
+
+      <hr class="divider" />
+
+      <!-- QUANTITY -->
+      <div class="qty-section">
+        <span class="qty-label">Quantity:</span>
+        <div class="qty-ctrl">
+          <button onclick="changeQty(-1)">−</button>
+          <span id="qtyDisplay">1</span>
+          <button onclick="changeQty(1)">+</button>
+        </div>
+      </div>
+
+      <button class="btn-add" onclick="addToCart()">🛒 Add to Cart</button>
+      <button class="btn-buy" onclick="buyNow()">⚡ Buy Now</button>
+
+      <div class="delivery-info">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1D9E75" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="1.5"/><circle cx="18.5" cy="18.5" r="1.5"/>
+        </svg>
+        Delivery in 1 day &nbsp;·&nbsp; Delivery fee ৳100
+      </div>
+
+      <div class="desc-box">
+        <p class="desc-title">Product Description</p>
+        <p id="productDesc">—</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RELATED PRODUCTS -->
+<div class="related-section" id="relatedSection" style="display:none;">
+  <h2 class="related-title">আরও পণ্য দেখুন</h2>
+  <div class="related-grid" id="relatedGrid"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-wrap">
+  <div class="toast-msg" id="toastMsg">Cart-এ যোগ হয়েছে!</div>
+</div>
+
+<script>
+  const BASE_URL = "https://six4zilla.onrender.com";
+  let currentProduct = null;
+  let qty = 1;
+
+  // ============ GET PRODUCT ID FROM URL ============
+  const params = new URLSearchParams(window.location.search);
+  const productId = params.get("id");
+
+  // ============ FETCH PRODUCT ============
+  async function loadProduct() {
+    if (!productId) {
+      showError("Product ID পাওয়া যায়নি।");
+      return;
+    }
+
+    try {
+      // First try: fetch single product by ID
+      const res = await fetch(`${BASE_URL}/products/${productId}`);
+      
+      if (res.ok) {
+        const product = await res.json();
+        renderProduct(product);
+      } else {
+        // Fallback: fetch all products and find by ID
+        const allRes = await fetch(`${BASE_URL}/products`);
+        const allProducts = await allRes.json();
+        const product = allProducts.find(p => p._id === productId);
+        if (product) {
+          renderProduct(product);
+          loadRelated(allProducts.filter(p => p._id !== productId));
+        } else {
+          showError("পণ্যটি পাওয়া যায়নি।");
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      showError("Server থেকে data আনতে সমস্যা হচ্ছে।");
+    }
+  }
+
+  // ============ LOAD ALL (for related) ============
+  async function loadAllProducts(currentId) {
+    try {
+      const res = await fetch(`${BASE_URL}/products`);
+      const all = await res.json();
+      loadRelated(all.filter(p => p._id !== currentId));
+    } catch(e) {}
+  }
+
+  // ============ RENDER PRODUCT ============
+  function renderProduct(item) {
+    currentProduct = item;
+
+    document.title = item.name + " | BanglarBazar";
+    document.getElementById("breadcrumb-name").textContent = item.name;
+
+    // Shop / seller name
+    document.getElementById("shopName").textContent =
+      item.shopName || item.seller || item.district + " Seller";
+
+    // Name & subtitle
+    document.getElementById("productName").textContent = item.name;
+    document.getElementById("productSubtitle").textContent =
+      item.subtitle || item.description || (item.district + " এর বিখ্যাত পণ্য");
+
+    // Price
+    document.getElementById("productPrice").textContent = "৳ " + item.price;
+
+    if (item.originalPrice && item.originalPrice > item.price) {
+      const discount = Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100);
+      document.getElementById("productOldPrice").textContent = "৳ " + item.originalPrice;
+      document.getElementById("productOldPrice").style.display = "inline";
+      document.getElementById("discountBadge").textContent = discount + "% off";
+      document.getElementById("discountBadge").style.display = "inline";
+    }
+
+    // Details
+    document.getElementById("productWeight").textContent =
+      item.weight || item.size || item.quantity || "—";
+    document.getElementById("productDistrict").textContent = item.district || "—";
+    document.getElementById("productCategory").textContent =
+      item.category || item.type || "General";
+
+    const stockEl = document.getElementById("productStock");
+    if (item.stock === false || item.stock === 0) {
+      stockEl.innerHTML = '<span class="stock-no">Out of Stock</span>';
+    } else {
+      stockEl.innerHTML = '<span class="stock-yes">✔ In Stock</span>';
+    }
+
+    // Description
+    document.getElementById("productDesc").textContent =
+      item.description || item.desc ||
+      item.name + " — " + (item.district || "বাংলাদেশ") + " এর ঐতিহ্যবাহী পণ্য। সরাসরি উৎপাদকের কাছ থেকে সংগ্রহ করা হয়েছে।";
+
+    // Image
+    const imgSrc = getImage(item);
+    document.getElementById("mainProductImg").src = imgSrc;
+
+    // Thumbnails: main image + extras if available
+    const thumbRow = document.getElementById("thumbRow");
+    thumbRow.innerHTML = "";
+
+    const allImages = item.images && item.images.length > 0
+      ? item.images
+      : [imgSrc, imgSrc, imgSrc]; // show same image 3x if no extras
+
+    allImages.forEach((src, i) => {
+      const div = document.createElement("div");
+      div.className = "thumb-item" + (i === 0 ? " active" : "");
+      div.innerHTML = `<img src="${src}" alt="thumb">`;
+      div.onclick = () => {
+        document.getElementById("mainProductImg").src = src;
+        document.querySelectorAll(".thumb-item").forEach(t => t.classList.remove("active"));
+        div.classList.add("active");
+      };
+      thumbRow.appendChild(div);
+    });
+
+    // Show card, hide loading
+    document.getElementById("loadingState").style.display = "none";
+    document.getElementById("detailCard").style.display = "grid";
+
+    // Load related
+    loadAllProducts(item._id);
+  }
+
+  // ============ RELATED PRODUCTS ============
+  function loadRelated(products) {
+    if (!products || products.length === 0) return;
+    const grid = document.getElementById("relatedGrid");
+    grid.innerHTML = "";
+    const show = products.slice(0, 6);
+    show.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "related-card";
+      card.innerHTML = `
+        <img src="${getImage(item)}" alt="${item.name}"
+          onerror="this.src='images/default.png'">
+        <div class="related-card-info">
+          <p class="related-card-name">${item.name}</p>
+          <p class="related-card-district">${item.district || ""}</p>
+          <p class="related-card-price">৳ ${item.price}</p>
+        </div>
+      `;
+      card.onclick = () => {
+        window.location.href = `product-detail.html?id=${item._id}`;
+      };
+      grid.appendChild(card);
+    });
+    document.getElementById("relatedSection").style.display = "block";
+  }
+
+  // ============ IMAGE HELPER ============
+  function getImage(item) {
+    if (!item.image) return "images/default.png";
+    if (item.image.startsWith("http")) return item.image;
+    return `${BASE_URL}/uploads/${item.image}`;
+  }
+
+  // ============ QUANTITY ============
+  function changeQty(d) {
+    qty = Math.max(1, qty + d);
+    document.getElementById("qtyDisplay").textContent = qty;
+  }
+
+  // ============ ADD TO CART ============
+  function addToCart() {
+    if (!currentProduct) return;
+    let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const exist = cart.find(p => p._id === currentProduct._id);
+    if (exist) {
+      exist.quantity += qty;
+    } else {
+      cart.push({ ...currentProduct, quantity: qty });
+    }
+    localStorage.setItem("cart", JSON.stringify(cart));
+    showToast(qty + "টি " + currentProduct.name + " cart-এ যোগ হয়েছে!");
+  }
+
+  // ============ BUY NOW ============
+  function buyNow() {
+    if (!currentProduct) return;
+    let cart = [{ ...currentProduct, quantity: qty }];
+    localStorage.setItem("cart", JSON.stringify(cart));
+    window.location.href = "checkout.html";
+  }
+
+  // ============ TOAST ============
+  function showToast(msg) {
+    const t = document.getElementById("toastMsg");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 2800);
+  }
+
+  // ============ ERROR ============
+  function showError(msg) {
+    document.getElementById("loadingState").innerHTML = `
+      <p style="color:#c0392b;font-size:15px;">⚠️ ${msg}</p>
+      <a href="index.html" style="color:var(--green);text-decoration:none;font-size:14px;">← Home এ ফিরে যাও</a>
+    `;
+  }
+
+  // ============ INIT ============
+  loadProduct();
+</script>
+</body>
+</html>
