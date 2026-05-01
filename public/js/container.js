@@ -1125,6 +1125,12 @@ document.addEventListener("DOMContentLoaded", async () => {
           <button id="add-${index}">Add to Cart</button>
         </div>
       `;
+      row.querySelector(".product-card").addEventListener("click", (e) => {
+  // ❌ cart button click করলে redirect বন্ধ রাখবো
+  if (e.target.tagName === "BUTTON") return;
+
+  window.location.href = `product-detail.html?id=${item._id}`;
+});
       container2.appendChild(row);
       
       let count = 0;
