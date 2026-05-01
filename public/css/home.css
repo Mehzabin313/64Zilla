@@ -814,7 +814,19 @@ transition:1s;
     font-weight: bold;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
-
+[id^="add-"] {
+   width: 100%;
+   padding: 13px;
+   background: var(--green);
+   color: #fff;
+   border: none;
+   border-radius: 10px;
+   font-size: 15px;
+   font-weight: 600;
+   cursor: pointer;
+   transition: background 0.2s, transform 0.1s;
+   margin-bottom: 10px;
+}
 /* কার্ট ড্রপডাউন ডিজাইন */
 #order-review {
     display: none; /* JS handle করবে */
