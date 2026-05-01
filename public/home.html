@@ -16,6 +16,18 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
 </head>
+<style>
+     :root {
+      --green: #1D9E75;
+      --green-dark: #0F6E56;
+      --green-light: #E1F5EE;
+      --red-light: #FAECE7;
+      --red-text: #993C1D;
+      --border: #e0e0e0;
+      --text-muted: #888;
+    }
+
+</style>
 <body>
 
 
@@ -77,9 +89,12 @@
     </div>
  
     <!-- Banner -->
-    <div class="landinglogo">
+   <!--- <div class="landinglogo">
         <img src="images/banner.webp">
-    </div>
+    </div>-->
+    <div class="landinglogo">
+  <img id="bannerImg" src="images/1.png" >
+</div>
 
     <!-- Category Buttons -->
    <!---- <div class="category">
@@ -357,6 +372,22 @@ async function checkUser() {
 }
 
 checkUser();
+</script>
+<script>
+  const banners = [
+    "images/images (7).jpg",
+    "images/banner2.jpg",
+    "images/banner3.jpg",
+    "images/banner4.jpg"
+  ];
+
+  let index = 0;
+  const img = document.getElementById("bannerImg");
+
+  setInterval(() => {
+    index = (index + 1) % banners.length;
+    img.src = banners[index];
+  }, 3000); // 3 seconds
 </script>
 
 <script src="js/product.js"></script>
