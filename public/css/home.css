@@ -897,3 +897,28 @@ transition:1s;
    width: 100px;;
   max-height: 500px;
 }
+/* + / - button */
+[id^="plus-"],
+[id^="minus-"] {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: #f5f5f5;
+  font-size: 18px;
+  cursor: pointer;
+  color: #333;
+  transition: 0.2s;
+  border-radius: 6px;
+}
+/* remove button */
+[id^="remove-"] {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  background: red;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
