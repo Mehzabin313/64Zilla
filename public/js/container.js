@@ -1125,9 +1125,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           <button id="add-${index}">Add to Cart</button>
         </div>
       `;
-
       container2.appendChild(row);
-
+      
       let count = 0;
 
       document.getElementById(`plus-${index}`).onclick = () => {
