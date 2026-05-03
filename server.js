@@ -575,15 +575,18 @@ app.put("/seller/:id", async (req, res) => {
     try {
         const id = req.params.id;
 
-        await Seller.findByIdAndUpdate(id, req.body);
+        await Seller.findByIdAndUpdate(id, {
+            username: req.body.username,
+            storeName: req.body.storeName,
+            district: req.body.district
+        });
 
-        res.json({ success: true, message: "Updated successfully" });
+        res.json({ success: true });
 
     } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
+        res.status(500).json({ success: false });
     }
 });
-
 process.on("uncaughtException", (err) => {
   console.log("🔥 UNCAUGHT ERROR:", err.message);
   console.log("🔥 STACK:", err.stack);
