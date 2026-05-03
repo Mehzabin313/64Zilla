@@ -183,7 +183,7 @@ app.post('/register', async (req, res) => {
     }
 });*/
 // ================= LOGIN (SESSION) =================
-/*app.post('/login', async (req, res) => {
+app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
@@ -202,32 +202,6 @@ app.post('/register', async (req, res) => {
 
     res.json({
         success: true,
-        role: user.role
-    });
-});*/
-app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-
-    // ১. ইউজার খুঁজে বের করা
-    const user = await User.findOne({ email });
-    if (!user) return res.json({ success: false, message: "User not found" });
-
-    // ২. পাসওয়ার্ড চেক করা (Bcrypt দিয়ে)
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.json({ success: false, message: "Wrong password" });
-
-    // ৩. JWT টোকেন তৈরি করা
-    // এখানে একটি Secret Key লাগবে (যেমন: 'my_secret_key')
-    const token = jwt.sign(
-        { id: user._id, role: user.role }, 
-        '64ZILLA_SECRET_KEY', // আপনার সিক্রেট কী
-        { expiresIn: '1d' }    // টোকেন ১ দিন কাজ করবে
-    );
-
-    // ৪. রেসপন্সে টোকেন পাঠানো
-    res.json({
-        success: true,
-        token: token, // এই টোকেনটি ফ্রন্টএন্ডে সেভ করতে হবে
         role: user.role
     });
 });
