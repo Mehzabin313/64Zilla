@@ -304,9 +304,9 @@ async function loadOrders() {
                 <p><b>Payment Status:</b> ${order.paymentStatus || "unpaid"}</p>
                 <p><b>Status:</b> ${order.status}</p>
 
-                <button onclick="updateOrder('${order._id}','confirmed')">Confirm</button>
-                <button onclick="updateOrder('${order._id}','shipped')">Ship</button>
-                <button onclick="updateOrder('${order._id}','delivered')">Deliver</button>
+                <button class="action-btn btn-confirm" onclick="updateOrder('${order._id}','confirmed')">Confirm</button>
+                <button class="action-btn btn-confirm" onclick="updateOrder('${order._id}','shipped')">Ship</button>
+                <button class="action-btn btn-confirm" onclick="updateOrder('${order._id}','delivered')">Deliver</button>
 
             </div>
             `;
