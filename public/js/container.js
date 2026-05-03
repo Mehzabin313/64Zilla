@@ -1196,7 +1196,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <div style="display:flex;gap:10px;margin-top:10px;">
           
           <!-- ❌ FIX: image path bug -->
-          <img src="${imgSrc}" width="80">
+          <img src="${imgSrc}" width="100">
 
           <div>
             <h6>${item.name}</h6>
