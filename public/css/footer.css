@@ -27,10 +27,9 @@ footer{
 .useful-link a{
     text-decoration: none;
     color:#A5F927;
-    padding-left: 100px;
+    
     display: flex;
     flex-direction: column;
-    justify-content:flex-start;
 }
 .footer-bottom img{
     width: 100%;
