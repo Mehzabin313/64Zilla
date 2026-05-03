@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/discount-sale.css">
     <link rel="stylesheet" href="css/store.css">
     <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/tangail.css">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
@@ -39,6 +40,11 @@
         </div>
 
         <div class="navmenu">
+           
+    
+    <div class="menu-toggle" id="mobile-menu">
+        <i class="fa-solid fa-bars"></i>
+    </div>
             <ul class="navul">
                 <li class="navli"><a href="home.html">HOME</a></li>
                 <li class="navli"><a href="#main">SHOP</a></li>
@@ -112,7 +118,12 @@
         <a href="dhaka.html" class="category-btn">Jamalpur</a>
         <a href="dhaka.html" class="category-btn">Khulna</a>
     </div>-->
+    <!---
     <div class="category"  >
+        <div class="mobile-filter-btn" id="mobileFilterBtn">
+        <span><i class="fa-solid fa-location-dot"></i> Select District</span>
+        <i class="fa-solid fa-chevron-down"></i>
+    </div>
 
     <a href="tangail.html?district=tangail" class="category-btn">Tangail</a>
 
@@ -133,11 +144,40 @@
     <a href="khulna.html?district=khulna" class="category-btn">Khulna</a>
     <a href="sylhet.html?district=khulna" class="category-btn">Sylhet</a>
 
+<div class="see-all-card" id="seeAllBtn">
+            <div class="icon-circle"><i class="fa-solid fa-chevron-right"></i></div>
+            <span>See all</span>
+        </div>
+</div>-->
+<div class="category-wrapper">
+    <div class="mobile-filter-btn" id="mobileFilterBtn">
+        <span><i class="fa-solid fa-location-dot"></i> Select Your District</span>
+        <i class="fa-solid fa-chevron-down"></i>
+    </div>
 
+    <div class="category" id="categoryContent">
+        <a href="tangail.html?district=tangail" class="category-btn">Tangail</a>
+        <a href="dhaka.html?district=dhaka" class="category-btn">Dhaka</a>
+        <a href="Rajsahi.html?district=rajshahi" class="category-btn">Rajshahi</a>
+        <a href="bogura.html?district=bogura" class="category-btn">Bogura</a>
+        <a href="natore.html?district=natore" class="category-btn">Natore</a>
+        <a href="chittagong.html?district=narsingdi" class="category-btn">Chittagong</a>
+
+        <a href="district.html?district=barisal" class="category-btn hidden-dist">Barisal</a>
+        <a href="jamalpur.html?district=jamalpur" class="category-btn hidden-dist">Jamalpur</a>
+        <a href="cumilla.html?district=khulna" class="category-btn hidden-dist">Cumilla</a>
+        <a href="khulna.html?district=khulna" class="category-btn hidden-dist">Khulna</a>
+        <a href="sylhet.html?district=khulna" class="category-btn hidden-dist">Sylhet</a>
+
+        <div class="see-all-card" id="seeAllBtn">
+            <div class="icon-circle"><i class="fa-solid fa-chevron-right"></i></div>
+            <span>See all</span>
+        </div>
+    </div>
 </div>
 
     <!-- Product Category -->
-    <div class="product-heading">
+  <!--- <div class="product-heading">
         <h5 class="mb-3">Explore products</h5>
 
         <div class="category-buttons">
@@ -148,7 +188,22 @@
             <button class="cat-btn" data-category="sweets">Sweets</button>
         </div>
     </div>
+-->
+    <div class="product-heading">
+    <h5 class="mb-3">Explore products</h5>
 
+    <div class="category-buttons" id="catBtnWrapper">
+        <button class="cat-btn active" data-category="all">All</button>
+        <button class="cat-btn" data-category="fruits">Fruits</button>
+        <button class="cat-btn" data-category="clothes">Clothes</button>
+        <button class="cat-btn" data-category="crafts">Crafts</button>
+        <button class="cat-btn" data-category="sweets">Sweets</button>
+        
+        <div class="mobile-category-icon" id="catMenuToggle">
+            <i class="fa-solid fa-list-ul"></i>
+        </div>
+    </div>
+</div>
 <div class="product-row" id="product-container"></div>
 
     <!-- Container 2 -->
@@ -162,11 +217,7 @@
         <h5 class="mb-3; padding: 0 30px;">Discount and Sale</h5>
         <div id="container3" class="row2"></div>
     </div>
-   <!-- Container 2 -->
-    <div class="container my-4">
-        <h5>Most Selling Items</h5>
-        <div id="container4" class="row"></div>
-    </div>
+ 
     <!-- Store Section -->
     <div id="store-section" class="store">
         <div class="store-menu">
@@ -177,20 +228,33 @@
     </div>
 
     <div id="store-grid"></div>
+<div class="banner2.1">
+  <div class="content2">
+    <h1>Stay Home and get your Traditional Products</h1>
+  </div>
+  <div class="image-container2">
+    <img src="images\152855-OUGTOW-524.jpg" alt="Delivery Rider">
+  </div>
+</div> 
 
+<div class="external-btns">
+   <p class="order-text">Place an order</p>
+  <a href="#container2" class="btn-shop-ext">Shop Now</a>
+  
+</div>
 </div>
 
 <!-- Footer -->
-<footer class="site-footer">
+<footer class="site-footer ">
     <div class="footer-top">
         <div class="footer-column brand-info">
-            <h2>Hatbondhu</h2>
+            <h2>64Zilla</h2>
             <p>Premium Fruits (PF) is an Agritech fruit chain initiative by BD Assistant Ltd...</p>
 
             <p>e-TIN **61486639816**</p>
             <p>Trade License No **2303JR/2400040011**</p>
 
-            <p class="join-community">JOIN OUR COMMUNITY</p>
+            <p class="join-community"><a href="register_user.html">JOIN OUR COMMUNITY</a></p>
         </div>
 
         <div class="contact-us">
@@ -198,15 +262,15 @@
             <p>Head Office: House #108, Road #01, Rangpur-5400</p>
             <p>Dhaka Warehouse: Millennium City, Keraniganj</p>
             <p>+88 09677**67</p>
-            <p>Hatbondhu@gmail.com</p>
+            <p>64zilla@gmail.com</p>
         </div>
 
         <div class="useful-link">
             <h2 style="color:#A5F927">Useful Link</h2>
             <ul>
-                <li><a href="#">FAQs</a></li>
+                <li><a href="faq.html">FAQs</a></li>
                 <li><a href="#">About Us</a></li>
-                <li><a href="#">Contact Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
                 <li><a href="#">Terms & Condition</a></li>
                 <li><a href="#">Privacy Policy</a></li>
                 <li><a href="#">Refund Policy</a></li>
@@ -220,6 +284,8 @@
         <img src="images/gerwbakpsj298.png">
     </div>
 </footer>
+
+
 
 <!-- JS Files -->
  <script>
@@ -390,6 +456,55 @@ checkUser();
     index = (index + 1) % banners.length;
     img.src = banners[index];
   }, 3000); // 3 seconds
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const seeAllBtn = document.getElementById('seeAllBtn');
+    const mobileBtn = document.getElementById('mobileFilterBtn');
+    const categoryMenu = document.getElementById('categoryContent');
+
+    // See All বাটনের কাজ
+    if(seeAllBtn) {
+        seeAllBtn.addEventListener('click', function() {
+            const hiddenItems = document.querySelectorAll('.hidden-dist');
+            hiddenItems.forEach(item => {
+                item.classList.remove('hidden-dist');
+                item.style.display = 'flex'; // ফোরস ডিসপ্লে
+            });
+            this.style.display = 'none'; // বাটন লুকিয়ে ফেলা
+        });
+    }
+
+    // মোবাইল ড্রপডাউন টগল
+    if(mobileBtn) {
+        mobileBtn.addEventListener('click', function() {
+            categoryMenu.classList.toggle('active-mobile');
+            const icon = this.querySelector('.fa-chevron-down');
+            icon.style.transform = categoryMenu.classList.contains('active-mobile') ? "rotate(180deg)" : "rotate(0deg)";
+        });
+    }
+});
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const mobileMenuIcon = document.getElementById('mobile-menu');
+    const navLinks = document.querySelector('.navul');
+
+    if (mobileMenuIcon && navLinks) {
+        mobileMenuIcon.addEventListener('click', function() {
+            // 'active' ক্লাসটি টগল করবে যা CSS এ display: flex করা আছে
+            navLinks.classList.toggle('active');
+            
+            // আইকন চেঞ্জ (Bars থেকে X চিহ্ন)
+            const icon = this.querySelector('i');
+            if (navLinks.classList.contains('active')) {
+                icon.classList.replace('fa-bars', 'fa-xmark');
+            } else {
+                icon.classList.replace('fa-xmark', 'fa-bars');
+            }
+        });
+    }
+});
 </script>
 
 <script src="js/product.js"></script>
