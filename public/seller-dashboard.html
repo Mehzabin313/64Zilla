@@ -6,7 +6,11 @@
 <link rel="stylesheet" href="css/seller-dashboard.css">
 </head>
 <body>
-
+<!-- Mobile Top Bar -->
+<div class="mobile-topbar">
+    <span class="menu-icon" onclick="toggleMenu()">☰</span>
+    <h3>Seller Panel</h3>
+</div>
 <div class="container">
 
     <!-- Sidebar -->
@@ -14,6 +18,7 @@
         <h2>Seller Panel</h2>
         <ul>
             <li>Dashboard</li>
+            <li><a href="seller-profile.html" >Profile</a></li>
             <li id="addProductBtn">Add Product</li>
             <li>My Products</li>
             <li>Orders</li>
@@ -27,11 +32,11 @@
         <div class="cards">
             <div class="card">
                 <h3>Total Sales</h3>
-                <p>৳ 25,000</p>
+                <p id="totalsale">৳ 0</p>
             </div>
             <div class="card">
                 <h3>Orders</h3>
-                <p>120</p>
+                <p id="totalorder">120</p>
             </div>
             <div class="card">
                 <h3>Products</h3>
@@ -82,5 +87,6 @@
     window.location.href = 'add-product.html';
 });
 </script>
+
 </body>
 </html>
