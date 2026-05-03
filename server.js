@@ -307,123 +307,7 @@ app.get("/my-products/:sellerId", async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-//-----seller add product-------
-/*app.post('/add-product', upload.single('image'), async (req, res) => {
-    try {
 
-        const { sellerId, name, price, district, size, availability } = req.body;
-
-        // 🔥 VALIDATION (IMPORTANT)
-        if (!sellerId || !name || !price) {
-            return res.status(400).json({
-                success: false,
-                message: "Missing required fields"
-            });
-        }
-
-        // 🔥 IMAGE CHECK (IMPORTANT)
-        if (!req.file) {
-            return res.status(400).json({
-                success: false,
-                message: "Image is required"
-            });
-        }
-
-        const product = new Product({
-            sellerId: String(sellerId),
-            name,
-            price,
-            district,
-            size,
-            availability,
-            image: req.file.filename
-        });
-
-        await product.save();
-
-        res.json({
-            success: true,
-            message: "Product added successfully",
-            image: req.file.filename
-        });
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: err.message });
-    }
-});
-//last final
-app.post('/add-product', upload.single('image'), async (req, res) => {
-    try {
-        console.log("BODY:", req.body);
-        console.log("FILE:", req.file); // 🔥 IMPORTANT
-
-       
-    if (!req.file) {
-      return res.status(400).json({ success: false, message: "No image uploaded" });
-    }
-        
-
-const product = new Product({
-    sellerId: req.body.sellerId,
-    name: req.body.name,
-    price: req.body.price,
-    district: req.body.district,
-    size: req.body.size,
-    availability: req.body.availability,
-    image: req.file.path
-});
-
-        await product.save();
-
-      res.json({
-      success: true,
-      message: "Product added"
-    });
-
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: err.message });
-    }
-});*/
-/*app.post("/add-product", upload.single("image"), async (req, res) => {
-  try {
-
-    console.log("BODY:", req.body);
-    console.log("FILE:", req.file);
-
-    // 🔥 image check
-    if (!req.file) {
-      return res.status(400).json({
-        success: false,
-        message: "Image missing (multer failed)"
-      });
-    }
-
-    const product = new Product({
-      sellerId: req.body.sellerId,
-      name: req.body.name,
-      price: req.body.price,
-      district: req.body.district,
-      size: req.body.size,
-      availability: req.body.availability,
-      image: req.file.path
-    });
-
-    await product.save();
-
-    res.json({ success: true });
-
-  } catch (err) {
-    console.log("ADD PRODUCT ERROR:", err);
-
-    res.status(500).json({
-      success: false,
-      message: err.message
-    });
-  }
-});*/
-// এটা দাও
 app.post("/add-product", (req, res) => {
   upload.single("image")(req, res, function(err) {
     if (err) {
@@ -467,33 +351,7 @@ app.delete('/delete-product/:id', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-// ================= EDIT PRODUCT =================
-/*app.put('/update-product/:id', upload.single('image'), async (req, res) => {
-    try {
 
-        const { name, price, district, size, availability } = req.body;
-
-        const updateData = {
-            name,
-            price,
-            district,
-            size,
-            availability
-        };
-
-      if (req.file) {
-      updateData.image = req.file.path;
-    }
-
-
-        await Product.findByIdAndUpdate(req.params.id, updateData);
-
-        res.json({ success: true });
-
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});*/
 
 app.put('/update-product/:id', (req, res) => {
 
@@ -575,94 +433,7 @@ app.get("/products/district/:district", async (req, res) => {
 
     res.json(products);
 });
-// 🔥 PLACE ORDER (from checkout)
-/*app.post("/orders", async (req, res) => {
-    try {
-        const { customer, paymentMethod, bkashNumber, items, total } = req.body;
 
-        if (!items || items.length === 0) {
-            return res.json({ success: false, message: "Empty cart" });
-        }
-
-        const order = new Order({
-
-            customer: {
-                name: customer?.name || "",
-                phone: customer?.phone || "",
-                address: customer?.address || ""
-            },
-
-            paymentMethod: paymentMethod || "COD",
-            bkashNumber: bkashNumber || "",
-
-            // 🔥 NEW
-            paymentStatus: paymentMethod === "COD" ? "unpaid" : "paid",
-            transactionId: paymentMethod === "bKash" ? "TXN" + Date.now() : "",
-
-            items: items.map(i => ({
-                productId: i.productId,
-                sellerId: i.sellerId,
-                name: i.name,
-                price: Number(i.price),
-                quantity: Number(i.quantity)
-            })),
-
-            // 🔥 FIXED
-            total: Number(total) || 0,
-
-            status: "pending",
-            date: new Date()
-        });
-
-        await order.save();
-
-        res.json({ success: true, order });
-
-    } catch (err) {
-        console.log(err);
-        res.json({ success: false });
-    }
-});*/
-// ================= ORDER MODEL LOGIC FIX =================
-/*app.post("/orders", async (req, res) => {
-  try {
-
-    const method = (req.body.paymentMethod || "").toLowerCase(); // ✅ HERE
-
-    const order = new Order({
-      customer: {
-        name: req.body.customer?.name,
-        phone: req.body.customer?.phone,
-        address: req.body.customer?.address
-      },
-
-      paymentMethod: req.body.paymentMethod,
-
-      bkashNumber: req.body.bkashNumber || "",
-
-      transactionId:
-        method === "bkash" ? "TXN" + Date.now() : "",
-
-      paymentStatus:
-        method === "cod" ? "unpaid" : "paid",
-
-      items: req.body.items || [],
-      total: Number(req.body.total),
-
-      status: "pending",
-      date: new Date()
-    });
-
-    await order.save();
-
-    res.json({ success: true, order });
-
-  } catch (err) {
-    console.log(err);
-    res.json({ success: false });
-  }
-});
-*/
 app.post("/orders", async (req, res) => {
   try {
 const { customer, paymentMethod, bkashNumber, items, total } = req.body;
@@ -792,6 +563,21 @@ app.post("/change-password", async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
+});
+// GET SELLER
+app.get("/seller/:id", async (req,res)=>{
+    const seller = await Seller.findById(req.params.id);
+    res.json(seller);
+});
+
+// UPDATE SELLER
+app.put("/seller/:id", async (req,res)=>{
+    const seller = await Seller.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        { new:true }
+    );
+    res.json(seller);
 });
 
 process.on("uncaughtException", (err) => {
