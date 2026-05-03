@@ -65,8 +65,8 @@ cloudinary.config({
   api_secret: process.env.CLOUD_API_SECRET
 });
 
-// ================= MULTER (CLOUDINARY STORAGE) =================
-// এটা দাও
+// =================  (CLOUDINARY STORAGE) =================
+
 let upload;
 try {
   const storage = new CloudinaryStorage({
@@ -97,18 +97,6 @@ const connect = async () => {
 };
 connect();
 
-// ================= Multer =================
-/*const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/');
-    },
-    filename: (req, file, cb) => {
-        const uniqueName = Date.now() + path.extname(file.originalname);
-        cb(null, uniqueName);
-    }
-});
-
-const upload = multer({ storage });*/
 
 
 // ================= ROUTES =================
@@ -195,7 +183,7 @@ app.post('/register', async (req, res) => {
     }
 });*/
 // ================= LOGIN (SESSION) =================
-app.post('/login', async (req, res) => {
+/*app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
@@ -216,8 +204,49 @@ app.post('/login', async (req, res) => {
         success: true,
         role: user.role
     });
-});
+});*/
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
 
+    // 1️⃣ USER FIND
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        return res.json({ success: false, message: "User not found" });
+    }
+
+    // 2️⃣ PASSWORD CHECK
+    const match = await bcrypt.compare(password, user.password);
+
+    if (!match) {
+        return res.json({ success: false, message: "Wrong password" });
+    }
+
+    // 3️⃣ JWT CREATE (SESSION REPLACE)
+    const token = jwt.sign(
+        { id: user._id, role: user.role },
+        process.env.JWT_SECRET,
+        { expiresIn: "7d" }
+    );
+
+    // 4️⃣ COOKIE SET (IMPORTANT)
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,        // render deploy এর জন্য
+        sameSite: "none"     // cross site allow
+    });
+
+    
+ res.json({
+    success: true,
+    role: user.role,
+    user: {
+        id: user._id,
+        name: user.username,
+        email: user.email
+    }
+});
+});
 
 // ================= SELLER REGISTER =================
 app.post('/register-seller', async (req, res) => {
@@ -330,7 +359,9 @@ app.post("/add-product", (req, res) => {
       district: req.body.district,
       size: req.body.size,
       availability: req.body.availability,
-      image: req.file.path
+      image: req.file.path,
+       storeName: seller.storeName,
+      sellerName: seller.username
     });
 
     product.save()
