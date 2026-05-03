@@ -1061,8 +1061,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 });*/
 document.addEventListener("DOMContentLoaded", async () => {
 
-  let cartItems = [];
-  let totalCart = 0;
+ let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+  //let totalCart = 0;
+   let totalCart = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const BASE_URL = "https://six4zilla.onrender.com";
 
@@ -1072,6 +1073,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   const container2 = document.getElementById("container2");
 
   if (!container2) return;
+   // ================= SAVE CART FUNCTION (NEW) =================
+  function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cartItems));
+  }
+
+  // ================= UPDATE CART COUNT =================
+  function updateCartUI() {
+    cartCount.innerText = totalCart;
+    saveCart(); 
+  }
 
   // ================= CART TOGGLE =================
   cartDiv.addEventListener("click", () => {
