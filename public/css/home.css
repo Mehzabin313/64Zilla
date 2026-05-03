@@ -11,7 +11,7 @@ body{
   box-sizing: border-box;
   font-family: sans-serif;
   background: white ;
-  background-image: url("/images/Black and Green Atmospheric Forest Path Desktop Wallpaper.png") !important;
+
 }
 #bannerImg {
   transition: opacity 0.5s ease-in-out;
@@ -23,7 +23,7 @@ h2{
    max-width: 1200px;     /* center width */
     margin: 0 auto;        /* center the container */
     padding: 0 30px;       /* left-right padding */
-    background:rgb(244, 248, 241);
+    
 }
 .nav{
     display: flex;
@@ -34,7 +34,7 @@ h2{
     width: 100%;
     flex-direction: row;
     align-items: center;
-    background: #0b5341;;
+    background:#02532B;
     color: #ffffff;
    
 }

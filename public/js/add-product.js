@@ -313,6 +313,7 @@ if (form) {
             formData.append("size", size);
             formData.append("availability", availability);
             formData.append("image", image);
+             formData.append("sellerId", sellerId);
 
             // ======================
             // BUTTON LOADING
