@@ -72,11 +72,14 @@ h3{
 }
 
 /* PRODUCTS GRID */
-.grid{
+#products{
     display:flex;
     flex-direction: row;
     justify-content: center;
     gap: 10px;
+    width: 100%;
+    height: auto;
+    
    
 }
 
