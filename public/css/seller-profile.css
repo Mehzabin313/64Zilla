@@ -1,3 +1,69 @@
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #f4f6f9;
+    color: #111;
+}
+
+/* ================= TOP BAR ================= */
+.topbar {
+    background: #111827;
+    padding: 12px 16px;
+}
+
+.topbar button {
+    background: #1D9E75;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* ================= MAIN ================= */
+.profile-container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 15px;
+}
+
+/* ================= PROFILE CARD ================= */
+.profile-card {
+    background: white;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    margin-bottom: 25px;
+}
+
+.profile-card h2 {
+    margin-bottom: 15px;
+}
+
+/* INFO */
+.info p {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    margin: 0;
+    font-size: 14px;
+}
+
+/* BUTTON */
+.profile-card button {
+    margin-top: 15px;
+    width: 100%;
+    padding: 10px;
+    background: #111827;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.profile-card button:hover {
+    background: #374151;
+}
+
 /* ================= GRID ================= */
 #products {
     display: grid;
