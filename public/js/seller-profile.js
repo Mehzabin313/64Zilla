@@ -10,7 +10,7 @@ async function loadSeller() {
         const res = await fetch(`${BASE_URL}/seller/${sellerId}`);
         const data = await res.json();
 
-        document.getElementById("name").innerText = data.name || "-";
+        document.getElementById("name").innerText = data.username || "-";
         document.getElementById("email").innerText = data.email || "-";
         document.getElementById("store").innerText = data.storeName || "No Store";
         document.getElementById("district").innerText = data.district || "-";
