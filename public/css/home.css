@@ -746,7 +746,7 @@ transition:1s;
  border: #ffffff;
  border-radius: 20px;
  text-decoration: none;
-}*/
+}
 .category {
     display: flex;
    
@@ -774,9 +774,85 @@ transition:1s;
 .category-btn:hover{
   background-color:#2d7a2d;
   color: #f1f1f1;
+}*/
+/* মেইন কন্টেইনার */
+/* PC View */
+.category {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 30px 0;
+    overflow-x: auto;
+    scrollbar-width: none;
 }
-/* --- existing code above --- */
+.category-btn {
+    min-width: 120px;
+    height: 70px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #02532B;
+    font-weight: bold;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    flex-shrink: 0;
+    border: 1px solid #eee;
+}
+.category-btn:hover{
+  background-color: #2d7a2d;
+  color: #f1f1f1;
+  border-radius: 20px;
+}
+.hidden-dist { display: none !important; } /* শুরুতে হাইড */
 
+.see-all-card {
+    min-width: 90px;
+    height: 70px;
+    background: #A5F927;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.mobile-filter-btn { display: none; } /* পিসিতে হাইড */
+
+/* Mobile View (Fix) */
+@media (max-width: 768px) {
+    .mobile-filter-btn {
+        display: flex;
+        justify-content: space-between;
+        background: #02532B;
+        color: white;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 8px;
+    }
+    .category {
+        display: none; /* মোবাইল ড্রপডাউন শুরুতে বন্ধ */
+        flex-direction: column;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+    }
+    .category.active-mobile { display: flex; } /* ওপেন হলে দেখাবে */
+    .category-btn {
+        width: 100%;
+        height: 50px;
+        box-shadow: none;
+        border-bottom: 1px solid #eee;
+        justify-content: flex-start;
+        padding-left: 15px;
+    }
+   
+    .see-all-card { width: 100%; height: 50px; flex-direction: row; gap: 10px; }
+}
 /* কার্ট বাটন এবং কাউন্ট ব্যাজ */
 #cartdiv {
     display: flex;
@@ -921,4 +997,219 @@ transition:1s;
   border: none;
   border-radius: 8px;
   cursor: pointer;
+}
+/*banner 2.1 */
+/* Banner Section Styling */
+.banner2\.1 {
+    background-color: #c63d3d; /* ইমেজের মতো লাল রং */
+    width: 90%; /* স্ক্রিনের সাইজ অনুযায়ী অ্যাডজাস্ট হবে */
+    max-width: 1000px; /* পিসি স্ক্রিনে বেশি বড় হবে না */
+    margin: 40px auto; /* পেজের মাঝখানে থাকবে */
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 20px 40px;
+    color: white;
+    overflow: hidden;
+    min-height: 250px;
+}
+
+.content2 h1 {
+    font-size: 32px;
+    max-width: 350px;
+    line-height: 1.2;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+}
+
+.image-container2 {
+    background-color: rgba(255, 255, 255, 0.2); /* হালকা ব্যাকগ্রাউন্ড */
+    padding: 10px;
+    border-radius: 15px;
+}
+
+.image-container2 img {
+    width: 150px; /* আপনার ইমেজের সাইজ অনুযায়ী কমিয়ে বাড়িয়ে নিন */
+    height: auto;
+    display: block;
+}
+
+/* --- Responsive CSS (Mobile & Tablet) --- */
+@media (max-width: 768px) {
+    .banner2\.1 {
+        flex-direction: column; /* মোবাইলে উপর-নিচ হয়ে যাবে */
+        padding: 30px 20px;
+        text-align: center;
+    }
+
+    .content2 h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        max-width: 100%;
+    }
+
+    .image-container2 img {
+        width: 180px; /* মোবাইলে ইমেজ একটু ছোট হবে */
+    }
+}
+.external-btns{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  
+}
+.external-btns p{
+  font-size: 20px;
+}
+.external-btns a{
+  text-decoration: none;
+  color: #ccc;
+  text-align: center;
+}
+.btn-shop-ext{
+  background-color: #2d7a2d;
+  min-height: 50px;
+  width: 180px;
+  margin: 20px auto;
+  display: flex;
+  align-items: center;     
+  justify-content: center;
+  border-radius: 10px;
+}
+/* Shop Now বাটন */
+.action-area {
+    display: flex;
+    flex-direction: column; /* একটির নিচে আরেকটি রাখার জন্য */
+    align-items: center;    /* মাঝখানে রাখার জন্য */
+    margin-top: 25px;
+    margin-bottom: 50px;
+    gap: 10px;              /* বাটন আর লেখার মাঝখানের গ্যাপ */
+}
+
+/* Shop Now বাটন স্টাইল */
+.shop-now-btn-ext {
+    background-color: #c63d3d;
+    color: white;
+    padding: 12px 40px;
+    border-radius: 50px;    /* গোল বাটন */
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.3s;
+    box-shadow: 0 4px 10px rgba(198, 61, 61, 0.3);
+}
+
+.shop-now-btn-ext:hover {
+    background-color: #a52d2d;
+    transform: scale(1.05); /* হালকা বড় হবে হোভার করলে */
+}
+
+/* Place an order টেক্সট স্টাইল */
+.order-text {
+    color: #555;            /* হালকা কালার */
+    font-size: 16px;
+    margin: 0;
+    font-family: sans-serif;
+    cursor: default;
+    align-items: center;
+}
+/* --- Responsive Design for Action Area --- */
+@media (max-width: 768px) {
+    /* ব্যানার থেকে বাটনের দূরত্ব মোবাইলে একটু কমানো হয়েছে */
+    .action-area {
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+
+    /* মোবাইলে বাটনটা একটু ছোট এবং ফিট দেখাবে */
+    .shop-now-btn-ext {
+        padding: 10px 30px;
+        font-size: 16px;
+        width: 80%; /* মোবাইল স্ক্রিনের ৮০% জুড়ে থাকবে */
+        text-align: center;
+    }
+
+    /* নিচের টেক্সটটা মোবাইলে একটু ছোট করা হয়েছে */
+    .order-text {
+        font-size: 14px;
+        color: #777;
+    }
+}
+
+/* ছোট ফোনের জন্য (যেমন iPhone SE) */
+@media (max-width: 480px) {
+    .shop-now-btn-ext {
+        width: 90%;
+        font-size: 15px;
+    }
+}
+@media (max-width: 768px) {
+    .landinglogo img {
+        max-width: 100%; /* মোবাইলে লোগো বা ব্যানারটি কতটুকু ছোট হবে তা এখানে ঠিক করুন */
+        margin-top: 10px;
+        min-height: 70px;
+    }
+}
+/* --- Desktop Styles (Default) --- */
+
+
+
+.menu-toggle {
+    display: none; /* পিসিতে আইকন থাকবে না */
+    cursor: pointer;
+    font-size: 10px;
+    color: white;
+}
+
+/* --- Mobile Media Query (max-width: 768px) --- */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block; /* মোবাইলে আইকন দেখাবে */
+        padding-left: 20px;
+    }
+
+    .navul {
+        display: none; /* শুরুতে মেনু হাইড থাকবে */
+       
+        position: absolute;
+        top: 150px; /* Navbar এর হাইট অনুযায়ী */
+       left: 0;
+        min-height: 100px;
+        width: 100%;
+        
+        background:#02532B;
+        padding: 20px 0;
+        text-align: center;
+        box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+        z-index: 1999;
+    }
+
+    /* যখন মেনু ওপেন হবে */
+    .navul.active {
+        display: flex;
+    }
+
+    .navli {
+        padding: 10px 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .nav{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* লগইন বাটন মোবাইলে হাইড রাখা বা মেনুর ভেতর নিতে পারেন */
+    .navbtn {
+        display: none; /* মোবাইলে মেইন বাটন হাইড করে দিলাম */
+    }
+
+    /* যদি লগইন বাটন মেনুর নিচে দেখাতে চান */
+    .navul.active::after {
+        content: ""; /* এখানে আপনি লগইন বাটনের স্টাইল কপি করতে পারেন */
+    }
 }
