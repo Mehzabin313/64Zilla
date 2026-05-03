@@ -173,7 +173,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await res.json();
 
         if (data.success) {
-      
+      localStorage.setItem("token", data.token); 
+                localStorage.setItem("role", data.role);
        
             if (data.role === "admin") {
                 window.location.href = "admin.html";
