@@ -174,6 +174,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (data.success) {
       localStorage.setItem("user", JSON.stringify(data.user)); 
+       
+    syncCartToServer();
             if (data.role === "admin") {
                 window.location.href = "admin.html";
             } 
