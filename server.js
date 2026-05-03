@@ -28,12 +28,8 @@ const Product = require("./models/product");
 const Order = require("./models/order");
 
 // ================= Middleware =================
-/*app.use(cors({
-  origin: "https://six4zilla.onrender.com",
-  credentials: true
-}));*/
 app.use(cors({
-  origin: true,
+  origin: "https://six4zilla.onrender.com",
   credentials: true
 }));
 
