@@ -31,6 +31,10 @@ const sellerSchema = mongoose.Schema({
         type: String, 
         required: true 
     }, // কী বিক্রি করবে
+    storeName: {
+    type: String,
+    default: "My Store"
+},
     createdOn: { 
         type: Date,
          default: Date.now 
