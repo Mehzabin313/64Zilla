@@ -163,13 +163,10 @@ const sellerId = localStorage.getItem("sellerId");
 const BASE_URL = "https://six4zilla.onrender.com";
 
 // =======================
-// ELEMENTS
+// NAVIGATION (Add Product)
 // =======================
 const addBtn = document.getElementById("addProductBtn");
 
-// =======================
-// NAVIGATION
-// =======================
 if (addBtn) {
     addBtn.onclick = () => {
         window.location.href = "add-product.html";
@@ -181,10 +178,7 @@ if (addBtn) {
 // =======================
 async function loadProducts() {
     try {
-        if (!sellerId) {
-            console.log("sellerId not found");
-            return;
-        }
+        if (!sellerId) return;
 
         const res = await fetch(`${BASE_URL}/my-products/${sellerId}`);
         const products = await res.json();
@@ -214,12 +208,12 @@ async function loadProducts() {
         });
 
     } catch (err) {
-        console.log("LOAD ERROR:", err);
+        console.log("PRODUCT LOAD ERROR:", err);
     }
 }
 
 // =======================
-// EDIT NAVIGATION
+// EDIT PRODUCT
 // =======================
 function goToEdit(id) {
     window.location.href = `edit-product.html?id=${id}`;
@@ -229,18 +223,18 @@ function goToEdit(id) {
 // DELETE PRODUCT
 // =======================
 async function deleteProduct(id) {
-    const confirmDelete = confirm("Are you sure?");
-    if (!confirmDelete) return;
+    if (!confirm("Are you sure?")) return;
 
     await fetch(`${BASE_URL}/delete-product/${id}`, {
         method: "DELETE"
     });
 
     loadProducts();
+    loadOrders();
 }
 
 // =======================
-// LOAD ORDERS + COUNT + TOTAL
+// LOAD ORDERS + TOTAL ORDER + TOTAL SALES
 // =======================
 async function loadOrders() {
     try {
@@ -257,6 +251,12 @@ async function loadOrders() {
 
         orderDiv.innerHTML = "";
 
+        // =======================
+        // TOTAL CALCULATION
+        // =======================
+        let totalOrders = orders.length;
+        let totalSales = 0;
+
         if (orders.length === 0) {
             orderDiv.innerHTML = "<p>No orders yet</p>";
             totalOrderEl.innerText = 0;
@@ -264,22 +264,23 @@ async function loadOrders() {
             return;
         }
 
-        let totalOrders = orders.length;
-        let totalSales = 0;
-
         orders.forEach(order => {
 
             let itemsHTML = "";
             let sellerTotal = 0;
 
             order.items.forEach(item => {
+
                 if (String(item.sellerId) === String(sellerId)) {
 
-                    let itemTotal = item.price * item.quantity;
+                    const price = Number(item.price) || 0;
+                    const qty = Number(item.quantity) || 0;
+
+                    const itemTotal = price * qty;
                     sellerTotal += itemTotal;
 
                     itemsHTML += `
-                        <p>${item.name} (x${item.quantity}) - ৳ ${item.price}</p>
+                        <p>${item.name} (x${qty}) - ৳ ${price}</p>
                     `;
                 }
             });
@@ -311,12 +312,14 @@ async function loadOrders() {
             `;
         });
 
-        // 🔥 SET TOP CARDS
+        // =======================
+        // TOP CARDS UPDATE
+        // =======================
         totalOrderEl.innerText = totalOrders;
         totalSaleEl.innerText = "৳ " + totalSales;
 
     } catch (err) {
-        console.log("ORDER ERROR:", err);
+        console.log("ORDER LOAD ERROR:", err);
     }
 }
 
@@ -326,7 +329,9 @@ async function loadOrders() {
 async function updateOrder(id, status) {
     await fetch(`${BASE_URL}/orders/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            "Content-Type": "application/json"
+        },
         body: JSON.stringify({ status })
     });
 
