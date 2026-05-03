@@ -571,13 +571,17 @@ app.get("/seller/:id", async (req,res)=>{
 });
 
 // UPDATE SELLER
-app.put("/seller/:id", async (req,res)=>{
-    const seller = await Seller.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        { new:true }
-    );
-    res.json(seller);
+app.put("/seller/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        await Seller.findByIdAndUpdate(id, req.body);
+
+        res.json({ success: true, message: "Updated successfully" });
+
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
 });
 
 process.on("uncaughtException", (err) => {
