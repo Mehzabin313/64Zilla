@@ -183,7 +183,7 @@ app.post('/register', async (req, res) => {
     }
 });*/
 // ================= LOGIN (SESSION) =================
-app.post('/login', async (req, res) => {
+/*app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
@@ -204,6 +204,40 @@ app.post('/login', async (req, res) => {
         success: true,
         role: user.role
     });
+});*/
+const jwt = require('jsonwebtoken');
+
+app.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // ১. ইউজার খুঁজে বের করা
+        const user = await User.findOne({ email });
+        if (!user) return res.json({ success: false, message: "User not found" });
+
+        // ২. পাসওয়ার্ড চেক করা
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) return res.json({ success: false, message: "Incorrect password" });
+
+        // ৩. JWT টোকেন তৈরি করা (env থেকে সিক্রেট কি নেওয়া হয়েছে)
+        const token = jwt.sign(
+            { id: user._id, role: user.role }, 
+            process.env.JWT_SECRET, // আপনার env ফাইল থেকে রিড করবে
+            { expiresIn: '1d' }
+        );
+
+        // ৪. রেসপন্সে টোকেন এবং রোল পাঠানো
+        res.json({
+            success: true,
+            token: token,
+            role: user.role,
+            message: "Login successful"
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
 });
 
 // ================= SELLER REGISTER =================
