@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Seller Profile</title>
+<link rel="stylesheet" href="css/seller-profile.css">
+</head>
+<body>
+
+<div class="profile-container">
+
+    <div class="profile-card">
+        <h2>👤 Seller Profile</h2>
+
+        <div class="info">
+            <p><b>Name:</b> <span id="name">Loading...</span></p>
+            <p><b>Email:</b> <span id="email"></span></p>
+            <p><b>Store Name:</b> <span id="store"></span></p>
+            <p><b>District:</b> <span id="district"></span></p>
+        </div>
+
+        <button onclick="editProfile()">Edit Profile</button>
+    </div>
+
+    <h3>My Products</h3>
+    <div id="products" class="grid"></div>
+
+</div>
+
+<script src="js/seller-profile.js"></script>
+
+</body>
+</html>
