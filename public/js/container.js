@@ -1233,6 +1233,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     if (e.target && e.target.id === "checkoutBtn") {
+        const user = localStorage.getItem("user");
+
+      if (!user) {
+        alert("Please login first to checkout!");
+        window.location.href = "login.html";
+        return;
+      }
       if (cartItems.length === 0) {
         alert("Cart is empty!");
         return;
