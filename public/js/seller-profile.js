@@ -1,5 +1,8 @@
 const sellerId = localStorage.getItem("sellerId");
 const BASE_URL = "https://six4zilla.onrender.com";
+function goBack(){
+    window.location.href = "seller-dashboard.html";
+}
 
 // ================= LOAD SELLER =================
 async function loadSeller() {
