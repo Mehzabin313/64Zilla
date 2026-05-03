@@ -28,8 +28,12 @@ const Product = require("./models/product");
 const Order = require("./models/order");
 
 // ================= Middleware =================
-app.use(cors({
+/*app.use(cors({
   origin: "https://six4zilla.onrender.com",
+  credentials: true
+}));*/
+app.use(cors({
+  origin: true,
   credentials: true
 }));
 
@@ -229,12 +233,11 @@ app.post('/login', async (req, res) => {
         { expiresIn: "7d" }
     );
 
-    // 4️⃣ COOKIE SET (IMPORTANT)
-    res.cookie("token", token, {
-        httpOnly: true,
-        secure: true,        // render deploy এর জন্য
-        sameSite: "none"     // cross site allow
-    });
+   res.cookie("token", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none"
+});
 
     
  res.json({
