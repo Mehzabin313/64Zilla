@@ -1,4 +1,4 @@
-body {
+/*body {
   margin: 0;
   font-family: Arial;
   display: flex;
@@ -91,4 +91,144 @@ body {
     padding: 20px;
     border-radius: 10px;
     font-weight: bold;
+}*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    background: #f4f6f9;
+}
+
+/* =======================
+   SIDEBAR
+======================= */
+.sidebar {
+    width: 240px;
+    background: #111827;
+    color: white;
+    padding: 20px;
+    position: fixed;
+    height: 100%;
+    transition: 0.3s;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar button {
+    width: 100%;
+    margin: 8px 0;
+    padding: 12px;
+    background: #1f2937;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.sidebar button:hover {
+    background: #374151;
+}
+
+/* =======================
+   MAIN AREA
+======================= */
+.main {
+    margin-left: 240px;
+    flex: 1;
+    padding: 20px;
+}
+
+/* =======================
+   STATS CARDS
+======================= */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.stats div {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    font-weight: bold;
+}
+
+/* =======================
+   CONTENT BOX
+======================= */
+#content {
+    margin-top: 20px;
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+/* =======================
+   TABLE / CARDS
+======================= */
+.card {
+    background: white;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* =======================
+   CHART
+======================= */
+canvas {
+    margin-top: 20px;
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* =======================
+   MOBILE RESPONSIVE
+======================= */
+@media (max-width: 992px) {
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+
+    body {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: fixed;
+        left: -260px;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .sidebar.active {
+        left: 0;
+    }
+
+    .main {
+        margin-left: 0;
+        padding-top: 60px;
+    }
+
+    .stats {
+        grid-template-columns: repeat(1, 1fr);
+    }
 }
