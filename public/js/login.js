@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await res.json();
 
         if (data.success) {
-      localStorage.setItem("user", JSON.stringify(data.user)); 
+      
        
     syncCartToServer();
             if (data.role === "admin") {
