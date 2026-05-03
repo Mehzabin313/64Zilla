@@ -1061,7 +1061,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });*/
 document.addEventListener("DOMContentLoaded", async () => {
 
- let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+ let cartItems =  [];
   //let totalCart = 0;
    let totalCart = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -1244,13 +1244,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     if (e.target && e.target.id === "checkoutBtn") {
-       const user = JSON.parse(localStorage.getItem("user"));
-
-if ( !user.id) {
-  alert("Please login first to checkout!");
-  window.location.href = "login.html";
-  return;
-}
+      
       if (cartItems.length === 0) {
         alert("Cart is empty!");
         return;
