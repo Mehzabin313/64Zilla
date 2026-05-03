@@ -183,7 +183,7 @@ app.post('/register', async (req, res) => {
     }
 });*/
 // ================= LOGIN (SESSION) =================
-/*app.post('/login', async (req, res) => {
+app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
@@ -204,47 +204,6 @@ app.post('/register', async (req, res) => {
         success: true,
         role: user.role
     });
-});*/
-app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-
-    // 1️⃣ USER FIND
-    const user = await User.findOne({ email });
-
-    if (!user) {
-        return res.json({ success: false, message: "User not found" });
-    }
-
-    // 2️⃣ PASSWORD CHECK
-    const match = await bcrypt.compare(password, user.password);
-
-    if (!match) {
-        return res.json({ success: false, message: "Wrong password" });
-    }
-
-    // 3️⃣ JWT CREATE (SESSION REPLACE)
-    const token = jwt.sign(
-        { id: user._id, role: user.role },
-        process.env.JWT_SECRET,
-        { expiresIn: "7d" }
-    );
-
-   res.cookie("token", token, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none"
-});
-
-    
- res.json({
-    success: true,
-    role: user.role,
-    user: {
-        id: user._id,
-        name: user.username,
-        email: user.email
-    }
-});
 });
 
 // ================= SELLER REGISTER =================
