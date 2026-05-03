@@ -175,7 +175,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data.success) {
       
        
-    syncCartToServer();
             if (data.role === "admin") {
                 window.location.href = "admin.html";
             } 
