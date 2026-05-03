@@ -247,3 +247,87 @@ button:nth-child(2) {
         flex-direction: column;
     }
 }
+/* ===== MOBILE TOP BAR ===== */
+.mobile-topbar {
+    display: none;
+    background: #0f172a;
+    color: white;
+    padding: 12px 15px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.menu-icon {
+    font-size: 22px;
+    cursor: pointer;
+}
+
+/* ===== MOBILE SIDEBAR ===== */
+@media (max-width: 768px) {
+
+    .mobile-topbar {
+        display: flex;
+    }
+
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -250px;
+        width: 220px;
+        height: 100%;
+        transition: 0.3s;
+        z-index: 999;
+    }
+
+    .sidebar.active {
+        left: 0;
+    }
+
+    .main {
+        padding-top: 60px;
+    }
+}
+.action-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-right: 5px;
+    transition: 0.2s;
+    font-weight: 500;
+}
+
+/* CONFIRM BUTTON */
+.btn-confirm {
+    background: #facc15;   /* yellow */
+    color: #111827;
+}
+
+.btn-confirm:hover {
+    background: #eab308;
+}
+
+/* SHIP BUTTON */
+.btn-ship {
+    background: #3b82f6;   /* blue */
+    color: white;
+}
+
+.btn-ship:hover {
+    background: #2563eb;
+}
+
+/* DELIVER BUTTON */
+.btn-deliver {
+    background: #22c55e;   /* green */
+    color: white;
+}
+
+.btn-deliver:hover {
+    background: #16a34a;
+}
