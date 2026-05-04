@@ -66,20 +66,25 @@
             <button id="menuBtn"><i class="fa-solid fa-bars"></i></button>
         </div>
         <!--sidebar-->
-        <!-- SIDEBAR -->
+       
 <div id="sideMenu" class="side-menu">
 
     <div class="side-header">
-        <h3>Menu</h3>
+        <div>
+            <h3>MENU</h3>
+            <p id="sb-name" style="margin:0;font-size:14px;color:gray;"></p>
+        </div>
         <span onclick="closeMenu()">×</span>
     </div>
 
-    <a href="home.html">🏠 Home</a>
-    <a href="profile.html">👤 Profile</a>
-    <a href="orders.html">📦 Orders</a>
-    <a href="cart.html">🛒 Cart</a>
-    <a href="contact.html">📞 Contact</a>
-    <a href="faq.html">❓ FAQ</a>
+    <hr>
+
+    <a href="home.html">Home</a>
+    <a href="profile.html">Profile</a>
+    <a href="orders.html">Orders</a>
+    <a href="cart.html">Cart</a>
+    <a href="contact.html">Contact</a>
+    <a href="faq.html">FAQ</a>
 
     <hr>
 
@@ -536,13 +541,51 @@ const menuBtn = document.getElementById("menuBtn");
 const sideMenu = document.getElementById("sideMenu");
 const overlay = document.getElementById("menuOverlay");
 
-/* OPEN SIDEBAR */
+let userData = null;
+
+/* CHECK USER */
+async function checkUser(){
+    const res = await fetch("https://six4zilla.onrender.com/me", {
+        credentials: "include"
+    });
+
+    const data = await res.json();
+
+    if(data.success){
+        userData = data.user;
+
+        // navbar login button change
+        const loginBtn = document.getElementById("login-btn");
+        loginBtn.textContent = data.user.name;
+
+        loginBtn.onclick = () => {
+            window.location.href = "profile.html";
+        };
+
+        // sidebar name set
+        document.getElementById("sb-name").innerText = data.user.name;
+
+    } else {
+        userData = null;
+    }
+}
+
+checkUser();
+
+/* OPEN SIDEBAR ONLY IF LOGGED IN */
 menuBtn.addEventListener("click", () => {
+
+    if(!userData){
+        alert("Please login first");
+        window.location.href = "login.html";
+        return;
+    }
+
     sideMenu.classList.add("active");
     overlay.style.display = "block";
 });
 
-/* CLOSE SIDEBAR */
+/* CLOSE */
 function closeMenu(){
     sideMenu.classList.remove("active");
     overlay.style.display = "none";
