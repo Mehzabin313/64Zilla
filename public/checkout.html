@@ -212,6 +212,7 @@
   <title>64Zilla.com - Place Order</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/home.css">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -728,38 +729,56 @@
 <body>
 
 <!-- ─── NAV ─── -->
-<nav>
-  <div class="logo">
-    <div class="logo-icon">🦁</div>
-    <h4>64Zilla!</h4>
-  </div>
-  <ul class="nav-links">
-    <li><a href="home.html">HOME</a></li>
-    <li><a href="#main">SHOP</a></li>
-    <li><a href="#contactus">CONTACT</a></li>
-    <li><a href="#">FAQ</a></li>
-    <li><a href="seller-register.html">SELLER</a></li>
-    <li><a href="profile.html">PROFILE</a></li>
-  </ul>
-  <div class="nav-actions">
-    <button class="btn-login" onclick="window.location.href='login.html'">LOGIN</button>
-  </div>
-</nav>
+<div class="nav">
+        <div class="logo">
+            <h4>64Zilla!</h4>
+        </div>
 
-<!-- ─── SECONDARY NAV ─── -->
-<div class="nav2">
-  <button style="background:none;border:none;font-size:20px;color:var(--green-dark);cursor:pointer;">
-    <i class="fa-solid fa-bars"></i>
-  </button>
-  <div class="search-wrap">
-    <input type="text" placeholder="Search products...">
-    <button><i class="fa-solid fa-magnifying-glass"></i></button>
-  </div>
-  <button class="btn-cart" onclick="window.location.href='cart-item.html'">
-    <i class="fa-solid fa-cart-shopping"></i>
-    <span class="cart-badge" id="cart-count">0</span>
-  </button>
+        <div class="navmenu">
+           
+    
+    <div class="menu-toggle" id="mobile-menu">
+        <i class="fa-solid fa-bars"></i>
+    </div>
+            <ul class="navul">
+                <li class="navli"><a href="home.html">HOME</a></li>
+                <li class="navli"><a href="#main">SHOP</a></li>
+                <li class="navli"><a href="contact.html">CONTACT</a></li>
+                <li class="navli"><a href="faq.html">FAQ</a></li>
+                <li class="navli"><a href="seller-register.html">SELLER</a></li>
+                <li class="navli"><a href="profile.html">PROFILE</a></li>
+            </ul>
+
+            <div class="navbtn">
+                <button type="button" id="login-btn">LOGIN</button>
+            </div>
+        </div>
+    </div>
+<div class="home-page">
+    <!-- Second Menu -->
+    <div class="nav2">
+        <div class="menu">
+            <button id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+        </div>
+
+        <div class="search">
+            <input type="text" id="search" placeholder="Search">
+            <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+
+   
+
+
+<!-- Cart dropdown -->
+<div id="order-review" style="display:none; position:fixed;
+ top:50px; right:0; width:300px; max-height:400px; 
+ overflow-y:auto; background:white; border:1px solid #ccc;
+  padding:10px; z-index:1000;">
+  <!-- Cart items dynamically add hobe ekhane -->
 </div>
+
+    </div>
+ 
 
 <!-- ─── PAGE ─── -->
 <div class="page-title">Checkout</div>
