@@ -165,64 +165,6 @@ body{
 
 <div id="sidebarOverlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
 
-<script>
-const sidebar = document.getElementById("userSidebar");
-const overlay = document.getElementById("sidebarOverlay");
-const loginBtn = document.getElementById("login-btn");
-
-let currentUser = null;
-
-/* OPEN SIDEBAR */
-function openSidebar(user){
-    currentUser = user;
-
-    document.getElementById("sb-name").innerText = user.name || "User";
-    document.getElementById("sb-email").innerText = user.email;
-
-    sidebar.classList.add("active");
-    overlay.style.display = "block";
-}
-
-/* CLOSE SIDEBAR */
-function closeSidebar(){
-    sidebar.classList.remove("active");
-    overlay.style.display = "none";
-}
-
-/* LOGOUT */
-async function logout(){
-    await fetch("https://six4zilla.onrender.com/logout", {
-        method:"POST",
-        credentials:"include"
-    });
-
-    location.reload();
-}
-
-/* CHECK USER */
-async function checkUser(){
-    const res = await fetch("https://six4zilla.onrender.com/me", {
-        credentials:"include"
-    });
-
-    const data = await res.json();
-
-    if(data.success){
-        loginBtn.textContent = data.user.name;
-
-        loginBtn.onclick = () => {
-            openSidebar(data.user);
-        };
-    } else {
-        loginBtn.textContent = "LOGIN";
-        loginBtn.onclick = () => {
-            window.location.href = "login.html";
-        };
-    }
-}
-
-checkUser();
-</script>
 
 </body>
 </html>
