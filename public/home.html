@@ -427,6 +427,7 @@ async function checkUser() {
         if (data.success) {
             loginBtn.textContent = "PROFILE";
             loginBtn.onclick = () => window.location.href = "profile.html";
+              loginBtn.textContent = data.user.name || "PROFILE";
         } else {
             loginBtn.textContent = "LOGIN";
             loginBtn.onclick = () => window.location.href = "login.html";
@@ -504,6 +505,13 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     }
+});
+</script>
+<script>
+const menuBtn = document.getElementById("menuBtn");
+
+menuBtn.addEventListener("click", function () {
+    window.location.href = "sidebar.html";
 });
 </script>
 
