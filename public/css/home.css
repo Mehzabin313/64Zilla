@@ -112,24 +112,98 @@ h2{
   border:none;
   font-size: larger;
 }
-/*sidebar*/
-.side-menu{
+/* ================= SIDEBAR ================= */
+.side-menu {
     position: fixed;
     top: 0;
-    left: -280px;
-    width: 260px;
-    height: 100%;
-    background: white;
-    transition: 0.3s;
-    z-index: 9999;
+    left: -300px; /* hidden state */
+    width: 280px;
+    height: 100vh;
+    background: #0f172a;
+    color: #fff;
+    padding: 20px;
+    transition: 0.3s ease;
+    z-index: 1001;
+    overflow-y: auto;
 }
 
-.side-menu.active{
+/* when active */
+.side-menu.active {
     left: 0;
 }
 
-.menu-overlay{
+/* ================= SIDEBAR HEADER ================= */
+.side-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.side-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #22c55e;
+}
+
+.side-header span {
+    cursor: pointer;
+    font-size: 22px;
+    color: #fff;
+}
+
+/* ================= LINKS ================= */
+.side-menu a {
+    display: block;
+    padding: 10px 0;
+    color: #e5e7eb;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: 0.2s;
+}
+
+.side-menu a:hover {
+    color: #22c55e;
+    padding-left: 5px;
+}
+
+/* ================= OVERLAY ================= */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
     display: none;
+    z-index: 1000;
+}
+
+/* show overlay */
+.menu-overlay.active {
+    display: block;
+}
+
+/* ================= LOGIN BUTTON ================= */
+#login-btn {
+    background: #22c55e;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+#login-btn:hover {
+    background: #16a34a;
+}
+
+/* ================= MOBILE RESPONSIVE ================= */
+@media (max-width: 768px) {
+    .side-menu {
+        width: 250px;
+    }
 }
 
 .search{
