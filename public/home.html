@@ -538,16 +538,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 <script>
-    async function checkUser(){
+let userData = null;
+
+/* ================= CHECK USER (JWT) ================= */
+async function checkUser(){
     try {
         const token = localStorage.getItem("token");
 
         if(!token){
             userData = null;
-            return;
+            return false;
         }
 
         const res = await fetch("https://six4zilla.onrender.com/me", {
+            method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -558,21 +562,55 @@ document.addEventListener("DOMContentLoaded", function() {
         if(data.success){
             userData = data.user;
 
-            document.getElementById("sb-name").innerText = data.user.username || data.user.name;
+            // sidebar name
+            const sbName = document.getElementById("sb-name");
+            if(sbName){
+                sbName.innerText = data.user.username || "User";
+            }
 
+            // login button → profile
             const loginBtn = document.getElementById("login-btn");
-            loginBtn.textContent = data.user.username || "PROFILE";
-            loginBtn.onclick = () => window.location.href = "profile.html";
+            if(loginBtn){
+                loginBtn.textContent = data.user.username || "PROFILE";
+                loginBtn.onclick = () => window.location.href = "profile.html";
+            }
 
+            return true;
         } else {
             userData = null;
+            return false;
         }
 
     } catch (err) {
-        console.log(err);
+        console.log("AUTH ERROR:", err);
         userData = null;
+        return false;
     }
 }
+
+/* ================= SIDEBAR OPEN ================= */
+menuBtn.addEventListener("click", async () => {
+
+    const ok = await checkUser(); // always verify
+
+    if(!ok){
+        alert("Please login first");
+        window.location.href = "login.html";
+        return;
+    }
+
+    sideMenu.classList.add("active");
+    overlay.style.display = "block";
+});
+
+/* ================= CLOSE SIDEBAR ================= */
+function closeMenu(){
+    sideMenu.classList.remove("active");
+    overlay.style.display = "none";
+}
+
+/* ================= AUTO CHECK ON LOAD ================= */
+window.addEventListener("load", checkUser);
 </script>
 
 <script src="js/product.js"></script>
