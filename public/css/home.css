@@ -149,18 +149,18 @@ h2{
 .side-header span {
     cursor: pointer;
     font-size: 22px;
-    color: #fff;
+    color:#c63d3d;
 }
 
 /* ================= LINKS ================= */
 .side-menu a {
     display: block;
     padding: 10px 0;
-    color: #e5e7eb;
+    color:#02532B;
     text-decoration: none;
     border-bottom: 1px solid rgba(255,255,255,0.05);
     transition: 0.2s;
-    background: #a5f92763;
+    background: hsla(87, 22%, 90%, 0.388);
 }
 
 .side-menu a:hover {
