@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>64Zilla Home</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:#f5f6fa;
+}
+
+/* NAVBAR */
+.nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 20px;
+    background:#1D9E75;
+    color:white;
+}
+
+.nav button{
+    padding:8px 15px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+/* ================= SIDEBAR ================= */
+.user-sidebar{
+    position: fixed;
+    top:0;
+    right:-320px;
+    width:300px;
+    height:100%;
+    background:#fff;
+    box-shadow:-5px 0 20px rgba(0,0,0,0.15);
+    transition:0.3s;
+    z-index:9999;
+    display:flex;
+    flex-direction:column;
+}
+
+.user-sidebar.active{
+    right:0;
+}
+
+/* TOP */
+.sidebar-top{
+    background:#1D9E75;
+    color:white;
+    padding:20px;
+    display:flex;
+    align-items:center;
+    position:relative;
+}
+
+.user-avatar{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    background:white;
+    color:#1D9E75;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:22px;
+    margin-right:10px;
+}
+
+.user-info h3{
+    margin:0;
+    font-size:16px;
+}
+
+.user-info p{
+    margin:0;
+    font-size:12px;
+}
+
+.close-btn{
+    position:absolute;
+    right:10px;
+    top:5px;
+    font-size:26px;
+    cursor:pointer;
+}
+
+/* MENU */
+.sidebar-menu{
+    padding:15px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.sidebar-menu a{
+    text-decoration:none;
+    color:#333;
+    padding:10px;
+    background:#f5f5f5;
+    border-radius:6px;
+}
+
+.sidebar-menu a:hover{
+    background:#1D9E75;
+    color:white;
+}
+
+/* OVERLAY */
+.sidebar-overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.4);
+    display:none;
+    z-index:9998;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="nav">
+    <h3>64Zilla</h3>
+    <button id="login-btn">LOGIN</button>
+</div>
+
+<!-- SIDEBAR -->
+<div id="userSidebar" class="user-sidebar">
+
+    <div class="sidebar-top">
+        <div class="user-avatar">
+            <i class="fa-solid fa-user"></i>
+        </div>
+
+        <div class="user-info">
+            <h3 id="sb-name">User</h3>
+            <p id="sb-email">email</p>
+        </div>
+
+        <span class="close-btn" onclick="closeSidebar()">×</span>
+    </div>
+
+    <div class="sidebar-menu">
+        <a href="profile.html">👤 My Profile</a>
+        <a href="orders.html">📦 My Orders</a>
+        <a href="cart.html">🛒 My Cart</a>
+        <a href="wishlist.html">❤️ Wishlist</a>
+
+        <hr>
+
+        <a href="settings.html">⚙️ Settings</a>
+        <a href="#" onclick="logout()">🚪 Logout</a>
+    </div>
+
+</div>
+
+<div id="sidebarOverlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<script>
+const sidebar = document.getElementById("userSidebar");
+const overlay = document.getElementById("sidebarOverlay");
+const loginBtn = document.getElementById("login-btn");
+
+let currentUser = null;
+
+/* OPEN SIDEBAR */
+function openSidebar(user){
+    currentUser = user;
+
+    document.getElementById("sb-name").innerText = user.name || "User";
+    document.getElementById("sb-email").innerText = user.email;
+
+    sidebar.classList.add("active");
+    overlay.style.display = "block";
+}
+
+/* CLOSE SIDEBAR */
+function closeSidebar(){
+    sidebar.classList.remove("active");
+    overlay.style.display = "none";
+}
+
+/* LOGOUT */
+async function logout(){
+    await fetch("https://six4zilla.onrender.com/logout", {
+        method:"POST",
+        credentials:"include"
+    });
+
+    location.reload();
+}
+
+/* CHECK USER */
+async function checkUser(){
+    const res = await fetch("https://six4zilla.onrender.com/me", {
+        credentials:"include"
+    });
+
+    const data = await res.json();
+
+    if(data.success){
+        loginBtn.textContent = data.user.name;
+
+        loginBtn.onclick = () => {
+            openSidebar(data.user);
+        };
+    } else {
+        loginBtn.textContent = "LOGIN";
+        loginBtn.onclick = () => {
+            window.location.href = "login.html";
+        };
+    }
+}
+
+checkUser();
+</script>
+
+</body>
+</html>
