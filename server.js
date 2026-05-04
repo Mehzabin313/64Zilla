@@ -565,10 +565,6 @@ app.get("/me", async (req, res) => {
 
         const user = await User.findById(decoded.id).select("-password");
 
-        if (!user) {
-            return res.json({ success: false });
-        }
-
         res.json({ success: true, user });
 
     } catch (err) {
