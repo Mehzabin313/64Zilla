@@ -1157,7 +1157,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       };
 
       document.getElementById(`add-${index}`).onclick = () => {
+         const token = localStorage.getItem("token");
 
+        if (!token) {
+          
+          alert("Please login first to add products to your cart!");
+          window.location.href = "login.html"; 
+          return; 
+        }
         let qty = count === 0 ? 1 : count;
 
         let exist = cartItems.find(p => p._id === item._id);
