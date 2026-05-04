@@ -609,6 +609,24 @@ function closeMenu(){
     overlay.style.display = "none";
 }
 
+/* ================= LOGOUT (NEW ADD) ================= */
+function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+
+    userData = null;
+
+    const loginBtn = document.getElementById("login-btn");
+    if(loginBtn){
+        loginBtn.textContent = "LOGIN";
+        loginBtn.onclick = () => window.location.href = "login.html";
+    }
+
+    closeMenu();
+
+    window.location.href = "home.html";
+}
+
 /* ================= AUTO CHECK ON LOAD ================= */
 window.addEventListener("load", checkUser);
 </script>
