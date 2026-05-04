@@ -554,13 +554,26 @@ app.get("/sellers", async (req, res) => {
 });
 //-----user profile details------
 app.get("/me", async (req, res) => {
-    if (!req.session.user) {
-        return res.json({ success: false });
+    try {
+        const token = req.headers.authorization?.split(" ")[1];
+
+        if (!token) {
+            return res.json({ success: false });
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        const user = await User.findById(decoded.id).select("-password");
+
+        if (!user) {
+            return res.json({ success: false });
+        }
+
+        res.json({ success: true, user });
+
+    } catch (err) {
+        res.json({ success: false });
     }
-
-    const user = await User.findById(req.session.user.id).select("-password");
-
-    res.json({ success: true, user });
 });
 app.post("/change-password", async (req, res) => {
     try {
