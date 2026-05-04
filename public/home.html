@@ -65,7 +65,30 @@
         <div class="menu">
             <button id="menuBtn"><i class="fa-solid fa-bars"></i></button>
         </div>
+        <!--sidebar-->
+        <!-- SIDEBAR -->
+<div id="sideMenu" class="side-menu">
 
+    <div class="side-header">
+        <h3>Menu</h3>
+        <span onclick="closeMenu()">×</span>
+    </div>
+
+    <a href="home.html">🏠 Home</a>
+    <a href="profile.html">👤 Profile</a>
+    <a href="orders.html">📦 Orders</a>
+    <a href="cart.html">🛒 Cart</a>
+    <a href="contact.html">📞 Contact</a>
+    <a href="faq.html">❓ FAQ</a>
+
+    <hr>
+
+    <a href="#" onclick="logout()">🚪 Logout</a>
+
+</div>
+
+<div id="menuOverlay" class="menu-overlay" onclick="closeMenu()"></div>
+        <!--search-->
         <div class="search">
             <input type="text" id="search" placeholder="Search">
             <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
@@ -508,12 +531,35 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 <script>
-const menuBtn = document.getElementById("menuBtn");
 
-menuBtn.addEventListener("click", function () {
-    window.location.href = "sidebar.html";
+const menuBtn = document.getElementById("menuBtn");
+const sideMenu = document.getElementById("sideMenu");
+const overlay = document.getElementById("menuOverlay");
+
+/* OPEN SIDEBAR */
+menuBtn.addEventListener("click", () => {
+    sideMenu.classList.add("active");
+    overlay.style.display = "block";
 });
+
+/* CLOSE SIDEBAR */
+function closeMenu(){
+    sideMenu.classList.remove("active");
+    overlay.style.display = "none";
+}
+
+/* LOGOUT */
+async function logout(){
+    await fetch("https://six4zilla.onrender.com/logout", {
+        method:"POST",
+        credentials:"include"
+    });
+
+    window.location.href = "login.html";
+}
+
 </script>
+
 
 <script src="js/product.js"></script>
 <script src="js/discount-sale.js"></script>
