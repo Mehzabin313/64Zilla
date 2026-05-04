@@ -535,45 +535,42 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 </script>
+
 <script>
+    let userData = null;
 
-const menuBtn = document.getElementById("menuBtn");
-const sideMenu = document.getElementById("sideMenu");
-const overlay = document.getElementById("menuOverlay");
-
-let userData = null;
-
-/* CHECK USER */
 async function checkUser(){
-    const res = await fetch("https://six4zilla.onrender.com/me", {
-        credentials: "include"
-    });
+    try {
+        const res = await fetch("https://six4zilla.onrender.com/me", {
+            credentials: "include"
+        });
 
-    const data = await res.json();
+        const data = await res.json();
 
-    if(data.success){
-        userData = data.user;
+        if(data.success){
+            userData = data.user;
 
-        // navbar login button change
-        const loginBtn = document.getElementById("login-btn");
-        loginBtn.textContent = data.user.name;
+            document.getElementById("sb-name").innerText = data.user.name;
 
-        loginBtn.onclick = () => {
-            window.location.href = "profile.html";
-        };
+            const loginBtn = document.getElementById("login-btn");
+            loginBtn.textContent = data.user.name;
+            loginBtn.onclick = () => window.location.href = "profile.html";
 
-        // sidebar name set
-        document.getElementById("sb-name").innerText = data.user.name;
-
-    } else {
+        } else {
+            userData = null;
+        }
+    } catch (err) {
+        console.log(err);
         userData = null;
     }
 }
 
-checkUser();
+menuBtn.addEventListener("click", async () => {
 
-/* OPEN SIDEBAR ONLY IF LOGGED IN */
-menuBtn.addEventListener("click", () => {
+    // 🔥 important: always ensure check finished
+    if(userData === null){
+        await checkUser(); // re-check on click
+    }
 
     if(!userData){
         alert("Please login first");
@@ -585,24 +582,8 @@ menuBtn.addEventListener("click", () => {
     overlay.style.display = "block";
 });
 
-/* CLOSE */
-function closeMenu(){
-    sideMenu.classList.remove("active");
-    overlay.style.display = "none";
-}
-
-/* LOGOUT */
-async function logout(){
-    await fetch("https://six4zilla.onrender.com/logout", {
-        method:"POST",
-        credentials:"include"
-    });
-
-    window.location.href = "login.html";
-}
-
+checkUser();
 </script>
-
 
 <script src="js/product.js"></script>
 <script src="js/discount-sale.js"></script>
