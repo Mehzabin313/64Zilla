@@ -119,8 +119,8 @@ h2{
     left: -300px; /* hidden state */
     width: 280px;
     height: 100vh;
-    background: #0f172a;
-    color: #fff;
+    background: white;
+    color: black;
     padding: 20px;
     transition: 0.3s ease;
     z-index: 1001;
@@ -160,6 +160,7 @@ h2{
     text-decoration: none;
     border-bottom: 1px solid rgba(255,255,255,0.05);
     transition: 0.2s;
+    background: #a5f92763;
 }
 
 .side-menu a:hover {
