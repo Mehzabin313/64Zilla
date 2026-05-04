@@ -536,13 +536,21 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
-<script>
-    let userData = null;
 
-async function checkUser(){
+<script>
+    async function checkUser(){
     try {
+        const token = localStorage.getItem("token");
+
+        if(!token){
+            userData = null;
+            return;
+        }
+
         const res = await fetch("https://six4zilla.onrender.com/me", {
-            credentials: "include"
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         });
 
         const data = await res.json();
@@ -550,39 +558,21 @@ async function checkUser(){
         if(data.success){
             userData = data.user;
 
-            document.getElementById("sb-name").innerText = data.user.name;
+            document.getElementById("sb-name").innerText = data.user.username || data.user.name;
 
             const loginBtn = document.getElementById("login-btn");
-            loginBtn.textContent = data.user.name;
+            loginBtn.textContent = data.user.username || "PROFILE";
             loginBtn.onclick = () => window.location.href = "profile.html";
 
         } else {
             userData = null;
         }
+
     } catch (err) {
         console.log(err);
         userData = null;
     }
 }
-
-menuBtn.addEventListener("click", async () => {
-
-    // 🔥 important: always ensure check finished
-    if(userData === null){
-        await checkUser(); // re-check on click
-    }
-
-    if(!userData){
-        alert("Please login first");
-        window.location.href = "login.html";
-        return;
-    }
-
-    sideMenu.classList.add("active");
-    overlay.style.display = "block";
-});
-
-checkUser();
 </script>
 
 <script src="js/product.js"></script>
