@@ -565,13 +565,13 @@ async function checkUser(){
             // sidebar name
             const sbName = document.getElementById("sb-name");
             if(sbName){
-                sbName.innerText = data.user.username || "User";
+                sbName.innerText = data.user.email || "User";
             }
 
             // login button → profile
             const loginBtn = document.getElementById("login-btn");
             if(loginBtn){
-                loginBtn.textContent = data.user.username || "PROFILE";
+                loginBtn.textContent = data.user.email || "PROFILE";
                 loginBtn.onclick = () => window.location.href = "profile.html";
             }
 
