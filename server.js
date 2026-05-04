@@ -205,7 +205,7 @@ app.post('/register', async (req, res) => {
         role: user.role
     });
 });*/
-const jwt = require('jsonwebtoken');
+
 
 app.post('/login', async (req, res) => {
     try {
