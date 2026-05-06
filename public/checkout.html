@@ -873,11 +873,32 @@
 const BASE_URL = "https://six4zilla.onrender.com";
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+let selectedPayment = "Online";
+
+function selectPayment(type) {
+  selectedPayment = type;
+
+  document.getElementById("opt-online").classList.remove("active");
+  document.getElementById("opt-cod").classList.remove("active");
+
+  if (type === "Online") {
+    document.getElementById("opt-online").classList.add("active");
+    document.getElementById("payNowBtn").style.display = "block";
+    document.getElementById("confirmBtn").style.display = "none";
+    document.getElementById("bkashField").style.display = "block";
+  } else {
+    document.getElementById("opt-cod").classList.add("active");
+    document.getElementById("payNowBtn").style.display = "none";
+    document.getElementById("confirmBtn").style.display = "block";
+    document.getElementById("bkashField").style.display = "none";
+  }
+}
+
 function renderCart() {
   const container = document.getElementById("cartGroupsDiv");
   container.innerHTML = "";
 
-  if (cart.length === 0) {
+  if (!cart.length) {
     container.innerHTML = "<p>Cart is empty</p>";
     updateTotal();
     return;
@@ -899,10 +920,19 @@ function renderCart() {
 }
 
 function updateTotal() {
-  let total = cart.reduce((sum, i) =>
-    sum + (i.price * (i.quantity || 1)), 0
+  let subtotal = cart.reduce(
+    (sum, i) => sum + (i.price * (i.quantity || 1)),
+    0
   );
 
+  let deliveryFee = cart.length ? 100 : 0;
+  let discount = 0;
+
+  let total = subtotal + deliveryFee - discount;
+
+  document.getElementById("subtotal").innerText = subtotal;
+  document.getElementById("deliveryFee").innerText = deliveryFee;
+  document.getElementById("discount").innerText = discount;
   document.getElementById("totalAmount").innerText = total;
 }
 
@@ -910,42 +940,56 @@ async function placeOrder(method) {
   const name = document.getElementById("name").value.trim();
   const phone = document.getElementById("phone").value.trim();
   const address = document.getElementById("address").value.trim();
+  const bkashNumber = document.getElementById("bkashNumber").value.trim();
 
   if (!name || !phone || !address) {
     alert("Fill all fields");
     return;
   }
 
+  if (!cart.length) {
+    alert("Cart empty");
+    return;
+  }
+
   const order = {
     customer: { name, phone, address },
     paymentMethod: method,
+    bkashNumber: method === "Online" ? bkashNumber : "",
     items: cart,
-    total: cart.reduce((s,i)=> s + (i.price*(i.quantity||1)),0)
+    total: parseInt(document.getElementById("totalAmount").innerText)
   };
 
-  if (method === "COD") {
-    const res = await fetch(`${BASE_URL}/orders`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(order)
-    });
+  try {
+    if (method === "COD") {
+      const res = await fetch(`${BASE_URL}/orders`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(order)
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (data.success) {
-      alert("Order placed successfully");
-      localStorage.removeItem("cart");
-      location.href = "home.html";
+      if (data.success) {
+        alert("Order placed successfully");
+        localStorage.removeItem("cart");
+        location.href = "home.html";
+      } else {
+        alert("Order failed");
+      }
+
     } else {
-      alert("Order failed");
+      localStorage.setItem("pendingOrder", JSON.stringify(order));
+      location.href = "payment.html";
     }
-
-  } else {
-    localStorage.setItem("pendingOrder", JSON.stringify(order));
-    location.href = "payment.html";
+  } catch (err) {
+    console.log("ORDER ERROR:", err);
+    alert("Server error");
   }
 }
 
+// init
+selectPayment("Online");
 renderCart();
 </script>
 </body>
