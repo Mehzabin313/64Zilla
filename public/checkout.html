@@ -870,173 +870,83 @@
 </div>
 
 <script>
-  const BASE_URL = "https://six4zilla.onrender.com";
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  let selectedPayment = "Online";
-  let discountAmount = 0;
-  const DELIVERY_FEE = 100;
+const BASE_URL = "https://six4zilla.onrender.com";
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  // ─── Render Cart ───
-  function renderCart() {
-    const container = document.getElementById("cartGroupsDiv");
-    updateCartCount();
+function renderCart() {
+  const container = document.getElementById("cartGroupsDiv");
+  container.innerHTML = "";
 
-    if (cart.length === 0) {
-      container.innerHTML = `<div class="empty-cart"><i class="fa-solid fa-cart-shopping"></i>Your cart is empty</div>`;
-      updateTotals();
-      return;
-    }
+  if (cart.length === 0) {
+    container.innerHTML = "<p>Cart is empty</p>";
+    updateTotal();
+    return;
+  }
 
-    // Group by seller
-    const groups = {};
-    cart.forEach(item => {
-      const sid = item.sellerId || "unknown";
-      if (!groups[sid]) groups[sid] = { sellerName: item.sellerName || "Store", items: [] };
-      groups[sid].items.push(item);
-    });
-
-    container.innerHTML = "";
-    Object.keys(groups).forEach(sid => {
-      const g = groups[sid];
-      const groupEl = document.createElement("div");
-      groupEl.className = "store-group";
-      groupEl.innerHTML = `
-        <div class="store-header">
-          <div class="store-info">
-            <div class="store-avatar">🏪</div>
-            <div>
-              <div class="store-name">${g.sellerName}</div>
-              <div class="store-delivery">Delivery in 1–2 days</div>
-            </div>
-          </div>
-          <div class="store-toggle"><i class="fa-solid fa-chevron-up"></i></div>
+  cart.forEach(item => {
+    container.innerHTML += `
+      <div class="cart-item">
+        <img src="${BASE_URL}/uploads/${item.image}" width="60">
+        <div>
+          <b>${item.name}</b><br>
+          ৳${item.price} × ${item.quantity || 1}
         </div>
-        <div class="store-items">
-          ${g.items.map(item => `
-            <div class="cart-item">
-              <img class="item-img"
-                src="${BASE_URL}/uploads/${item.image}"
-                onerror="this.src='https://placehold.co/72x72/e8f4ec/2d6a4f?text=img'"
-                alt="${item.name}">
-              <div class="item-details">
-                <div class="item-name">${item.name}</div>
-                <div class="item-weight">${item.weight || "1000gm"}</div>
-                <div class="item-price">৳ ${item.price}</div>
-              </div>
-              <div class="qty-control">
-                <button class="qty-btn" onclick="changeQty('${item._id || item.productId}', -1)">−</button>
-                <span class="qty-num">${item.quantity || 1}</span>
-                <button class="qty-btn" onclick="changeQty('${item._id || item.productId}', 1)">+</button>
-              </div>
-              <div class="item-total">৳ ${(item.price * (item.quantity || 1))}</div>
-            </div>
-          `).join("")}
-        </div>
-      `;
-      container.appendChild(groupEl);
+      </div>
+    `;
+  });
+
+  updateTotal();
+}
+
+function updateTotal() {
+  let total = cart.reduce((sum, i) =>
+    sum + (i.price * (i.quantity || 1)), 0
+  );
+
+  document.getElementById("totalAmount").innerText = total;
+}
+
+async function placeOrder(method) {
+  const name = document.getElementById("name").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const address = document.getElementById("address").value.trim();
+
+  if (!name || !phone || !address) {
+    alert("Fill all fields");
+    return;
+  }
+
+  const order = {
+    customer: { name, phone, address },
+    paymentMethod: method,
+    items: cart,
+    total: cart.reduce((s,i)=> s + (i.price*(i.quantity||1)),0)
+  };
+
+  if (method === "COD") {
+    const res = await fetch(`${BASE_URL}/orders`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(order)
     });
 
-    updateTotals();
-  }
+    const data = await res.json();
 
-  function changeQty(productId, delta) {
-    cart = cart.map(item => {
-      if ((item._id || item.productId) === productId) {
-        const newQty = (item.quantity || 1) + delta;
-        return { ...item, quantity: Math.max(1, newQty) };
-      }
-      return item;
-    });
-    localStorage.setItem("cart", JSON.stringify(cart));
-    renderCart();
-  }
-
-  function updateCartCount() {
-    const total = cart.reduce((s, i) => s + (i.quantity || 1), 0);
-    document.getElementById("cart-count").textContent = total;
-  }
-
-  function updateTotals() {
-    const subtotal = cart.reduce((s, i) => s + ((i.price || 0) * (i.quantity || 1)), 0);
-    document.getElementById("subtotal").textContent = subtotal;
-    document.getElementById("deliveryFee").textContent = cart.length > 0 ? DELIVERY_FEE : 0;
-    document.getElementById("discount").textContent = discountAmount;
-    const fee = cart.length > 0 ? DELIVERY_FEE : 0;
-    document.getElementById("totalAmount").textContent = subtotal + fee - discountAmount;
-  }
-
-  // ─── Payment Toggle ───
-  function selectPayment(method) {
-    selectedPayment = method;
-    document.getElementById("opt-online").classList.toggle("active", method === "Online");
-    document.getElementById("opt-cod").classList.toggle("active", method === "COD");
-    document.getElementById("payNowBtn").style.display = method === "Online" ? "block" : "none";
-    document.getElementById("confirmBtn").style.display = method === "COD" ? "block" : "none";
-    document.getElementById("bkashField").style.display = method === "Online" ? "block" : "none";
-  }
-  // default
-  selectPayment("COD");
-
-  // ─── Voucher ───
-  function applyVoucher() {
-    const code = document.getElementById("voucherCode").value.trim().toUpperCase();
-    if (code === "SAVE50") { discountAmount = 50; alert("Voucher applied! ৳50 off"); }
-    else alert("Invalid voucher code");
-    updateTotals();
-  }
-
-  // ─── Place Order ───
-  async function placeOrder(method) {
-    const name = document.getElementById("name").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const address = document.getElementById("address").value.trim();
-    const bkash = document.getElementById("bkashNumber").value.trim();
-
-    if (!name || !phone || !address) { alert("Please fill all delivery information"); return; }
-    if (cart.length === 0) { alert("Your cart is empty"); return; }
-
-    const subtotal = cart.reduce((s, i) => s + ((i.price || 0) * (i.quantity || 1)), 0);
-    const order = {
-      customer: { name, phone, address },
-      paymentMethod: method,
-      bkashNumber: bkash,
-      items: cart.map(item => ({
-        productId: item._id || item.productId,
-        sellerId: item.sellerId,
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity || 1
-      })),
-      total: subtotal + DELIVERY_FEE - discountAmount
-    };
-
-    if (method === "COD") {
-      try {
-        const res = await fetch(`${BASE_URL}/orders`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(order)
-        });
-        const data = await res.json();
-        if (data.success) {
-          alert("✅ Order placed successfully!");
-          localStorage.removeItem("cart");
-          window.location.href = "home.html";
-        } else {
-          alert("Order failed. Please try again.");
-        }
-      } catch (err) {
-        console.error("ORDER ERROR:", err);
-        alert("Network error. Please try again.");
-      }
+    if (data.success) {
+      alert("Order placed successfully");
+      localStorage.removeItem("cart");
+      location.href = "home.html";
     } else {
-      localStorage.setItem("pendingOrder", JSON.stringify(order));
-      window.location.href = "payment.html";
+      alert("Order failed");
     }
-  }
 
-  // Init
-  renderCart();
+  } else {
+    localStorage.setItem("pendingOrder", JSON.stringify(order));
+    location.href = "payment.html";
+  }
+}
+
+renderCart();
 </script>
 </body>
 </html>
