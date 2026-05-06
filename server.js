@@ -58,14 +58,14 @@ if (!fs.existsSync("uploads")) {
   fs.mkdirSync("uploads");
 }
 
-// ================= CLOUDINARY CONFIG =================
+// CLOUDINARY CONFIG 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET
 });
 
-// =================  (CLOUDINARY STORAGE) =================
+// CLOUDINARY STORAGE) 
 
 let upload;
 try {
@@ -82,7 +82,7 @@ try {
   console.log("MULTER SETUP ERROR:", err.message);
 }
 
-// ================= MongoDB =================
+//  MongoDB 
 const connect = async () => {
     if (!mongo) {
         console.error("MONGO_URL missing in .env");
@@ -98,8 +98,94 @@ const connect = async () => {
 connect();
 
 
+const sslcz = new SSLCommerzPayment(
+  process.env.STORE_ID,
+  process.env.STORE_PASSWORD,
+  false // sandbox
+);
 
-// ================= ROUTES =================
+// ================= PAYMENT START =================
+app.post("/initiate-payment", async (req, res) => {
+  try {
+    const { order } = req.body;
+
+    const tran_id = "TXN_" + Date.now();
+
+    // Save order
+    await Order.create({
+      transactionId: tran_id,
+      customer: order.customer,
+      items: order.items,
+      total: order.total,
+      status: "pending"
+    });
+
+    const data = {
+      total_amount: order.total,
+      currency: "BDT",
+      tran_id,
+
+      success_url: `${process.env.BASE_URL}/payment-success`,
+      fail_url: `${process.env.BASE_URL}/payment-fail`,
+      cancel_url: `${process.env.BASE_URL}/payment-cancel`,
+
+      shipping_method: "NO",
+      product_name: "Order Payment",
+      product_category: "Ecommerce",
+      product_profile: "general",
+
+      cus_name: order.customer.name,
+      cus_email: "test@test.com",
+      cus_add1: order.customer.address,
+      cus_phone: order.customer.phone,
+      cus_city: "Dhaka",
+      cus_country: "Bangladesh"
+    };
+
+    const apiResponse = await sslcz.init(data);
+
+    res.json({ url: apiResponse.GatewayPageURL });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Payment init failed" });
+  }
+});
+
+// SUCCESS 
+app.post("/payment-success", async (req, res) => {
+  const { tran_id } = req.body;
+
+  await Order.findOneAndUpdate(
+    { transactionId: tran_id },
+    { status: "paid" }
+  );
+
+  res.redirect(`${process.env.FRONTEND_URL}/success.html`);
+});
+
+//  FAIL 
+app.post("/payment-fail", async (req, res) => {
+  const { tran_id } = req.body;
+
+  await Order.findOneAndUpdate(
+    { transactionId: tran_id },
+    { status: "failed" }
+  );
+
+  res.redirect(`${process.env.FRONTEND_URL}/fail.html`);
+});
+
+//  CANCEL 
+app.post("/payment-cancel", (req, res) => {
+  res.redirect(`${process.env.FRONTEND_URL}/cancel.html`);
+});
+
+// SERVER START
+app.listen(process.env.PORT, () => {
+  console.log("Server running on port", process.env.PORT);
+});
+// ROUTES 
 //-----search product--------
 app.get("/search-products", async (req, res) => {
     try {
@@ -124,7 +210,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'home.html'));
 });
 
-// ================= USER REGISTER =================
+//  USER REGISTER 
 app.post('/register', async (req, res) => {
     try {
         const { username, email, password } = req.body;
@@ -147,86 +233,27 @@ app.post('/register', async (req, res) => {
     }
 });
 
-// ================= USER LOGIN =================
-/*app.post('/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-
-        const user = await User.findOne({ email });
-
-        if (!user) {
-            return res.status(404).json({ success: false, message: "User not found" });
-        }
-
-        const isMatch = await bcrypt.compare(password, user.password);
-
-        if (!isMatch) {
-            return res.status(401).json({ success: false, message: "Invalid credentials" });
-        }
-
-        const token = jwt.sign(
-            { id: user._id, role: user.role },
-            process.env.JWT_SECRET,
-            { expiresIn: "7d" }
-        );
-
-        res.cookie("token", token, { httpOnly: true });
-
-        res.json({
-            success: true,
-            role: user.role,
-            token
-        });
-
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});*/
-// ================= LOGIN (SESSION) =================
-/*app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ email });
-
-    if (!user) return res.json({ success: false });
-
-    const match = await bcrypt.compare(password, user.password);
-
-    if (!match) return res.json({ success: false });
-
-    // ✅ SESSION SAVE
-    req.session.user = {
-        id: user._id,
-        role: user.role
-    };
-
-    res.json({
-        success: true,
-        role: user.role
-    });
-});*/
 
 
 app.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // ১. ইউজার খুঁজে বের করা
+      
         const user = await User.findOne({ email });
         if (!user) return res.json({ success: false, message: "User not found" });
 
-        // ২. পাসওয়ার্ড চেক করা
+       
         const match = await bcrypt.compare(password, user.password);
         if (!match) return res.json({ success: false, message: "Incorrect password" });
 
-        // ৩. JWT টোকেন তৈরি করা (env থেকে সিক্রেট কি নেওয়া হয়েছে)
+        
         const token = jwt.sign(
             { id: user._id, role: user.role }, 
-            process.env.JWT_SECRET, // আপনার env ফাইল থেকে রিড করবে
+            process.env.JWT_SECRET, 
             { expiresIn: '1d' }
         );
 
-        // ৪. রেসপন্সে টোকেন এবং রোল পাঠানো
         res.json({
             success: true,
             token: token,
@@ -240,7 +267,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// ================= SELLER REGISTER =================
+// SELLER REGISTER 
 app.post('/register-seller', async (req, res) => {
     try {
         const { username, email, password, nid, district, productCategory } = req.body;
