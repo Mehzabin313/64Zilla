@@ -8,6 +8,115 @@
     <link rel="stylesheet" href="css/seller-dashboard.css">
       <link rel="stylesheet" href="css/seller-product_detail.css">
 </head>
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: rgb(112, 182, 112);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container Card */
+.login-container {
+    background: #fff;
+    padding: 30px 25px;
+    width: 350px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    animation: fadeIn 0.6s ease;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Profile Icon */
+.login-container img {
+    width: 70px;
+    margin-bottom: 10px;
+}
+
+/* Heading */
+.login-container h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Inputs */
+.login-container input,
+.login-container select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+/* Input Focus Effect */
+.login-container input:focus,
+.login-container select:focus {
+    border-color: #667eea;
+    outline: none;
+    box-shadow: 0 0 5px rgba(102,126,234,0.5);
+}
+
+/* Button */
+.login-btn {
+    width: 100%;
+    padding: 10px;
+    background: #667eea;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+/* Button Hover */
+.login-btn:hover {
+    background: #5a67d8;
+}
+
+/* Register text */
+.register {
+    margin-top: 15px;
+    font-size: 14px;
+    color: black;
+}
+
+.register a {
+   
+    text-decoration: none !important;
+    font-weight: bold;
+    color: black !important;
+   
+}
+
+.register a:hover {
+    text-decoration: underline;
+}
+</style>
 <body>
     <div class="login-container">
         <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="User Icon">
@@ -28,7 +137,7 @@
                 <option value="Sylhet">Sylhet</option>
             </select>
 
-            <input type="text" id="productCategory" placeholder="What will you sell? (e.g. Honey, Saree)" required>
+            <input type="text" id="productCategory" placeholder="What will you sell? " required>
 
             <button type="submit" class="login-btn" id="regBtn">Register as Seller</button>
         </form>
