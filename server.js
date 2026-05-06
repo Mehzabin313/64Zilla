@@ -449,7 +449,7 @@ const { customer, paymentMethod, bkashNumber, items, total } = req.body;
       bkashNumber: req.body.bkashNumber || "",
 
       transactionId: "",
-      paymentStatus: req.body.paymentMethod === "COD" ? "unpaid" : "paid",
+     
 
       items: req.body.items || [],
       total: Number(req.body.total) || 0,
@@ -469,7 +469,37 @@ const { customer, paymentMethod, bkashNumber, items, total } = req.body;
   }
   console.log("Full Request Body:", req.body);
 });
+app.post("/verify-payment", async (req, res) => {
+  try {
+    const { order, status, transactionId, bkashNumber } = req.body;
 
+    if (status !== "SUCCESS") {
+      return res.json({ success: false });
+    }
+
+    const newOrder = new Order({
+      customer: order.customer,
+      items: order.items,
+      total: order.total,
+
+      paymentMethod: "bKash",
+      paymentStatus: "paid",
+
+      transactionId,
+      bkashNumber,
+
+      status: "pending",
+      date: new Date()
+    });
+
+    await newOrder.save();
+
+    res.json({ success: true, order: newOrder });
+
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
 // 🔥 SELLER/ADMIN GET ALL ORDERS
 app.get("/seller/orders/:sellerId", async (req, res) => {
   try {
