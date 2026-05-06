@@ -130,53 +130,7 @@
   <img id="bannerImg" src="images/1.png" >
 </div>
 
-    <!-- Category Buttons -->
-   <!---- <div class="category">
-        <a href="tangail.html" class="category-btn" 
-           >
-           Tangail
-        </a>
 
-        <a href="dhaka.html" class="category-btn">Dhaka</a>
-        <a href="Rajsahi.html" class="category-btn">Rajshahi</a>
-        <a href="dhaka.html" class="category-btn">Bogura</a>
-        <a href="dhaka.html" class="category-btn">Natore</a>
-        <a href="dhaka.html" class="category-btn">Norshindi</a>
-        <a href="dhaka.html" class="category-btn">Barisal</a>
-        <a href="dhaka.html" class="category-btn">Jamalpur</a>
-        <a href="dhaka.html" class="category-btn">Khulna</a>
-    </div>-->
-    <!---
-    <div class="category"  >
-        <div class="mobile-filter-btn" id="mobileFilterBtn">
-        <span><i class="fa-solid fa-location-dot"></i> Select District</span>
-        <i class="fa-solid fa-chevron-down"></i>
-    </div>
-
-    <a href="tangail.html?district=tangail" class="category-btn">Tangail</a>
-
-    <a href="dhaka.html?district=dhaka" class="category-btn">Dhaka</a>
-
-    <a href="Rajsahi.html?district=rajshahi" class="category-btn">Rajshahi</a>
-
-    <a href="bogura.html?district=bogura" class="category-btn">Bogura</a>
-
-    <a href="natore.html?district=natore" class="category-btn">Natore</a>
-
-    <a href="chittagong.html?district=narsingdi" class="category-btn">Chittagong</a>
-
-    <a href="district.html?district=barisal" class="category-btn">Barisal</a>
-
-    <a href="jamalpur.html?district=jamalpur" class="category-btn">Jamalpur</a>
-    <a href="cumilla.html?district=khulna" class="category-btn">Cumilla</a>
-    <a href="khulna.html?district=khulna" class="category-btn">Khulna</a>
-    <a href="sylhet.html?district=khulna" class="category-btn">Sylhet</a>
-
-<div class="see-all-card" id="seeAllBtn">
-            <div class="icon-circle"><i class="fa-solid fa-chevron-right"></i></div>
-            <span>See all</span>
-        </div>
-</div>-->
 <div class="category-wrapper">
     <div class="mobile-filter-btn" id="mobileFilterBtn">
         <span><i class="fa-solid fa-location-dot"></i> Select Your District</span>
@@ -221,11 +175,11 @@
     <h5 class="mb-3">Explore products</h5>
 
     <div class="category-buttons" id="catBtnWrapper">
-        <button class="cat-btn active" data-category="all">All</button>
-        <button class="cat-btn" data-category="fruits">Fruits</button>
+     <button class="cat-btn active" data-category="all">All</button>
+    <button class="cat-btn" data-category="fruits">Fruits</button>
         <button class="cat-btn" data-category="clothes">Clothes</button>
-        <button class="cat-btn" data-category="crafts">Crafts</button>
-        <button class="cat-btn" data-category="sweets">Sweets</button>
+     <button class="cat-btn" data-category="crafts">Crafts</button>
+    <button class="cat-btn" data-category="sweets">Sweets</button>
         
         <div class="mobile-category-icon" id="catMenuToggle">
             <i class="fa-solid fa-list-ul"></i>
@@ -236,12 +190,12 @@
 
     <!-- Container 2 -->
     <div class="container my-4">
-        <h5>Categories</h5>
+    <h5>Categories</h5>
         <div id="container2" class="row"></div>
     </div>
 
     <!-- Discount and Sale -->
-    <div class="dis-container">
+ <div class="dis-container">
         <h5 class="mb-3; padding: 0 30px;">Discount and Sale</h5>
         <div id="container3" class="row2"></div>
     </div>
@@ -455,7 +409,7 @@ async function checkUser() {
         if (data.success) {
             loginBtn.textContent = "PROFILE";
             loginBtn.onclick = () => window.location.href = "profile.html";
-              loginBtn.textContent = data.customer.name || "PROFILE";
+              loginBtn.textContent = data.user.username || "PROFILE";
         } else {
             loginBtn.textContent = "LOGIN";
             loginBtn.onclick = () => window.location.href = "login.html";
