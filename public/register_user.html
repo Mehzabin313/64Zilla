@@ -116,13 +116,14 @@ button:hover {
         <div class="register">
            Already have an account? <a href="login.html">login</a>
         </div>
+        <p id="message"></p>
     </div>
      <script src="login.js"></script>
 
    
     
 
-    <p id="message"></p>
+    
 
     <script>
         const form = document.getElementById('registerForm');
@@ -153,7 +154,7 @@ button:hover {
                 if (response.status === 201) {
                     messageDisplay.innerText = "Registration Successful!";
                     messageDisplay.style.color = "green";
-                    form.reset(); // Form clear kore deya
+                    form.reset(); 
                 } else {
                     messageDisplay.innerText = "Error: " + JSON.stringify(result);
                     messageDisplay.style.color = "red";
