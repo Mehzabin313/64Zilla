@@ -1,65 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>64Zilla.com - Payment</title>
+  <title>bKash Payment</title>
 </head>
 <body>
 
-<h2>Payment Page</h2>
-<p>Click confirm to complete your payment</p>
+<h2>bKash Payment Verification</h2>
 
-<button id="payBtn" onclick="confirmPayment()">Confirm Payment</button>
+<p>Send Money to: 01XXXXXXXXX</p>
+
+<input id="trxId" placeholder="Transaction ID"><br><br>
+<input id="bkashNumber" placeholder="Your bKash Number"><br><br>
+
+<button onclick="submitPayment()">Submit</button>
 
 <script>
 const BASE_URL = "https://six4zilla.onrender.com";
 
-async function confirmPayment() {
+async function submitPayment() {
+  const order = JSON.parse(localStorage.getItem("pendingOrder"));
 
-  const btn = document.getElementById("payBtn");
-  btn.disabled = true;
-  btn.innerText = "Processing...";
+  const trxId = document.getElementById("trxId").value;
+  const bkashNumber = document.getElementById("bkashNumber").value;
 
-  try {
-    const order = JSON.parse(localStorage.getItem("pendingOrder"));
+  if (!trxId || !bkashNumber) {
+    alert("Fill all fields");
+    return;
+  }
 
-    if (!order) {
-      alert("No pending order found!");
-      btn.disabled = false;
-      btn.innerText = "Confirm Payment";
-      return;
-    }
+  const payload = {
+  customer: order.customer,
+  items: order.items,
+  total: order.total,
+  paymentMethod: "bKash",
+  bkashNumber,
+  trxId
+};
 
-    const res = await fetch(`${BASE_URL}/orders`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(order)
-    });
+  const res = await fetch(`${BASE_URL}/orders`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
 
-    const data = await res.json();
+  const data = await res.json();
 
-    if (data.success) {
-
-      alert("Payment Successful & Order Placed!");
-
-      localStorage.removeItem("cart");
-      localStorage.removeItem("pendingOrder");
-
-      window.location.href = "home.html";
-
-    } else {
-      alert("Payment Failed!");
-      btn.disabled = false;
-      btn.innerText = "Confirm Payment";
-    }
-
-  } catch (err) {
-    console.log("PAYMENT ERROR:", err);
-    alert("Network Error!");
-
-    btn.disabled = false;
-    btn.innerText = "Confirm Payment";
+  if (data.success) {
+    alert("Payment submitted! Waiting for verification.");
+    localStorage.removeItem("pendingOrder");
+    location.href = "home.html";
+  } else {
+    alert("Failed");
   }
 }
 </script>
