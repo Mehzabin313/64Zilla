@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Orders - 64Zilla</title>
+  <style>
+    body{
+      font-family: Arial;
+      background:#f5f5f5;
+      padding:20px;
+    }
+
+    .order-card{
+      background:#fff;
+      border:1px solid #ddd;
+      padding:15px;
+      margin-bottom:10px;
+      border-radius:8px;
+    }
+
+    .status{
+      font-weight:bold;
+      padding:3px 8px;
+      border-radius:5px;
+    }
+
+    .pending{ background:orange; color:#fff; }
+    .confirmed{ background:blue; color:#fff; }
+    .shipped{ background:purple; color:#fff; }
+    .delivered{ background:green; color:#fff; }
+  </style>
+</head>
+
+<body>
+
+<h2>🧾 My Orders</h2>
+
+<div id="orders"></div>
+
+<script>
+const BASE_URL = "https://six4zilla.onrender.com";
+
+async function loadMyOrders(){
+
+  const token = localStorage.getItem("token");
+
+  if(!token){
+    alert("Please login first");
+    window.location.href = "login.html";
+    return;
+  }
+
+  try {
+    const res = await fetch(`${BASE_URL}/orders/my`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    const orders = await res.json();
+
+    const div = document.getElementById("orders");
+    div.innerHTML = "";
+
+    if(!orders.length){
+      div.innerHTML = "<p>No orders found</p>";
+      return;
+    }
+
+    orders.forEach(order => {
+
+      div.innerHTML += `
+        <div class="order-card">
+          <p><b>Order ID:</b> ${order._id}</p>
+
+          <p><b>Name:</b> ${order.customer.name}</p>
+          <p><b>Phone:</b> ${order.customer.phone}</p>
+          <p><b>Address:</b> ${order.customer.address}</p>
+
+          <p><b>Total:</b> ৳ ${order.total}</p>
+
+          <p>
+            <b>Status:</b>
+            <span class="status ${order.status}">
+              ${order.status}
+            </span>
+          </p>
+
+          <hr>
+
+          <b>Items:</b>
+          ${order.items.map(i => `
+            <div style="font-size:14px;">
+              • ${i.name} × ${i.quantity} = ৳ ${i.price * i.quantity}
+            </div>
+          `).join("")}
+
+        </div>
+      `;
+    });
+
+  } catch(err){
+    console.log(err);
+  }
+}
+
+loadMyOrders();
+</script>
+
+</body>
+</html>
