@@ -10,8 +10,15 @@ const orderSchema = new mongoose.Schema({
   },
 
   paymentMethod: String,
-  bkashNumber: String,
-  transactionId: String,
+  bkashNumber: {
+  type: String,
+  default: ""
+},
+
+transactionId: {
+  type: String,
+  default: ""
+},
 
   paymentStatus: {
     type: String,
