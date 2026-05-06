@@ -455,7 +455,7 @@ async function checkUser() {
         if (data.success) {
             loginBtn.textContent = "PROFILE";
             loginBtn.onclick = () => window.location.href = "profile.html";
-              loginBtn.textContent = data.user.name || "PROFILE";
+              loginBtn.textContent = data.customer.name || "PROFILE";
         } else {
             loginBtn.textContent = "LOGIN";
             loginBtn.onclick = () => window.location.href = "login.html";
@@ -484,7 +484,7 @@ checkUser();
   setInterval(() => {
     index = (index + 1) % banners.length;
     img.src = banners[index];
-  }, 3000); // 3 seconds
+  }, 3000); 
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -492,19 +492,19 @@ document.addEventListener("DOMContentLoaded", function() {
     const mobileBtn = document.getElementById('mobileFilterBtn');
     const categoryMenu = document.getElementById('categoryContent');
 
-    // See All বাটনের কাজ
+   
     if(seeAllBtn) {
         seeAllBtn.addEventListener('click', function() {
             const hiddenItems = document.querySelectorAll('.hidden-dist');
             hiddenItems.forEach(item => {
                 item.classList.remove('hidden-dist');
-                item.style.display = 'flex'; // ফোরস ডিসপ্লে
+                item.style.display = 'flex'; 
             });
-            this.style.display = 'none'; // বাটন লুকিয়ে ফেলা
+            this.style.display = 'none'; 
         });
     }
 
-    // মোবাইল ড্রপডাউন টগল
+
     if(mobileBtn) {
         mobileBtn.addEventListener('click', function() {
             categoryMenu.classList.toggle('active-mobile');
@@ -521,7 +521,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (mobileMenuIcon && navLinks) {
         mobileMenuIcon.addEventListener('click', function() {
-            // 'active' ক্লাসটি টগল করবে যা CSS এ display: flex করা আছে
+            
             navLinks.classList.toggle('active');
             
             // আইকন চেঞ্জ (Bars থেকে X চিহ্ন)
@@ -540,7 +540,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <script>
 let userData = null;
 
-/* ================= CHECK USER (JWT) ================= */
+/* CHECK USER  */
 async function checkUser(){
     try {
         const token = localStorage.getItem("token");
@@ -588,10 +588,10 @@ async function checkUser(){
     }
 }
 
-/* ================= SIDEBAR OPEN ================= */
+
 menuBtn.addEventListener("click", async () => {
 
-    const ok = await checkUser(); // always verify
+    const ok = await checkUser(); 
 
     if(!ok){
         alert("Please login first");
@@ -603,13 +603,11 @@ menuBtn.addEventListener("click", async () => {
     overlay.style.display = "block";
 });
 
-/* ================= CLOSE SIDEBAR ================= */
 function closeMenu(){
     sideMenu.classList.remove("active");
     overlay.style.display = "none";
 }
 
-/* ================= LOGOUT (NEW ADD) ================= */
 function logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
@@ -627,7 +625,7 @@ function logout() {
     window.location.href = "home.html";
 }
 
-/* ================= AUTO CHECK ON LOAD ================= */
+
 window.addEventListener("load", checkUser);
 </script>
 
