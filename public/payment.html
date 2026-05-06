@@ -18,7 +18,13 @@
 const BASE_URL = "https://six4zilla.onrender.com";
 
 async function submitPayment() {
+
   const order = JSON.parse(localStorage.getItem("pendingOrder"));
+
+  if (!order) {
+    alert("No pending order found");
+    return;
+  }
 
   const trxId = document.getElementById("trxId").value;
   const bkashNumber = document.getElementById("bkashNumber").value;
@@ -29,28 +35,32 @@ async function submitPayment() {
   }
 
   const payload = {
-  customer: order.customer,
-  items: order.items,
-  total: order.total,
-  paymentMethod: "bKash",
-  bkashNumber,
-  trxId
-};
+    order,
+    status: "SUCCESS",
+    transactionId: trxId,
+    bkashNumber
+  };
 
-  const res = await fetch(`${BASE_URL}/orders`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
+  try {
+    const res = await fetch(`${BASE_URL}/verify-payment`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  if (data.success) {
-    alert("Payment submitted! Waiting for verification.");
-    localStorage.removeItem("pendingOrder");
-    location.href = "home.html";
-  } else {
-    alert("Failed");
+    if (data.success) {
+      alert("Payment submitted successfully!");
+      localStorage.removeItem("pendingOrder");
+      location.href = "home.html";
+    } else {
+      alert("Payment failed!");
+    }
+
+  } catch (err) {
+    console.log(err);
+    alert("Server error");
   }
 }
 </script>
