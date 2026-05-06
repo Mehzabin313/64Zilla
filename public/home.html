@@ -395,33 +395,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<script>
-const loginBtn = document.getElementById("login-btn");
 
-async function checkUser() {
-    try {
-        const res = await fetch("https://six4zilla.onrender.com/me", {
-            credentials: "include"
-        });
-
-        const data = await res.json();
-
-        if (data.success) {
-            loginBtn.textContent = "PROFILE";
-            loginBtn.onclick = () => window.location.href = "profile.html";
-              loginBtn.textContent = data.user.username || "PROFILE";
-        } else {
-            loginBtn.textContent = "LOGIN";
-            loginBtn.onclick = () => window.location.href = "login.html";
-        }
-
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-checkUser();
-</script>
 <script>
   const banners = [
     "images/1.png",
@@ -494,7 +468,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <script>
 let userData = null;
 
-/* CHECK USER  */
+
 async function checkUser(){
     try {
         const token = localStorage.getItem("token");
@@ -525,7 +499,7 @@ async function checkUser(){
             // login button → profile
             const loginBtn = document.getElementById("login-btn");
             if(loginBtn){
-                loginBtn.textContent = data.user.email || "PROFILE";
+               loginBtn.textContent = data.user.username || "PROFILE";
                 loginBtn.onclick = () => window.location.href = "profile.html";
             }
 
