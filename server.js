@@ -27,6 +27,7 @@ const Seller = require("./models/seller");
 const Product = require("./models/product");
 const Order = require("./models/order");
 
+
 // ================= Middleware =================
 app.use(cors({
   origin: "https://six4zilla.onrender.com",
@@ -97,94 +98,39 @@ const connect = async () => {
 };
 connect();
 
+const orders = []; // temporary DB
 
-const sslcz = new SSLCommerzPayment(
-  process.env.STORE_ID,
-  process.env.STORE_PASSWORD,
-  false // sandbox
-);
+// =====================
+// CREATE ORDER (ONLY AFTER PAYMENT VERIFY)
+// =====================
+app.post("/verify-payment", (req, res) => {
+  const { order, status } = req.body;
 
-// ================= PAYMENT START =================
-app.post("/initiate-payment", async (req, res) => {
-  try {
-    const { order } = req.body;
-
-    const tran_id = "TXN_" + Date.now();
-
-    // Save order
-    await Order.create({
-      transactionId: tran_id,
-      customer: order.customer,
-      items: order.items,
-      total: order.total,
-      status: "pending"
-    });
-
-    const data = {
-      total_amount: order.total,
-      currency: "BDT",
-      tran_id,
-
-      success_url: `${process.env.BASE_URL}/payment-success`,
-      fail_url: `${process.env.BASE_URL}/payment-fail`,
-      cancel_url: `${process.env.BASE_URL}/payment-cancel`,
-
-      shipping_method: "NO",
-      product_name: "Order Payment",
-      product_category: "Ecommerce",
-      product_profile: "general",
-
-      cus_name: order.customer.name,
-      cus_email: "test@test.com",
-      cus_add1: order.customer.address,
-      cus_phone: order.customer.phone,
-      cus_city: "Dhaka",
-      cus_country: "Bangladesh"
-    };
-
-    const apiResponse = await sslcz.init(data);
-
-    res.json({ url: apiResponse.GatewayPageURL });
-
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "Payment init failed" });
+  if (status !== "SUCCESS") {
+    return res.json({ success: false });
   }
+
+  const newOrder = {
+    id: Date.now(),
+    ...order,
+    status: "PAID"
+  };
+
+  orders.push(newOrder);
+
+  console.log("ORDER SAVED:", newOrder);
+
+  res.json({ success: true, order: newOrder });
 });
 
-// SUCCESS 
-app.post("/payment-success", async (req, res) => {
-  const { tran_id } = req.body;
-
-  await Order.findOneAndUpdate(
-    { transactionId: tran_id },
-    { status: "paid" }
-  );
-
-  res.redirect(`${process.env.FRONTEND_URL}/success.html`);
+// =====================
+// GET ORDERS (TEST)
+// =====================
+app.get("/orders", (req, res) => {
+  res.json(orders);
 });
 
-//  FAIL 
-app.post("/payment-fail", async (req, res) => {
-  const { tran_id } = req.body;
 
-  await Order.findOneAndUpdate(
-    { transactionId: tran_id },
-    { status: "failed" }
-  );
-
-  res.redirect(`${process.env.FRONTEND_URL}/fail.html`);
-});
-
-//  CANCEL 
-app.post("/payment-cancel", (req, res) => {
-  res.redirect(`${process.env.FRONTEND_URL}/cancel.html`);
-});
-
-// SERVER START
-app.listen(process.env.PORT, () => {
-  console.log("Server running on port", process.env.PORT);
-});
 // ROUTES 
 //-----search product--------
 app.get("/search-products", async (req, res) => {
