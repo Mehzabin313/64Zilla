@@ -469,6 +469,7 @@ const { customer, paymentMethod, bkashNumber, items, total } = req.body;
   }
   console.log("Full Request Body:", req.body);
 });
+
 // 🔥 SELLER/ADMIN GET ALL ORDERS
 app.get("/seller/orders/:sellerId", async (req, res) => {
   try {
