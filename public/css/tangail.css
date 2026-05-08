@@ -291,7 +291,7 @@ h2{
 /* FOOTER FIX */
 .site-footer{
     position:relative !important;
-    margin-top:80px !important;
+    margin-top:300px !important;
     clear:both;
     width:100%;
     z-index:1;
