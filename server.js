@@ -98,30 +98,7 @@ const connect = async () => {
 };
 connect();
 
-const orders = []; // temporary DB
 
-// =====================
-// CREATE ORDER (ONLY AFTER PAYMENT VERIFY)
-// =====================
-app.post("/verify-payment", (req, res) => {
-  const { order, status } = req.body;
-
-  if (status !== "SUCCESS") {
-    return res.json({ success: false });
-  }
-
-  const newOrder = {
-    id: Date.now(),
-    ...order,
-    status: "PAID"
-  };
-
-  orders.push(newOrder);
-
-  console.log("ORDER SAVED:", newOrder);
-
-  res.json({ success: true, order: newOrder });
-});
 
 // =====================
 // GET ORDERS (TEST)
