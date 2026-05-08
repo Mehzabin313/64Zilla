@@ -204,6 +204,8 @@
 
   // ============ INIT ============
   loadProduct();*/
+  //last 
+  /*
   const BASE_URL = "https://six4zilla.onrender.com";
 
 let currentProduct = null;
@@ -409,4 +411,238 @@ document.addEventListener("DOMContentLoaded", () => {
   if (cartBtn) {
     cartBtn.addEventListener("click", toggleCart);
   }
-});
+});*/
+const BASE_URL = "https://six4zilla.onrender.com";
+
+let currentProduct = null;
+let qty = 1;
+
+// ================= CART HELPERS =================
+function getCart() {
+  return JSON.parse(localStorage.getItem("cart") || "[]");
+}
+
+function saveCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function updateCartCount() {
+  const cart = getCart();
+  const total = cart.reduce((sum, i) => sum + i.quantity, 0);
+
+  const el = document.getElementById("cart-count");
+  if (el) el.textContent = total;
+}
+
+// ================= GET PRODUCT ID =================
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("id");
+
+// ================= LOAD PRODUCT =================
+async function loadProduct() {
+  const loading = document.getElementById("loadingState");
+  const card = document.getElementById("detailCard");
+
+  try {
+    if (!productId) throw new Error("Product ID missing in URL");
+
+    const res = await fetch(`${BASE_URL}/products/${productId}`);
+    if (!res.ok) throw new Error("API failed");
+
+    const item = await res.json();
+
+    if (!item) throw new Error("Product not found");
+
+    currentProduct = item;
+
+    renderProduct(item);
+    loadRelated();
+
+    if (loading) loading.style.display = "none";
+    if (card) card.style.display = "block";
+
+  } catch (err) {
+    console.log(err);
+
+    if (loading) {
+      loading.innerHTML = `
+        <p style="color:red;">Product load failed</p>
+        <a href="home.html">Go Home</a>
+      `;
+    }
+  }
+}
+
+// ================= RENDER PRODUCT =================
+function renderProduct(item) {
+
+  const set = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  };
+
+  set("productName", item.name);
+  set("productPrice", "৳ " + item.price);
+  set("productDesc", item.description || "No description");
+
+  const img = document.getElementById("mainProductImg");
+  if (img) {
+    img.src = item.image?.startsWith("http")
+      ? item.image
+      : `${BASE_URL}/uploads/${item.image}`;
+  }
+}
+
+// ================= RELATED =================
+async function loadRelated() {
+  const grid = document.getElementById("relatedGrid");
+  if (!grid) return;
+
+  try {
+    const res = await fetch(`${BASE_URL}/products`);
+    const all = await res.json();
+
+    const filtered = all.filter(p => p._id !== productId).slice(0, 6);
+
+    grid.innerHTML = "";
+
+    filtered.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "related-card";
+
+      div.innerHTML = `
+        <img src="${p.image}" style="width:100%">
+        <p>${p.name}</p>
+        <p>৳ ${p.price}</p>
+      `;
+
+      div.onclick = () => {
+        window.location.href = `product-detail.html?id=${p._id}`;
+      };
+
+      grid.appendChild(div);
+    });
+
+  } catch (e) {
+    console.log("related error", e);
+  }
+}
+
+// ================= QTY =================
+function changeQty(v) {
+  qty = Math.max(1, qty + v);
+
+  const el = document.getElementById("qtyDisplay");
+  if (el) el.textContent = qty;
+}
+
+// ================= ADD TO CART =================
+function addToCart() {
+  if (!currentProduct) return;
+
+  let cart = getCart();
+
+  const exist = cart.find(i => i._id === currentProduct._id);
+
+  if (exist) {
+    exist.quantity += qty;
+  } else {
+    cart.push({
+      ...currentProduct,
+      quantity: qty
+    });
+  }
+
+  saveCart(cart);
+  updateCartCount();
+
+  alert("Added to cart");
+}
+
+// ================= CART UI =================
+function toggleCart() {
+  const box = document.getElementById("order-review");
+  if (!box) return;
+
+  box.style.display = box.style.display === "block" ? "none" : "block";
+
+  renderCart();
+}
+
+function renderCart() {
+  const box = document.getElementById("order-review");
+  if (!box) return;
+
+  const cart = getCart();
+
+  if (cart.length === 0) {
+    box.innerHTML = "<p>Cart is empty</p>";
+    return;
+  }
+
+  let total = 0;
+
+  box.innerHTML = cart.map((item, i) => {
+    total += item.price * item.quantity;
+
+    return `
+      <div style="display:flex;gap:10px;margin-bottom:10px">
+        <img src="${item.image}" width="50">
+        <div>
+          <p>${item.name}</p>
+          <p>Qty: ${item.quantity}</p>
+          <p>৳ ${item.price * item.quantity}</p>
+
+          <button onclick="inc(${i})">+</button>
+          <button onclick="dec(${i})">-</button>
+          <button onclick="remove(${i})">x</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  box.innerHTML += `<hr><h4>Total: ৳ ${total}</h4>`;
+
+  box.innerHTML += `
+    <button onclick="window.location.href='checkout.html'">
+      Checkout
+    </button>
+  `;
+}
+
+// ================= CART ACTIONS =================
+window.inc = function(i) {
+  let cart = getCart();
+  cart[i].quantity++;
+  saveCart(cart);
+  updateCartCount();
+  renderCart();
+};
+
+window.dec = function(i) {
+  let cart = getCart();
+
+  if (cart[i].quantity > 1) cart[i].quantity--;
+  else cart.splice(i, 1);
+
+  saveCart(cart);
+  updateCartCount();
+  renderCart();
+};
+
+window.remove = function(i) {
+  let cart = getCart();
+  cart.splice(i, 1);
+  saveCart(cart);
+  updateCartCount();
+  renderCart();
+};
+
+// ================= INIT =================
+document.addEventListener("DOMContentLoaded", () => {
+  loadProduct();
+  updateCartCount();
+
+  const cart = document.getElementById("cartdiv");
+  if (cart) cart.addEventListener("click", toggleCart);
+}); 
