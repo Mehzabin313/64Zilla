@@ -437,7 +437,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cartBtn.addEventListener("click", toggleCart);
   }
 });*/
-const BASE_URL = "https://six4zilla.onrender.com";
+/*const BASE_URL = "https://six4zilla.onrender.com";
 
 let currentProduct = null;
 let qty = 1;
@@ -663,4 +663,258 @@ document.addEventListener("DOMContentLoaded", () => {
       box.style.display = box.style.display === "block" ? "none" : "block";
     });
   }
+});*/
+const BASE_URL = "https://six4zilla.onrender.com";
+
+let currentProduct = null;
+let qty = 1;
+
+// ================= GET CART =================
+function getCart() {
+  return JSON.parse(localStorage.getItem("cart") || "[]");
+}
+
+function saveCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+// ================= CART COUNT =================
+function updateCartCount() {
+  const cartCount = document.getElementById("cart-count");
+  if (!cartCount) return;
+
+  let cart = getCart();
+  let total = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+  cartCount.textContent = total;
+
+  renderCart();
+}
+
+// ================= CART RENDER =================
+function renderCart() {
+  const box = document.getElementById("order-review");
+  if (!box) return;
+
+  let cart = getCart();
+
+  box.innerHTML = `
+    <div class="cart-header">
+      <h4>🛒 Cart</h4>
+      <button onclick="toggleCart()" class="close-btn">×</button>
+    </div>
+  `;
+
+  if (cart.length === 0) {
+    box.innerHTML += "<p style='padding:10px'>Cart is empty</p>";
+    return;
+  }
+
+  let totalPrice = 0;
+
+  cart.forEach((item, index) => {
+    let itemTotal = item.price * item.quantity;
+    totalPrice += itemTotal;
+
+    box.innerHTML += `
+      <div class="cart-item">
+        <!-- FIX 1: IMAGE ISSUE SOLVED -->
+        <!-- আগে শুধু item.image ছিল, কিন্তু অনেক সময় backend path না থাকায় ভেঙে যেত -->
+        <img src="${
+          item.image?.startsWith("http")
+            ? item.image
+            : `${BASE_URL}/uploads/${item.image}`
+        }" />
+
+        <div>
+          <p>${item.name}</p>
+          <p>Qty: ${item.quantity}</p>
+          <p>৳ ${itemTotal}</p>
+
+          <button onclick="inc(${index})">+</button>
+          <button onclick="dec(${index})">-</button>
+          <button onclick="remove(${index})">X</button>
+        </div>
+      </div>
+      <hr>
+    `;
+  });
+
+  box.innerHTML += `
+    <div class="cart-footer">
+      <h4>Total: ৳ ${totalPrice}</h4>
+      <button onclick="checkout()" style="width:100%;padding:10px;background:green;color:white;border:none;">
+        Checkout
+      </button>
+    </div>
+  `;
+}
+
+// ================= CART ACTIONS =================
+window.inc = function (i) {
+  let cart = getCart();
+  cart[i].quantity++;
+  saveCart(cart);
+  updateCartCount();
+};
+
+window.dec = function (i) {
+  let cart = getCart();
+
+  if (cart[i].quantity > 1) cart[i].quantity--;
+  else cart.splice(i, 1);
+
+  saveCart(cart);
+  updateCartCount();
+};
+
+window.remove = function (i) {
+  let cart = getCart();
+  cart.splice(i, 1);
+  saveCart(cart);
+  updateCartCount();
+};
+
+// ================= TOGGLE CART =================
+function toggleCart() {
+  const box = document.getElementById("order-review");
+  if (!box) return;
+
+  box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
+// ================= PRODUCT ID =================
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("id");
+
+// ================= LOAD PRODUCT =================
+async function loadProduct() {
+  try {
+    if (!productId) throw new Error("No product id");
+
+    let res = await fetch(`${BASE_URL}/products/${productId}`);
+
+    let item;
+
+    if (res.ok) {
+      item = await res.json();
+    } else {
+      const allRes = await fetch(`${BASE_URL}/products`);
+      const all = await allRes.json();
+
+      item = all.find(p => p._id === productId);
+    }
+
+    if (!item) throw new Error("Product not found");
+
+    currentProduct = item;
+
+    document.getElementById("loadingState").style.display = "none";
+    document.getElementById("detailCard").style.display = "grid";
+
+    document.getElementById("productName").textContent = item.name || "";
+    document.getElementById("productPrice").textContent = "৳ " + item.price;
+
+    document.getElementById("mainProductImg").src =
+      item.image?.startsWith("http")
+        ? item.image
+        : `${BASE_URL}/uploads/${item.image}`;
+
+    // FIX 2: RELATED PRODUCT NOT SHOWING / WRONG LAYOUT
+    // সমস্যা: related section call হচ্ছিল না properly
+    // solution: loadAllProducts add করতে হবে এখানে
+    loadAllProducts(item._id);
+
+  } catch (err) {
+    document.getElementById("loadingState").innerHTML = `
+      <p style="color:red">⚠️ Product load failed</p>
+      <button onclick="location.reload()">Retry</button>
+    `;
+  }
+}
+
+// ================= RELATED PRODUCTS =================
+function loadRelated(products) {
+  if (!products || products.length === 0) return;
+
+  const grid = document.getElementById("relatedGrid");
+
+  grid.innerHTML = "";
+
+  const show = products.slice(0, 6);
+
+  show.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "related-card";
+
+    card.innerHTML = `
+      <img src="${item.image?.startsWith("http")
+        ? item.image
+        : `${BASE_URL}/uploads/${item.image}`}" />
+
+      <div class="related-card-info">
+        <p>${item.name}</p>
+        <p>${item.district || ""}</p>
+        <p>৳ ${item.price}</p>
+      </div>
+    `;
+
+    card.onclick = () => {
+      window.location.href = `product-detail.html?id=${item._id}`;
+    };
+
+    grid.appendChild(card);
+  });
+
+  // FIX 3: "You may need" SECTION ROW ISSUE
+  // সমস্যা: CSS flex/grid না থাকায় নিচে নিচে চলে যাচ্ছিল
+  // solution (CSS দরকার):
+  // #relatedGrid { display:grid; grid-template-columns:repeat(3,1fr); gap:15px; }
+
+  document.getElementById("relatedSection").style.display = "block";
+}
+
+// ================= LOAD ALL FOR RELATED =================
+async function loadAllProducts(currentId) {
+  try {
+    const res = await fetch(`${BASE_URL}/products`);
+    const all = await res.json();
+
+    loadRelated(all.filter(p => p._id !== currentId));
+  } catch (e) {}
+}
+
+// ================= ADD TO CART =================
+function addToCart() {
+  if (!currentProduct) return;
+
+  let cart = getCart();
+
+  const exist = cart.find(p => p._id === currentProduct._id);
+
+  if (exist) exist.quantity += qty;
+  else {
+    cart.push({
+      ...currentProduct,
+      quantity: qty,
+
+      // FIX 4: IMAGE NOT SHOW IN CART FIX
+      // আগে image path ছিল না properly set
+      image: currentProduct.image?.startsWith("http")
+        ? currentProduct.image
+        : `${BASE_URL}/uploads/${currentProduct.image}`
+    });
+  }
+
+  saveCart(cart);
+  updateCartCount();
+}
+
+// ================= INIT =================
+document.addEventListener("DOMContentLoaded", () => {
+  loadProduct();
+  updateCartCount();
+
+  const cartBtn = document.getElementById("cartdiv");
+  if (cartBtn) cartBtn.addEventListener("click", toggleCart);
 });
