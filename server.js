@@ -111,7 +111,7 @@ app.get('/', (req, res) => {
 });
 
 // ================= AUTH =================
-app.post('/register', async (req, res) => {
+/*app.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
@@ -130,7 +130,30 @@ app.post('/register', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});*/
+//  USER REGISTER 
+app.post('/register', async (req, res) => {
+    try {
+        const { username, email, password } = req.body;
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = new User({
+            username,
+            email,
+            password: hashedPassword,
+            role: 'user'
+        });
+
+        await newUser.save();
+
+        res.status(201).json({ success: true, message: "Registration Successful" });
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
+
 
 app.post('/login', async (req, res) => {
   try {
