@@ -131,9 +131,6 @@ h2{
    
 }
 
-
-
-/* Specific highlight for the 'Join Community' button */
 .join-community {
     display: inline-block;
     background-color: #A5F927;
@@ -291,7 +288,7 @@ h2{
 /* FOOTER FIX */
 .site-footer{
     position:relative !important;
-    margin-top:300px !important;
+    margin-top:800px !important;
     clear:both;
     width:100%;
     z-index:1;
