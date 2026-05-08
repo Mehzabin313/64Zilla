@@ -302,7 +302,7 @@ app.get("/my-products/:sellerId", async (req, res) => {
     }
 });
 
-app.post("/add-product", (req, res) => {
+app.post("/add-product", async(req, res) => {
   upload.single("image")(req, res, function(err) {
     if (err) {
       console.log("MULTER ERROR:", err.message);
@@ -316,7 +316,7 @@ app.post("/add-product", (req, res) => {
     if (!req.file) {
       return res.status(400).json({ success: false, message: "Image missing" });
     }
-
+ const seller = await Seller.findById(req.body.sellerId);
     const product = new Product({
        sellerId: req.body.sellerId,
       name: req.body.name,
