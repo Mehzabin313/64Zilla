@@ -356,12 +356,14 @@
       gap: 14px;
     }
     .related-card {
-      background: #fff;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      overflow: hidden;
-      cursor: pointer;
-      transition: box-shadow 0.2s, transform 0.2s;
+       min-width:160px;
+       border-radius:18px;
+       padding:10px;
+       text-align:center;
+       color:#0a4d20;
+       flex-shrink:0;
+       transition:0.3s;
+       background: rgba(255, 255, 255, 0.596);
     }
     .related-card:hover {
       box-shadow: 0 4px 18px rgba(0,0,0,0.10);
@@ -508,13 +510,13 @@
 
 <!-- RELATED PRODUCTS -->
 <div class="related-section" id="relatedSection" style="display:none;">
-  <h2 class="related-title">আরও পণ্য দেখুন</h2>
+  <h2 class="related-title">Product You May need</h2>
   <div class="related-grid" id="relatedGrid"></div>
 </div>
 
 <!-- TOAST -->
 <div class="toast-wrap">
-  <div class="toast-msg" id="toastMsg">Cart-এ যোগ হয়েছে!</div>
+  <div class="toast-msg" id="toastMsg">Product add to successfully!</div>
 </div>
 
 <script src="js/product-detail.js"></script>
