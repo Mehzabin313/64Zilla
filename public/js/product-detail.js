@@ -1308,7 +1308,7 @@ function renderCart() {
   `;
 }
 
-/* ================= CART ACTION ================= */
+/* ================= CART ACTIONS ================= */
 window.inc = function (i) {
   let cart = getCart();
   cart[i].quantity++;
@@ -1340,13 +1340,30 @@ function toggleCart() {
   box.style.display = box.style.display === "block" ? "none" : "block";
 }
 
-/* ================= CHECKOUT FIX ================= */
+/* ================= CHECKOUT FIX (IMPORTANT) ================= */
 function checkout() {
   window.location.href = "checkout.html";
 }
-
-/* IMPORTANT: global access fix */
 window.checkout = checkout;
+
+/* ================= BUY NOW FIX (MISSING ছিল) ================= */
+function buyNow() {
+  if (!currentProduct) return;
+
+  const cart = [
+    {
+      ...currentProduct,
+      quantity: qty,
+      image: currentProduct.image?.startsWith("http")
+        ? currentProduct.image
+        : `${BASE_URL}/uploads/${currentProduct.image}`
+    }
+  ];
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  window.location.href = "checkout.html";
+}
+window.buyNow = buyNow;
 
 /* ================= PRODUCT ID ================= */
 const params = new URLSearchParams(window.location.search);
@@ -1375,7 +1392,6 @@ async function loadProduct() {
     document.getElementById("loadingState").style.display = "none";
     document.getElementById("detailCard").style.display = "grid";
 
-    /* ===== BASIC INFO ===== */
     document.getElementById("productName").textContent = item.name;
     document.getElementById("productPrice").textContent = "৳ " + item.price;
 
@@ -1384,7 +1400,6 @@ async function loadProduct() {
         ? item.image
         : `${BASE_URL}/uploads/${item.image}`;
 
-    /* ===== EXTRA INFO ===== */
     const shop = document.getElementById("shopName");
     if (shop) shop.textContent = item.shopName || item.seller || item.district;
 
@@ -1398,6 +1413,7 @@ async function loadProduct() {
     }
 
     loadAllProducts(item._id);
+
   } catch (err) {
     document.getElementById("loadingState").innerHTML =
       "<p style='color:red'>Failed to load product</p>";
@@ -1470,4 +1486,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const cartBtn = document.getElementById("cartdiv");
   if (cartBtn) cartBtn.addEventListener("click", toggleCart);
+
+  /* ===== MENU ICON FIX (NEW ADD) ===== */
+  const menu = document.getElementById("menu");
+  if (menu) {
+    menu.addEventListener("click", () => {
+      const box = document.getElementById("order-review");
+      if (box) {
+        box.style.display =
+          box.style.display === "block" ? "none" : "block";
+      }
+    });
+  }
 });
