@@ -717,27 +717,37 @@ function renderCart() {
     totalPrice += itemTotal;
 
     box.innerHTML += `
-      <div class="cart-item">
-        <!-- FIX 1: IMAGE ISSUE SOLVED -->
-        <!-- আগে শুধু item.image ছিল, কিন্তু অনেক সময় backend path না থাকায় ভেঙে যেত -->
-        <img src="${
-          item.image?.startsWith("http")
-            ? item.image
-            : `${BASE_URL}/uploads/${item.image}`
-        }" />
+  <div class="cart-item">
 
-        <div>
-          <p>${item.name}</p>
-          <p>Qty: ${item.quantity}</p>
-          <p>৳ ${itemTotal}</p>
+    <!-- FIX: Proper image fallback -->
+    <img src="${
+      item.image?.startsWith("http")
+        ? item.image
+        : `${BASE_URL}/uploads/${item.image}`
+    }" class="cart-img" />
 
-          <button onclick="inc(${index})">+</button>
-          <button onclick="dec(${index})">-</button>
-          <button onclick="remove(${index})">X</button>
-        </div>
+    <div class="cart-info">
+      <p class="cart-name">${item.name}</p>
+
+      <!-- FIX: Quantity show -->
+      <p class="cart-qty">
+        Qty: <b>${item.quantity}</b>
+      </p>
+
+      <p class="cart-price">৳ ${itemTotal}</p>
+
+      <div class="cart-actions">
+        <button onclick="inc(${index})">+</button>
+        <button onclick="dec(${index})">-</button>
+
+        <!-- FIX: Cross delete button -->
+        <button onclick="remove(${index})" class="remove-btn">×</button>
       </div>
-      <hr>
-    `;
+    </div>
+
+  </div>
+  <hr>
+`;
   });
 
   box.innerHTML += `
@@ -820,9 +830,7 @@ async function loadProduct() {
         ? item.image
         : `${BASE_URL}/uploads/${item.image}`;
 
-    // FIX 2: RELATED PRODUCT NOT SHOWING / WRONG LAYOUT
-    // সমস্যা: related section call হচ্ছিল না properly
-    // solution: loadAllProducts add করতে হবে এখানে
+  
     loadAllProducts(item._id);
 
   } catch (err) {
@@ -866,10 +874,7 @@ function loadRelated(products) {
     grid.appendChild(card);
   });
 
-  // FIX 3: "You may need" SECTION ROW ISSUE
-  // সমস্যা: CSS flex/grid না থাকায় নিচে নিচে চলে যাচ্ছিল
-  // solution (CSS দরকার):
-  // #relatedGrid { display:grid; grid-template-columns:repeat(3,1fr); gap:15px; }
+  
 
   document.getElementById("relatedSection").style.display = "block";
 }
