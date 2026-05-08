@@ -234,24 +234,28 @@
     }
 
     body {
-      font-family: 'Nunito', sans-serif;
-      background: var(--green-bg);
-      min-height: 100vh;
-      color: var(--text-dark);
+      margin: 0;
+  padding: 0px 50px 0x 50px;
+
+  height: auto;
+  
+  box-sizing: border-box;
+  font-family: sans-serif;
+  background: white ;
     }
 
     /* ─── NAV ─── */
     nav {
-      background: var(--green-dark);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 40px;
-      height: 64px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+   display: flex;
+    align-items: center;
+    justify-content:space-between;
+    gap: 200px;
+    height: 60px;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    background:#02532B;
+    color: #ffffff;
     }
 
     .logo {
@@ -268,7 +272,7 @@
     }
     .logo h4 {
       color: #fff;
-      font-family: 'Playfair Display', serif;
+     
       font-size: 22px;
       font-weight: 600;
       letter-spacing: 0.5px;
@@ -754,35 +758,12 @@
             </div>
         </div>
     </div>
-<div class="home-page">
-    <!-- Second Menu -->
-    <div class="nav2">
-        <div class="menu">
-            <button id="menuBtn"><i class="fa-solid fa-bars"></i></button>
-        </div>
-
-        <div class="search">
-            <input type="text" id="search" placeholder="Search">
-            <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
-        </div>
-
+<div class="home-page" style="margin-top: 20px;">
    
-
-
-<!-- Cart dropdown -->
-<div id="order-review" style="display:none; position:fixed;
- top:50px; right:0; width:300px; max-height:400px; 
- overflow-y:auto; background:white; border:1px solid #ccc;
-  padding:10px; z-index:1000;">
-  <!-- Cart items dynamically add hobe ekhane -->
-</div>
-
-    </div>
  
 
 <!-- ─── PAGE ─── -->
-<div class="page-title">Checkout</div>
-<p class="page-subtitle">Review your items and complete your order</p>
+
 
 <div class="order-wrapper">
 
