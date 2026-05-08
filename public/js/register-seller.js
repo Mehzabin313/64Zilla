@@ -1,7 +1,7 @@
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    // For index.html LOGIN button
+  
     const sellerregistryBtn = document.querySelector('#seller-regis');
     if(sellerregistryBtn){
         sellerregistryBtn.addEventListener('click', function() {
@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('sellerRegForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // এইচটিএমএল থেকে ভ্যালুগুলো নেওয়া
+   
     const username = document.getElementById('username').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -36,14 +36,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const result = await response.json();
 
         if (result.success) {
-            alert("সেলার রেজিস্ট্রেশন সফল হয়েছে!");
-            window.location.href = 'seller-login.html'; // সাকসেস হলে লগইন পেজে পাঠাবে
+            alert("Register successfull!");
+            window.location.href = 'seller-login.html'; 
         } else {
-            alert("এরর: " + result.message);
+            alert("error: " + result.message);
         }
     } catch (error) {
         console.error("Fetch error:", error);
-        alert("সার্ভার কানেক্ট হচ্ছে না !");
+        alert("server error!");
     }
 });
 })
