@@ -242,77 +242,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             ৳ ${item.price}
           </p>
 
-          <!-- QUANTITY -->
-          <div class="qty-box"
-            style="
-              display:flex;
-              justify-content:center;
-              align-items:center;
-              gap:10px;
-              margin-top:10px;
-            "
-          >
-
-            <button 
-              class="qty-btn"
-              id="minus-${index}"
-
-              style="
-                width:30px;
-                height:30px;
-                border:none;
-                background:#eee;
-                border-radius:5px;
-                cursor:pointer;
-              "
-            >
-              -
-            </button>
-
-            <span id="count-${index}">
-              1
-            </span>
-
-            <button 
-              class="qty-btn"
-              id="plus-${index}"
-
-              style="
-                width:30px;
-                height:30px;
-                border:none;
-                background:#eee;
-                border-radius:5px;
-                cursor:pointer;
-              "
-            >
-              +
-            </button>
-
-          </div>
-
-          <!-- ADD TO CART -->
-          <button 
-            id="add-${index}"
-
-            class="add-cart-btn"
-
-            style="
-              width:100%;
-              margin-top:12px;
-              padding:10px;
-              border:none;
-              background:#96D85D;
-              color:white;
-              border-radius:8px;
-              cursor:pointer;
-              font-weight:bold;
-            "
-          >
-            Add To Cart
-          </button>
-
-        </div>
+         
       `;
     });
 
