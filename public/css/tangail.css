@@ -259,3 +259,47 @@ h2{
     height: auto;
   }
 }
+/* ===== JUST FOR YOU SECTION FIX ===== */
+
+#productList{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:20px;
+    width:100%;
+    margin-top:20px;
+    margin-bottom:50px;
+}
+
+/* ===== PAGE HEIGHT FIX ===== */
+
+.tan-page{
+    width:100%;
+    min-height:100vh;
+    padding-bottom:50px;
+}
+
+/* ===== PLACE OF VISIT FIX ===== */
+
+.tan-place{
+    width:100%;
+    margin-top:30px;
+    margin-bottom:40px;
+}
+
+.tan-placeimg{
+    display:flex;
+    flex-wrap:wrap;
+    gap:15px;
+    justify-content:center;
+}
+
+/* ===== FOOTER FIX ===== */
+
+.site-footer{
+    width:100%;
+    clear:both;
+    margin-top:50px;
+    position:relative;
+    z-index:1;
+}
