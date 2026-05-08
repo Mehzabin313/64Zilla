@@ -1,158 +1,289 @@
 console.log("SERVER STARTING...");
-
-require("dotenv").config();
-
-const express = require("express");
-const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const cookieParser = require("cookie-parser");
-const cors = require("cors");
-const path = require("path");
-const multer = require("multer");
+console.log("ENV CHECK:", process.env.CLOUD_NAME, process.env.MONGO_URL ? "MONGO OK" : "MONGO MISSING");
+const express = require('express');
+const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const path = require('path');
+const multer = require('multer');
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
-const fs = require("fs");
-const session = require("express-session");
+
+const fs = require('fs');
+const session = require('express-session');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
+
+const mongo = process.env.MONGO_URL;
+
+// Models
 const User = require("./models/user");
 const Seller = require("./models/seller");
 const Product = require("./models/product");
 const Order = require("./models/order");
 
-// ================= ENV CHECK =================
-console.log("ENV CHECK:", process.env.CLOUD_NAME, process.env.MONGO_URL ? "OK" : "MISSING");
 
-// ================= MIDDLEWARE =================
+// ================= Middleware =================
 app.use(cors({
   origin: "https://six4zilla.onrender.com",
   credentials: true
 }));
 
-app.use(express.static(path.join(__dirname, "public")));
+//app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(express.json());
 app.use(cookieParser());
 
+//----session cookie-----
+//app.use(cors({ origin: true, credentials: true }));
+
 app.use(session({
-  secret: "secret123",
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false }
+    secret: 'secret123',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false,
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24
+    }
 }));
 
-// ================= CLOUDINARY =================
+
+if (!fs.existsSync("uploads")) {
+  fs.mkdirSync("uploads");
+}
+
+// CLOUDINARY CONFIG 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET
 });
 
-const storage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: "six4zilla-products",
-    allowed_formats: ["jpg", "png", "jpeg", "webp"]
-  }
-});
+// CLOUDINARY STORAGE) 
 
-const upload = multer({ storage });
-
-// ================= DB =================
-mongoose.connect(process.env.MONGO_URL)
-  .then(() => console.log("MongoDB connected"))
-  .catch(err => console.log(err));
-
-// ================= VERIFY TOKEN =================
-function verifyToken(req, res, next) {
-  const token = req.headers.authorization?.split(" ")[1];
-
-  if (!token) return res.status(401).json({ success: false });
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (err) {
-    return res.status(401).json({ success: false });
-  }
+let upload;
+try {
+  const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+      folder: "six4zilla-products",
+      allowed_formats: ["jpg", "jpeg", "png", "webp"]
+    }
+  });
+  upload = multer({ storage });
+  console.log("MULTER CLOUDINARY READY");
+} catch (err) {
+  console.log("MULTER SETUP ERROR:", err.message);
 }
 
-// ================= ROUTES =================
+//  MongoDB 
+const connect = async () => {
+    if (!mongo) {
+        console.error("MONGO_URL missing in .env");
+        return;
+    }
+    try {
+        await mongoose.connect(mongo);
+        console.log('MongoDB connected');
+    } catch (error) {
+        console.error('DB error:', error.message);
+    }
+};
+connect();
 
-// HOME
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "home.html"));
+
+
+
+// ROUTES 
+//-----search product--------
+app.get("/search-products", async (req, res) => {
+    try {
+        const key = req.query.q;
+
+        const products = await Product.find({
+            $or: [
+                { name: { $regex: key, $options: "i" } },
+                { district: { $regex: key, $options: "i" } },
+                { size: { $regex: key, $options: "i" } }
+            ]
+        });
+
+        res.json(products);
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+// Home
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'home.html'));
 });
 
-// REGISTER USER
-app.post("/register", async (req, res) => {
-  const { username, email, password } = req.body;
+//  USER REGISTER 
+app.post('/register', async (req, res) => {
+    try {
+        const { username, email, password } = req.body;
 
-  const hashed = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-  const user = new User({ username, email, password: hashed });
-  await user.save();
+        const newUser = new User({
+            username,
+            email,
+            password: hashedPassword,
+            role: 'user'
+        });
 
-  res.json({ success: true });
+        await newUser.save();
+
+        res.status(201).json({ success: true, message: "Registration Successful" });
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-// LOGIN USER
-app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
-  if (!user) return res.json({ success: false });
 
-  const match = await bcrypt.compare(password, user.password);
-  if (!match) return res.json({ success: false });
+app.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
 
-  const token = jwt.sign(
-    { id: user._id },
-    process.env.JWT_SECRET,
-    { expiresIn: "1d" }
-  );
+      
+        const user = await User.findOne({ email });
+        if (!user) return res.json({ success: false, message: "User not found" });
 
-  res.json({ success: true, token });
+       
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) return res.json({ success: false, message: "Incorrect password" });
+
+        
+        const token = jwt.sign(
+            { id: user._id, role: user.role }, 
+            process.env.JWT_SECRET, 
+            { expiresIn: '1d' }
+        );
+
+        res.json({
+            success: true,
+            token: token,
+            role: user.role,
+            message: "Login successful"
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
 });
 
-// REGISTER SELLER
-app.post("/register-seller", async (req, res) => {
-  const seller = new Seller(req.body);
-  await seller.save();
-  res.json({ success: true });
+// SELLER REGISTER 
+app.post('/register-seller', async (req, res) => {
+    try {
+        const { username, email, password, nid, district, productCategory } = req.body;
+
+        const existingSeller = await Seller.findOne({
+            $or: [{ email }, { nid }]
+        });
+
+        if (existingSeller) {
+            return res.status(400).json({
+                success: false,
+                message: "Seller already exists"
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newSeller = new Seller({
+            username,
+            email,
+            password: hashedPassword,
+            nid,
+            district,
+            productCategory
+        });
+
+        await newSeller.save();
+
+        res.json({ success: true, message: "Seller registered" });
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-// LOGIN SELLER
-app.post("/seller-login", async (req, res) => {
-  const seller = await Seller.findOne({ email: req.body.email });
+// ================= SELLER LOGIN =================
+app.post('/seller-login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
 
-  if (!seller) return res.status(404).json({ success: false });
+        const seller = await Seller.findOne({ email });
 
-  const match = await bcrypt.compare(req.body.password, seller.password);
-  if (!match) return res.status(401).json({ success: false });
+        if (!seller) {
+            return res.status(404).json({ message: "Seller not found" });
+        }
 
-  res.json({ success: true, sellerId: seller._id });
+        const isMatch = await bcrypt.compare(password, seller.password);
+
+        if (!isMatch) {
+            return res.status(401).json({ message: "Wrong password" });
+        }
+
+        // 🔥 FIXED RESPONSE
+        res.json({
+            success: true,
+            role: "seller",
+            seller: {
+                _id: seller._id,
+                email: seller.email
+            }
+        });
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-// PRODUCTS
+// ================= ADD PRODUCT =================
 app.get("/products", async (req, res) => {
-  const products = await Product.find();
-  res.json(products);
+    const products = await Product.find();
+    res.json(products);
+});
+// SELLER PRODUCTS
+
+app.get("/my-products/:sellerId", async (req, res) => {
+    try {
+
+        const sellerId = String(req.params.sellerId);
+
+        const products = await Product.find({ sellerId });
+
+        res.json(products);
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-// ADD PRODUCT (FIXED)
+
 app.post("/add-product", (req, res) => {
   upload.single("image")(req, res, async function (err) {
     try {
-      if (err) return res.status(500).json({ success: false });
+      if (err) {
+        return res.status(500).json({ success: false, message: err.message });
+      }
 
-      if (!req.file) return res.status(400).json({ success: false });
+      if (!req.file) {
+        return res.status(400).json({ success: false, message: "Image missing" });
+      }
 
       const seller = await Seller.findById(req.body.sellerId);
-      if (!seller) return res.status(404).json({ success: false });
 
       const product = new Product({
         sellerId: req.body.sellerId,
@@ -162,101 +293,294 @@ app.post("/add-product", (req, res) => {
         size: req.body.size,
         availability: req.body.availability,
         image: req.file.path,
-        storeName: seller.storeName || "",
-        sellerName: seller.username || ""
+        storeName: seller?.storeName || "",
+        sellerName: seller?.username || ""
       });
 
       await product.save();
 
-      res.json({ success: true });
+      return res.json({ success: true });
 
     } catch (err) {
-      res.status(500).json({ success: false });
+      console.log("ADD PRODUCT ERROR:", err.message);
+      return res.status(500).json({ success: false, message: err.message });
     }
   });
 });
-
-// DELETE PRODUCT
-app.delete("/delete-product/:id", async (req, res) => {
-  await Product.findByIdAndDelete(req.params.id);
-  res.json({ success: true });
+// ================= DELETE PRODUCT =================
+app.delete('/delete-product/:id', async (req, res) => {
+    try {
+        await Product.findByIdAndDelete(req.params.id);
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-// UPDATE PRODUCT
-app.put("/update-product/:id", (req, res) => {
-  upload.single("image")(req, res, async function (err) {
-    if (err) return res.status(500).json({ success: false });
 
-    const updateData = { ...req.body };
+app.put('/update-product/:id', (req, res) => {
 
-    if (req.file) updateData.image = req.file.path;
+  upload.single('image')(req, res, async function (err) {
 
-    await Product.findByIdAndUpdate(req.params.id, updateData);
+    try {
+
+      if (err) {
+        console.log("MULTER ERROR:", err);
+        return res.status(500).json({
+          success: false,
+          message: "Upload failed"
+        });
+      }
+
+      if (!req.params.id) {
+        return res.status(400).json({
+          success: false,
+          message: "ID missing"
+        });
+      }
+
+      const { name, price, district, size, availability } = req.body;
+
+      const updateData = {
+        name,
+        price,
+        district,
+        size,
+        availability
+      };
+
+      if (req.file) {
+        updateData.image = req.file.path;
+      }
+
+      const updated = await Product.findByIdAndUpdate(
+        req.params.id,
+        updateData,
+        { new: true }
+      );
+
+      if (!updated) {
+        return res.status(404).json({
+          success: false,
+          message: "Product not found"
+        });
+      }
+
+      res.json({ success: true });
+
+    } catch (err) {
+      console.log("UPDATE ERROR:", err);
+      res.status(500).json({
+        success: false,
+        message: err.message
+      });
+    }
+
+  });
+
+});
+
+app.get("/product/:id", async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        res.json(product);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+// ================= GET PRODUCTS BY DISTRICT =================
+app.get("/products/district/:district", async (req, res) => {
+    const district = req.params.district;
+
+    const products = await Product.find({
+        district: { $regex: `^${district}$`, $options: "i" }
+    });
+
+    res.json(products);
+});
+
+app.post("/orders", async (req, res) => {
+  try {
+const { customer, paymentMethod, bkashNumber, items, total } = req.body;
+
+    // validation (optional but recommended)
+    if (!customer || !customer.name || !customer.phone) {
+       return res.status(400).json({ success: false, message: "Customer details missing" });
+    }
+    const order = new Order({
+        userId: req.user?.id,
+      customer: {
+        name: req.body.customer?.name || "",
+        phone: req.body.customer?.phone || "",
+        address: req.body.customer?.address || ""
+      },
+
+      paymentMethod: req.body.paymentMethod,
+      bkashNumber: req.body.bkashNumber || "",
+
+      transactionId: "",
+     
+
+      items: req.body.items || [],
+      total: Number(req.body.total) || 0,
+
+      status: "pending",
+      date: new Date()
+      
+    });
+
+    const saved = await order.save();
+
+    res.json({ success: true, order: saved });
+
+  } catch (err) {
+    console.log(err);
+    res.json({ success: false, error: err.message });
+  }
+  console.log("Full Request Body:", req.body);
+});
+
+// 🔥 SELLER/ADMIN GET ALL ORDERS
+app.get("/seller/orders/:sellerId", async (req, res) => {
+  try {
+
+    const sellerId = req.params.sellerId;
+
+    const orders = await Order.find().sort({ date: -1 });
+
+    const filtered = orders.filter(order =>
+      order.items.some(item =>
+        String(item.sellerId) === String(sellerId)
+      )
+    );
+
+    res.json(filtered);
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 🔥 ORDER STATUS UPDATE (seller use করবে)
+app.put("/orders/:id", async (req, res) => {
+  try {
+    await Order.findByIdAndUpdate(req.params.id, {
+      status: req.body.status
+    });
 
     res.json({ success: true });
-  });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
-
-// SINGLE PRODUCT
-app.get("/product/:id", async (req, res) => {
-  const product = await Product.findById(req.params.id);
-  res.json(product);
-});
-
-// SEARCH
-app.get("/search-products", async (req, res) => {
-  const key = req.query.q;
-
-  const products = await Product.find({
-    $or: [
-      { name: { $regex: key, $options: "i" } },
-      { district: { $regex: key, $options: "i" } }
-    ]
-  });
-
-  res.json(products);
-});
-
-// ORDERS (ONLY ONE VERSION - FIXED)
+//seler order  dashboard--
 app.get("/orders", async (req, res) => {
   const orders = await Order.find();
   res.json(orders);
 });
-
-// CREATE ORDER
-app.post("/orders", async (req, res) => {
-  const order = new Order(req.body);
-  await order.save();
-  res.json({ success: true });
-});
-
-// USER ORDERS
+//user order-dashboard
 app.get("/orders/my", verifyToken, async (req, res) => {
-  const orders = await Order.find({ userId: req.user.id });
-  res.json(orders);
+  try {
+    const userId = req.user.id;
+
+    const orders = await Order.find({ userId }).sort({ date: -1 });
+
+    res.json(orders);
+
+  } catch (err) {
+    res.status(500).json({ success: false });
+  }
+});
+app.get("/users", async (req, res) => {
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-// SELLER ORDERS
-app.get("/seller/orders/:sellerId", async (req, res) => {
-  const orders = await Order.find();
+app.get("/sellers", async (req, res) => {
+    try {
+        const sellers = await Seller.find();
+        res.json(sellers);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+//-----user profile details------
+app.get("/me", async (req, res) => {
+    try {
+        const token = req.headers.authorization?.split(" ")[1];
 
-  const filtered = orders.filter(o =>
-    o.items.some(i => String(i.sellerId) === req.params.sellerId)
-  );
+        if (!token) {
+            return res.json({ success: false });
+        }
 
-  res.json(filtered);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        const user = await User.findById(decoded.id).select("-password");
+
+        res.json({ success: true, user });
+
+    } catch (err) {
+        res.json({ success: false });
+    }
+});
+app.post("/change-password", async (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.json({ success: false, message: "Not logged in" });
+        }
+
+        const user = await User.findById(req.session.user.id);
+
+        const match = await bcrypt.compare(req.body.oldPassword, user.password);
+
+        if (!match) {
+            return res.json({ success: false, message: "Old password wrong" });
+        }
+
+        const hashed = await bcrypt.hash(req.body.newPassword, 10);
+
+        user.password = hashed;
+        await user.save();
+
+        res.json({ success: true });
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+// GET SELLER
+app.get("/seller/:id", async (req,res)=>{
+    const seller = await Seller.findById(req.params.id);
+    res.json(seller);
 });
 
-// UPDATE ORDER STATUS
-app.put("/orders/:id", async (req, res) => {
-  await Order.findByIdAndUpdate(req.params.id, {
-    status: req.body.status
-  });
+// UPDATE SELLER
+app.put("/seller/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
 
-  res.json({ success: true });
+        await Seller.findByIdAndUpdate(id, {
+            username: req.body.username,
+            storeName: req.body.storeName,
+            district: req.body.district
+        });
+
+        res.json({ success: true });
+
+    } catch (err) {
+        res.status(500).json({ success: false });
+    }
 });
-
-// ================= START =================
+process.on("uncaughtException", (err) => {
+  console.log("🔥 UNCAUGHT ERROR:", err.message);
+  console.log("🔥 STACK:", err.stack);
+});
+// ================= START SERVER =================
 app.listen(port, () => {
-  console.log("Server running on port", port);
+    console.log(`🚀 Server running at http://localhost:${port}`);
 });
