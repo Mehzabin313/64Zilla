@@ -1,6 +1,4 @@
 
-console.log("SERVER STARTING...");
-console.log("ENV CHECK:", process.env.CLOUD_NAME, process.env.MONGO_URL ? "MONGO OK" : "MONGO MISSING");
 const express = require('express');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
@@ -99,13 +97,6 @@ const connect = async () => {
 connect();
 
 
-
-// =====================
-// GET ORDERS (TEST)
-// =====================
-app.get("/orders", (req, res) => {
-  res.json(orders);
-});
 
 
 // ROUTES 
@@ -281,38 +272,38 @@ app.get("/my-products/:sellerId", async (req, res) => {
 
 
 app.post("/add-product", (req, res) => {
-  upload.single("image")(req, res, function(err) {
-    if (err) {
-      console.log("MULTER ERROR:", err.message);
+  upload.single("image")(req, res, async function (err) {
+    try {
+      if (err) {
+        return res.status(500).json({ success: false, message: err.message });
+      }
+
+      if (!req.file) {
+        return res.status(400).json({ success: false, message: "Image missing" });
+      }
+
+      const seller = await Seller.findById(req.body.sellerId);
+
+      const product = new Product({
+        sellerId: req.body.sellerId,
+        name: req.body.name,
+        price: req.body.price,
+        district: req.body.district,
+        size: req.body.size,
+        availability: req.body.availability,
+        image: req.file.path,
+        storeName: seller?.storeName || "",
+        sellerName: seller?.username || ""
+      });
+
+      await product.save();
+
+      return res.json({ success: true });
+
+    } catch (err) {
+      console.log("ADD PRODUCT ERROR:", err.message);
       return res.status(500).json({ success: false, message: err.message });
     }
-
-    console.log("=== ADD PRODUCT HIT ===");
-    console.log("BODY:", JSON.stringify(req.body));
-    console.log("FILE:", JSON.stringify(req.file));
-
-    if (!req.file) {
-      return res.status(400).json({ success: false, message: "Image missing" });
-    }
- 
-    const product = new Product({
-       sellerId: req.body.sellerId,
-      name: req.body.name,
-      price: req.body.price,
-      district: req.body.district,
-      size: req.body.size,
-      availability: req.body.availability,
-      image: req.file.path,
-        storeName: seller.storeName || "",
-        sellerName: seller.username || ""
-    });
-
-    product.save()
-      .then(() => res.json({ success: true }))
-      .catch(err => {
-        console.log("DB ERROR:", err.message);
-        res.status(500).json({ success: false, message: err.message });
-      });
   });
 });
 // ================= DELETE PRODUCT =================
