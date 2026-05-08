@@ -262,6 +262,25 @@ app.get("/me", async (req, res) => {
     res.json({ success: false });
   }
 });
+app.get("/product/:id", async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        res.json(product);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+// ================= GET PRODUCTS BY DISTRICT =================
+app.get("/products/district/:district", async (req, res) => {
+    const district = req.params.district;
+
+    const products = await Product.find({
+    district: { $regex: `^${district}$`, $options: "i" }
+});
+
+    res.json(products);
+});
+
 
 // ================= START SERVER =================
 app.listen(port, () => {
