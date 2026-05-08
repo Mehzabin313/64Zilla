@@ -206,8 +206,8 @@ max-height: 600px;
 }
 .product-card button[id^="add-"] {
     width: 100%;
-    background: green;
-    color: #fff;
+    background:#8DE61A;
+    color:#0a4d20;
     padding: 6px;
     border-radius: 8px;
     font-size: 13px;
