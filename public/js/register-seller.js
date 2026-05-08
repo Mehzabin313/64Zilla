@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     } catch (error) {
         console.error("Fetch error:", error);
-        alert("সার্ভার কানেক্ট হচ্ছে না রে!");
+        alert("সার্ভার কানেক্ট হচ্ছে না !");
     }
 });
 })
