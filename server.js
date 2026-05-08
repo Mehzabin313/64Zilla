@@ -158,8 +158,43 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+// SELLER REGISTER 
+app.post('/register-seller', async (req, res) => {
+    try {
+        const { username, email, password, nid, district, productCategory } = req.body;
 
-// ================= SELLER LOGIN =================
+        const existingSeller = await Seller.findOne({
+            $or: [{ email }, { nid }]
+        });
+
+        if (existingSeller) {
+            return res.status(400).json({
+                success: false,
+                message: "Seller already exists"
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newSeller = new Seller({
+            username,
+            email,
+            password: hashedPassword,
+            nid,
+            district,
+            productCategory
+        });
+
+        await newSeller.save();
+
+        res.json({ success: true, message: "Seller registered" });
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// SELLER LOGIN 
 app.post('/seller-login', async (req, res) => {
   try {
     const { email, password } = req.body;
