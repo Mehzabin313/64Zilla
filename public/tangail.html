@@ -226,150 +226,333 @@ Located close to Dhaka, Tangail serves as a bridge between tradition and moderni
     </div>
 </footer>
 
+<!-- ================= TANGAIL PRODUCT SYSTEM START ================= -->
+
 <script>
-document.addEventListener("DOMContentLoaded", () => {
 
-  let totalCart = 0;
-  let cartItems = [];
+const BASE_URL = "https://six4zilla.onrender.com";
 
-  const cartCount = document.getElementById("cart-count");
-  const orderReview = document.getElementById("order-review");
-  const cartDiv = document.getElementById("cart"); // Cart icon
 
-  const product2 = [
-    { name: "Chomchom", image: "images/Tangail-Chomchom.jpg", district:"Tangail", weight:"500gm", price:250},
-    { name: "Jamdani Saree", image: "images/jamdani.jpeg", district:"Dhaka", weight:"1 Piece", price:10000},
-    { name: "Nakshi Kantha", image: "images/nokshikatha.jpg", district:"Bogra", weight:"1 Piece", price:3000},
-    { name: "Rajsahi Am", image: "images/rajsahi am.jpeg", district:"Rajshahi", weight:"1kg", price:100},
-    { name: "Bogur Doi", image: "images/mistydoi.jpg", district:"Bogra", weight:"1kg", price:500},
-    { name: "Norshindi Lotkon", image: "images/lotkon.jpeg", district:"Norshindi", weight:"1kg", price:400}
-  ];
+// ================= LOAD PRODUCTS =================
+async function loadTangailProducts(){
 
-  const container2 = document.getElementById('container2');
-  if (!container2) return;
+    try{
 
-  // CREATE PRODUCTS
-  product2.forEach((item, index) => {
-    const row = document.createElement("div");
-    row.classList.add("col-md-2", "col-6");
-    row.innerHTML = `
-      <div class="product-card text-center">
-        <img src="${item.image}" class="img-fluid rounded">
-        <h6>${item.name}</h6>
-        <h6>${item.district}</h6>
-        <h6>${item.weight}</h6>
-        <h6>৳ ${item.price}</h6>
-        <div class="qty-box">
-          <button class="qty-btn" id="minus-${index}">-</button>
-          <span id="count-${index}">0</span>
-          <button class="qty-btn" id="plus-${index}">+</button>
-        </div>
-        <button id="add-${index}" class="add-cart-btn">Add to Cart</button>
-      </div>
-    `;
-    container2.appendChild(row);
+        const res = await fetch(`${BASE_URL}/products`);
 
-    let count = 0;
-    const plusBtn = document.getElementById(`plus-${index}`);
-    const minusBtn = document.getElementById(`minus-${index}`);
-    const countSpan = document.getElementById(`count-${index}`);
-    const addBtn = document.getElementById(`add-${index}`);
-    const carticon=document.getElementById('cartdiv');
-   
+        const products = await res.json();
 
-    plusBtn.addEventListener("click", () => {
-      count++;
-      countSpan.textContent = count;
-    });
-    minusBtn.addEventListener("click", () => {
-      if (count > 0) { count--; countSpan.textContent = count; }
-    });
-    addBtn.addEventListener("click", () => {
-      let finalQty = count === 0 ? 1 : count;
-      let existingItem = cartItems.find(p => p.name === item.name);
-      if (existingItem) { existingItem.quantity += finalQty; } 
-      else { cartItems.push({ ...item, quantity: finalQty }); }
-      totalCart += finalQty;
-      cartCount.textContent = totalCart;
-      count = 0; countSpan.textContent = 0;
-      renderCart();
-      orderReview.style.display = "block"; // automatically open cart
-    });
-  });
 
-  // RENDER CART
-  function renderCart() {
-    orderReview.innerHTML = "";
-    let totalPrice = 0;
-    cartItems.forEach((item, index) => {
-      let itemTotal = item.price * item.quantity;
-      totalPrice += itemTotal;
-      const div = document.createElement("div");
-      div.classList.add("cart-item");
-      div.innerHTML = `
-        <div style="display:flex; align-items:center; gap:5px; margin-bottom:10px;font-size:15px;background:rgba(128, 128, 128, 0.285);width:100%;">
-          <img src="${item.image}" style="width:50px; height:50px; object-fit:cover;">
-          <div> 
-            <h6 style=" color:#02532B;font-size:15px;">${item.name}</h6> 
-            <p>District: ${item.district}</p>
-            <div style="display:flex; align-items:center;flex-direction:row; gap:15px;">
-           
-           
-            <p> ${item.weight}</p>
-            <p> ৳ ${itemTotal}</p>
-            <button onclick="plusItem(${index})">+</button>
-            <button onclick="minusItem(${index})">-</button>
-            <button onclick="removeItem(${index})">Remove</button>
-          </div>
+        // ONLY TANGAIL PRODUCTS
+        const tangailProducts = products.filter(item =>
+
+            item.district &&
+            item.district.toLowerCase().includes("tangail")
+        );
+
+
+        const productList =
+            document.getElementById("productList");
+
+        productList.innerHTML = "";
+
+
+        tangailProducts.forEach(item => {
+
+            const card =
+                document.createElement("div");
+
+            card.className = "product-card";
+
+
+            card.innerHTML = `
+
+                <div style="
+                    width:220px;
+                    background:white;
+                    border-radius:12px;
+                    overflow:hidden;
+                    border:1px solid #ddd;
+                    padding:10px;
+                    cursor:pointer;
+                ">
+
+                    <img
+                        src="${getImage(item)}"
+                        alt="${item.name}"
+
+                        style="
+                            width:100%;
+                            height:220px;
+                            object-fit:cover;
+                            border-radius:10px;
+                        "
+                    >
+
+                    <h3 style="
+                        margin-top:10px;
+                        color:#02532B;
+                        font-size:18px;
+                    ">
+                        ${item.name}
+                    </h3>
+
+                    <p style="font-size:14px;">
+                        ${item.district || ""}
+                    </p>
+
+                    <h4>
+                        ৳ ${item.price}
+                    </h4>
+
+                    <button class="add-btn"
+
+                        style="
+                            width:100%;
+                            padding:10px;
+                            background:#02532B;
+                            color:white;
+                            border:none;
+                            border-radius:8px;
+                            cursor:pointer;
+                        "
+                    >
+                        Add To Cart
+                    </button>
+
                 </div>
-            
-        </div>
-        <hr>
-      `;
-      orderReview.appendChild(div);
+            `;
+
+
+
+            // ================= PRODUCT CLICK =================
+            card.querySelector("img")
+            .addEventListener("click", ()=>{
+
+                // OPEN PRODUCT DETAIL PAGE
+                window.location.href =
+                `product-detail.html?id=${item._id}`;
+            });
+
+
+
+
+            // ================= ADD TO CART =================
+            card.querySelector(".add-btn")
+            .addEventListener("click", (e)=>{
+
+                e.stopPropagation();
+
+                let cart = JSON.parse(
+                    localStorage.getItem("cart") || "[]"
+                );
+
+
+                const exist = cart.find(
+                    p => p._id === item._id
+                );
+
+
+                if(exist){
+
+                    exist.quantity += 1;
+
+                } else {
+
+                    cart.push({
+                        ...item,
+                        quantity:1
+                    });
+                }
+
+
+                localStorage.setItem(
+                    "cart",
+                    JSON.stringify(cart)
+                );
+
+
+                updateCartCount();
+
+                renderCartDropdown();
+
+                alert(item.name + " added to cart");
+            });
+
+
+            productList.appendChild(card);
+
+        });
+
+
+    } catch(err){
+
+        console.log(err);
+    }
+}
+
+
+
+// ================= IMAGE HELPER =================
+function getImage(item){
+
+    if(!item.image){
+
+        return "images/default.png";
+    }
+
+    if(item.image.startsWith("http")){
+
+        return item.image;
+    }
+
+    return `${BASE_URL}/uploads/${item.image}`;
+}
+
+
+
+// ================= UPDATE CART COUNT =================
+function updateCartCount(){
+
+    const cart = JSON.parse(
+        localStorage.getItem("cart") || "[]"
+    );
+
+    let total = 0;
+
+    cart.forEach(item => {
+
+        total += item.quantity || 1;
     });
-    const totalDiv = document.createElement("h4");
-    totalDiv.innerText = "Total: ৳ " + totalPrice;
+
+    document.getElementById("cart-count")
+    .innerText = total;
+}
+
+
+
+// ================= RENDER CART DROPDOWN =================
+function renderCartDropdown(){
+
+    const orderReview =
+        document.getElementById("order-review");
+
+    const cart = JSON.parse(
+        localStorage.getItem("cart") || "[]"
+    );
+
+    orderReview.innerHTML = "";
+
+
+    let totalPrice = 0;
+
+
+    cart.forEach(item => {
+
+        totalPrice +=
+            item.price * item.quantity;
+
+
+        const div =
+            document.createElement("div");
+
+
+        div.innerHTML = `
+
+            <div style="
+                display:flex;
+                gap:10px;
+                margin-bottom:10px;
+                padding-bottom:10px;
+                border-bottom:1px solid #ddd;
+            ">
+
+                <img
+                    src="${getImage(item)}"
+
+                    style="
+                        width:60px;
+                        height:60px;
+                        object-fit:cover;
+                        border-radius:8px;
+                    "
+                >
+
+                <div>
+
+                    <h4 style="
+                        margin:0;
+                        font-size:15px;
+                    ">
+                        ${item.name}
+                    </h4>
+
+                    <p style="margin:0;">
+                        Qty: ${item.quantity}
+                    </p>
+
+                    <p style="margin:0;">
+                        ৳ ${item.price * item.quantity}
+                    </p>
+
+                </div>
+
+            </div>
+        `;
+
+        orderReview.appendChild(div);
+    });
+
+
+
+    const totalDiv =
+        document.createElement("h3");
+
+
+    totalDiv.innerHTML =
+        `Total: ৳ ${totalPrice}`;
+
+
     orderReview.appendChild(totalDiv);
-   
-  }
+}
 
-  // PLUS / MINUS / REMOVE
-  window.plusItem = function(index) { cartItems[index].quantity++; totalCart++; cartCount.textContent = totalCart; renderCart(); };
-  window.minusItem = function(index) { 
-    if(cartItems[index].quantity>1){cartItems[index].quantity--; totalCart--;}
-    else{totalCart-=1; cartItems.splice(index,1);}
-    cartCount.textContent=totalCart; renderCart(); 
-  };
-  window.removeItem = function(index){ totalCart-=cartItems[index].quantity; cartItems.splice(index,1); cartCount.textContent=totalCart; renderCart(); };
 
-  // CART ICON CLICK TOGGLE
-  cartDiv.addEventListener("click", () => {
-    orderReview.style.display = orderReview.style.display === "block" ? "none" : "block";
-  });
+
+
+// ================= CART TOGGLE =================
+document.getElementById("cartdiv")
+.addEventListener("click", ()=>{
+
+    const orderReview =
+        document.getElementById("order-review");
+
+
+    if(orderReview.style.display === "block"){
+
+        orderReview.style.display = "none";
+
+    } else {
+
+        orderReview.style.display = "block";
+    }
 
 });
+
+
+
+
+// ================= INIT =================
+loadTangailProducts();
+
+updateCartCount();
+
+renderCartDropdown();
+
 </script>
 
 
-<script>
-  const banners = [
-    "images/1.png",
-    "images/2.png",
-    "images/3.png",
-    
-    "images/mghmxbfgbb-1669634449.jpg",
-    "images/Making_of_Jamdani-8.webp",
-  ];
 
-  let index = 0;
-  const img = document.getElementById("bannerImg");
 
-  setInterval(() => {
-    index = (index + 1) % banners.length;
-    img.src = banners[index];
-  }, 3000); 
-</script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     const seeAllBtn = document.getElementById('seeAllBtn');
@@ -524,13 +707,7 @@ window.addEventListener("load", checkUser);
 <script src="js/utils.js"></script>
 
 
-
-
-
     <script src="js/login.js"></script>
- 
- 
-  
  
   <script src="js/product-detail.js"></script>
   
