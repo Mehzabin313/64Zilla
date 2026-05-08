@@ -906,10 +906,28 @@ function updateTotal() {
     0
   );
 
-  let deliveryFee = cart.length ? 100 : 0;
-  let discount = 0;
+ let totalQty = cart.reduce(
+    (sum, i) => sum + (i.quantity || 1),
+    0
+  );
+   let deliveryFee = cart.length ? 100 : 0;
+
+  
+  let discountPercent = 0;
+
+  if (totalQty >= 15) {
+    discountPercent = 50;
+  } else if (totalQty >= 6) {
+    discountPercent = 20;
+  } else if (totalQty >= 3) {
+    discountPercent = 10;
+  }
+
+  let discount = (subtotal * discountPercent) / 100;
+ 
 
   let total = subtotal + deliveryFee - discount;
+
 
   document.getElementById("subtotal").innerText = subtotal;
   document.getElementById("deliveryFee").innerText = deliveryFee;
