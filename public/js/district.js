@@ -297,6 +297,13 @@ async function loadProducts() {
           <h3>${p.name}</h3>
           <p>৳ ${p.price}</p>
           <p>${p.district}</p>
+          <div class="qty-box">
+          <button id="minus-${index}">-</button>
+          <span id="count-${index}">0</span>
+          <button id="plus-${index}">+</button>
+        </div>
+
+        <button id="add-${index}">Add to Cart</button>
         </div>
       `;
     });
