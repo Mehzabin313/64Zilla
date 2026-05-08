@@ -209,7 +209,7 @@
 let currentProduct = null;
 let qty = 1;
 
-// ================= CART HELPERS =================
+// ================= GET CART =================
 function getCart() {
   return JSON.parse(localStorage.getItem("cart") || "[]");
 }
@@ -220,16 +220,18 @@ function saveCart(cart) {
 
 // ================= CART COUNT =================
 function updateCartCount() {
+  const cartCount = document.getElementById("cart-count");
+  if (!cartCount) return;
+
   let cart = getCart();
   let total = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-  const cartCount = document.getElementById("cart-count");
-  if (cartCount) cartCount.textContent = total;
+  cartCount.textContent = total;
 
   renderCart();
 }
 
-// ================= CART UI =================
+// ================= CART RENDER =================
 function renderCart() {
   const box = document.getElementById("order-review");
   if (!box) return;
@@ -238,7 +240,7 @@ function renderCart() {
 
   box.innerHTML = `
     <div class="cart-header">
-      <h4>🛒 Your Cart</h4>
+      <h4>🛒 Cart</h4>
       <button onclick="toggleCart()" class="close-btn">×</button>
     </div>
   `;
@@ -256,15 +258,15 @@ function renderCart() {
 
     box.innerHTML += `
       <div class="cart-item">
-        <img src="${item.image}">
+        <img src="${item.image}" />
         <div>
           <p>${item.name}</p>
           <p>Qty: ${item.quantity}</p>
           <p>৳ ${itemTotal}</p>
 
-          <button onclick="increase(${index})">+</button>
-          <button onclick="decrease(${index})">-</button>
-          <button onclick="removeItem(${index})">Remove</button>
+          <button onclick="inc(${index})">+</button>
+          <button onclick="dec(${index})">-</button>
+          <button onclick="remove(${index})">X</button>
         </div>
       </div>
       <hr>
@@ -274,7 +276,7 @@ function renderCart() {
   box.innerHTML += `
     <div class="cart-footer">
       <h4>Total: ৳ ${totalPrice}</h4>
-      <button onclick="checkout()" style="width:100%;padding:10px;margin-top:10px;background:green;color:white;border:none;">
+      <button onclick="checkout()" style="width:100%;padding:10px;background:green;color:white;border:none;">
         Checkout
       </button>
     </div>
@@ -282,27 +284,24 @@ function renderCart() {
 }
 
 // ================= CART ACTIONS =================
-window.increase = function (i) {
+window.inc = function (i) {
   let cart = getCart();
   cart[i].quantity++;
   saveCart(cart);
   updateCartCount();
 };
 
-window.decrease = function (i) {
+window.dec = function (i) {
   let cart = getCart();
 
-  if (cart[i].quantity > 1) {
-    cart[i].quantity--;
-  } else {
-    cart.splice(i, 1);
-  }
+  if (cart[i].quantity > 1) cart[i].quantity--;
+  else cart.splice(i, 1);
 
   saveCart(cart);
   updateCartCount();
 };
 
-window.removeItem = function (i) {
+window.remove = function (i) {
   let cart = getCart();
   cart.splice(i, 1);
   saveCart(cart);
@@ -322,35 +321,58 @@ function checkout() {
   window.location.href = "checkout.html";
 }
 
-// ================= PRODUCT LOAD =================
+// ================= PRODUCT ID =================
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("id");
 
+// ================= LOAD PRODUCT (FIXED SAFE VERSION) =================
 async function loadProduct() {
   try {
-    const res = await fetch(`${BASE_URL}/products/${productId}`);
+    if (!productId) throw new Error("No product id");
 
-    if (!res.ok) throw new Error("Not found");
+    let res = await fetch(`${BASE_URL}/products/${productId}`);
 
-    const item = await res.json();
+    let item;
+
+    if (res.ok) {
+      item = await res.json();
+    } else {
+      // fallback
+      const allRes = await fetch(`${BASE_URL}/products`);
+      const all = await allRes.json();
+
+      item = all.find(p => p._id === productId);
+    }
+
+    if (!item) throw new Error("Product not found");
 
     currentProduct = item;
 
-    document.getElementById("loadingState").style.display = "none";
-    document.getElementById("detailCard").style.display = "grid";
+    // UI show
+    const loader = document.getElementById("loadingState");
+    const card = document.getElementById("detailCard");
 
-    document.getElementById("productName").textContent = item.name;
+    if (loader) loader.style.display = "none";
+    if (card) card.style.display = "grid";
+
+    document.getElementById("productName").textContent = item.name || "";
     document.getElementById("productPrice").textContent = "৳ " + item.price;
 
-    document.getElementById("mainProductImg").src =
-      item.image?.startsWith("http")
+    const img = document.getElementById("mainProductImg");
+
+    if (img) {
+      img.src = item.image?.startsWith("http")
         ? item.image
         : `${BASE_URL}/uploads/${item.image}`;
+    }
 
   } catch (err) {
-    console.log(err);
-    document.getElementById("loadingState").innerHTML =
-      "<p>Product load failed</p>";
+    console.log("LOAD ERROR:", err);
+
+    document.getElementById("loadingState").innerHTML = `
+      <p style="color:red">⚠️ Product load failed</p>
+      <button onclick="location.reload()">Retry</button>
+    `;
   }
 }
 
@@ -383,8 +405,8 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProduct();
   updateCartCount();
 
-  const cartDiv = document.getElementById("cartdiv");
-  if (cartDiv) {
-    cartDiv.addEventListener("click", toggleCart);
+  const cartBtn = document.getElementById("cartdiv");
+  if (cartBtn) {
+    cartBtn.addEventListener("click", toggleCart);
   }
 });
