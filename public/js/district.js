@@ -242,6 +242,8 @@ function addToCart(id) {
 // INIT
 // ==========================
 document.addEventListener("DOMContentLoaded", loadDistrictProducts);*/
+//last 
+/*
 const BASE_URL = "https://six4zilla.onrender.com";
 
 // get district from URL
@@ -310,6 +312,118 @@ async function loadProducts() {
         <button id="add-${index}">Add to Cart</button>
         </div>
       `;
+    });
+
+  } catch (err) {
+    console.log(err);
+    container.innerHTML = "Server Error";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", loadProducts);*/
+const BASE_URL = "https://six4zilla.onrender.com";
+
+const params = new URLSearchParams(window.location.search);
+let district = params.get("district");
+
+const allowed = [
+  "dhaka",
+  "tangail",
+  "rajshahi",
+  "bogura",
+  "natore",
+  "narsingdi",
+  "barisal",
+  "jamalpur",
+  "khulna"
+];
+
+if (!district || !allowed.includes(district.toLowerCase())) {
+  district = "dhaka";
+}
+
+district = district.toLowerCase();
+
+const container = document.getElementById("productList");
+
+let cartItems = [];
+let totalCart = 0;
+
+function updateCart() {
+  const cartCount = document.getElementById("cart-count");
+  if (cartCount) cartCount.innerText = totalCart;
+}
+
+async function loadProducts() {
+  try {
+    const res = await fetch(`${BASE_URL}/products/district/${district}`);
+    const products = await res.json();
+
+    container.innerHTML = "";
+
+    if (!products.length) {
+      container.innerHTML = `<h3>No products in ${district}</h3>`;
+      return;
+    }
+
+    products.forEach((p, index) => {
+
+      container.innerHTML += `
+        <div class="product-card">
+          <img src="${p.image}">
+          <h3>${p.name}</h3>
+          <p>৳ ${p.price}</p>
+          <p>${p.district}</p>
+
+          <div class="qty-box">
+            <button id="minus-${index}">-</button>
+            <span id="count-${index}">0</span>
+            <button id="plus-${index}">+</button>
+          </div>
+
+          <button id="add-${index}">Add to Cart</button>
+        </div>
+      `;
+    });
+
+    // event binding (IMPORTANT)
+    products.forEach((p, index) => {
+
+      let count = 0;
+
+      const plus = document.getElementById(`plus-${index}`);
+      const minus = document.getElementById(`minus-${index}`);
+      const countSpan = document.getElementById(`count-${index}`);
+      const addBtn = document.getElementById(`add-${index}`);
+
+      plus.onclick = () => {
+        count++;
+        countSpan.innerText = count;
+      };
+
+      minus.onclick = () => {
+        if (count > 0) count--;
+        countSpan.innerText = count;
+      };
+
+      addBtn.onclick = () => {
+        let qty = count === 0 ? 1 : count;
+
+        let exist = cartItems.find(x => x._id === p._id);
+
+        if (exist) {
+          exist.quantity += qty;
+        } else {
+          cartItems.push({ ...p, quantity: qty });
+        }
+
+        totalCart += qty;
+        updateCart();
+
+        count = 0;
+        countSpan.innerText = 0;
+      };
+
     });
 
   } catch (err) {
