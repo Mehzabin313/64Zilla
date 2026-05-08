@@ -929,7 +929,7 @@ const BASE_URL = "https://six4zilla.onrender.com";
 let currentProduct = null;
 let qty = 1;
 
-// ================= CART =================
+// ================= GET CART =================
 function getCart() {
   return JSON.parse(localStorage.getItem("cart") || "[]");
 }
@@ -940,16 +940,114 @@ function saveCart(cart) {
 
 // ================= CART COUNT =================
 function updateCartCount() {
-  const el = document.getElementById("cart-count");
-  if (!el) return;
+  const cartCount = document.getElementById("cart-count");
+  if (!cartCount) return;
 
-  const cart = getCart();
-  el.textContent = cart.reduce((s, i) => s + i.quantity, 0);
+  let cart = getCart();
+  let total = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+  cartCount.textContent = total;
 
   renderCart();
 }
 
-// ================= GET PRODUCT ID =================
+// ================= CART RENDER =================
+function renderCart() {
+  const box = document.getElementById("order-review");
+  if (!box) return;
+
+  let cart = getCart();
+
+  box.innerHTML = `
+    <div class="cart-header">
+      <h4>🛒 Cart</h4>
+      <button onclick="toggleCart()" class="close-btn">×</button>
+    </div>
+  `;
+
+  if (cart.length === 0) {
+    box.innerHTML += "<p style='padding:10px'>Cart is empty</p>";
+    return;
+  }
+
+  let totalPrice = 0;
+
+  cart.forEach((item, index) => {
+    let itemTotal = item.price * item.quantity;
+    totalPrice += itemTotal;
+
+    box.innerHTML += `
+      <div class="cart-item">
+
+        <img src="${
+          item.image?.startsWith("http")
+            ? item.image
+            : `${BASE_URL}/uploads/${item.image}`
+        }" class="cart-img" />
+
+        <div class="cart-info">
+          <p class="cart-name">${item.name}</p>
+
+          <p class="cart-qty">Qty: <b>${item.quantity}</b></p>
+
+          <p class="cart-price">৳ ${itemTotal}</p>
+
+          <div class="cart-actions">
+            <button onclick="inc(${index})">+</button>
+            <button onclick="dec(${index})">-</button>
+            <button onclick="remove(${index})" class="remove-btn">×</button>
+          </div>
+        </div>
+
+      </div>
+      <hr>
+    `;
+  });
+
+  box.innerHTML += `
+    <div class="cart-footer">
+      <h4>Total: ৳ ${totalPrice}</h4>
+      <button onclick="checkout()" style="width:100%;padding:10px;background:green;color:white;border:none;">
+        Checkout
+      </button>
+    </div>
+  `;
+}
+
+// ================= CART ACTIONS =================
+window.inc = function (i) {
+  let cart = getCart();
+  cart[i].quantity++;
+  saveCart(cart);
+  updateCartCount();
+};
+
+window.dec = function (i) {
+  let cart = getCart();
+
+  if (cart[i].quantity > 1) cart[i].quantity--;
+  else cart.splice(i, 1);
+
+  saveCart(cart);
+  updateCartCount();
+};
+
+window.remove = function (i) {
+  let cart = getCart();
+  cart.splice(i, 1);
+  saveCart(cart);
+  updateCartCount();
+};
+
+// ================= TOGGLE CART =================
+function toggleCart() {
+  const box = document.getElementById("order-review");
+  if (!box) return;
+
+  box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
+// ================= PRODUCT ID =================
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("id");
 
@@ -965,7 +1063,8 @@ async function loadProduct() {
     if (res.ok) {
       item = await res.json();
     } else {
-      const all = await fetch(`${BASE_URL}/products`).then(r => r.json());
+      const allRes = await fetch(`${BASE_URL}/products`);
+      const all = await allRes.json();
       item = all.find(p => p._id === productId);
     }
 
@@ -973,65 +1072,70 @@ async function loadProduct() {
 
     currentProduct = item;
 
-    // UI show
     document.getElementById("loadingState").style.display = "none";
     document.getElementById("detailCard").style.display = "grid";
 
-    // ================= FIX 1: PROPER PRODUCT RENDER ORDER =================
-    renderProduct(item);
+    // ================= BASIC INFO =================
+    document.getElementById("productName").textContent = item.name || "";
+    document.getElementById("productPrice").textContent = "৳ " + item.price;
 
-    // ================= FIX 2: RELATED PRODUCT CALL =================
+    document.getElementById("mainProductImg").src =
+      item.image?.startsWith("http")
+        ? item.image
+        : `${BASE_URL}/uploads/${item.image}`;
+
+    // ================= EXTRA DETAILS (FIXED) =================
+
+    // Seller / Address
+    const shop = document.getElementById("shopName");
+    if (shop) {
+      shop.textContent =
+        item.shopName || item.seller || item.district || "Seller";
+    }
+
+    // Weight
+    const weight = document.getElementById("productWeight");
+    if (weight) {
+      weight.textContent = item.weight || item.size || "—";
+    }
+
+    // Description
+    const desc = document.getElementById("productDesc");
+    if (desc) {
+      desc.textContent =
+        item.description ||
+        item.desc ||
+        `${item.name} — Bangladesh Product`;
+    }
+
+    // Availability
+    const stock = document.getElementById("productStock");
+    if (stock) {
+      if (item.stock === false || item.stock === 0) {
+        stock.textContent = "Out of Stock";
+        stock.style.color = "red";
+      } else {
+        stock.textContent = "In Stock";
+        stock.style.color = "green";
+      }
+    }
+
+    // ================= RELATED =================
     loadAllProducts(item._id);
 
   } catch (err) {
-    document.getElementById("loadingState").innerHTML =
-      `<p style="color:red">⚠️ Product load failed</p>`;
+    document.getElementById("loadingState").innerHTML = `
+      <p style="color:red">⚠️ Product load failed</p>
+      <button onclick="location.reload()">Retry</button>
+    `;
   }
 }
 
-// ================= PRODUCT RENDER (ORDER FIXED) =================
-function renderProduct(item) {
-
-  // 🔥 1. NAME
-  document.getElementById("productName").textContent = item.name || "";
-
-  // 🔥 2. SELLER / ADDRESS (FIXED PLACE)
-  document.getElementById("shopName").textContent =
-    item.shopName || item.seller || item.district || "Seller";
-
-  // 🔥 3. PRICE
-  document.getElementById("productPrice").textContent = "৳ " + item.price;
-
-  // 🔥 4. WEIGHT / SIZE
-  document.getElementById("productWeight").textContent =
-    item.weight || item.size || item.quantity || "—";
-
-  // 🔥 5. CATEGORY
-  document.getElementById("productCategory").textContent =
-    item.category || item.type || "General";
-
-  // 🔥 6. DISTRICT
-  document.getElementById("productDistrict").textContent =
-    item.district || "—";
-
-  // 🔥 7. DESCRIPTION (FIXED LAST POSITION ISSUE)
-  document.getElementById("productDesc").textContent =
-    item.description ||
-    item.desc ||
-    `${item.name} — ${item.district || "Bangladesh"} product`;
-
-  // 🔥 8. IMAGE
-  document.getElementById("mainProductImg").src =
-    item.image?.startsWith("http")
-      ? item.image
-      : `${BASE_URL}/uploads/${item.image}`;
-}
-
-// ================= RELATED PRODUCTS FIX =================
+// ================= RELATED PRODUCTS =================
 function loadRelated(products) {
-  const grid = document.getElementById("relatedGrid");
-  if (!grid) return;
+  if (!products || products.length === 0) return;
 
+  const grid = document.getElementById("relatedGrid");
   grid.innerHTML = "";
 
   const show = products.slice(0, 6);
@@ -1045,7 +1149,7 @@ function loadRelated(products) {
         item.image?.startsWith("http")
           ? item.image
           : `${BASE_URL}/uploads/${item.image}`
-      }">
+      }" />
 
       <div class="related-card-info">
         <p>${item.name}</p>
@@ -1061,19 +1165,20 @@ function loadRelated(products) {
     grid.appendChild(card);
   });
 
-  // 🔥 FIX: show section must be ON
   document.getElementById("relatedSection").style.display = "block";
 }
 
 // ================= LOAD ALL PRODUCTS =================
 async function loadAllProducts(currentId) {
   try {
-    const all = await fetch(`${BASE_URL}/products`).then(r => r.json());
+    const res = await fetch(`${BASE_URL}/products`);
+    const all = await res.json();
+
     loadRelated(all.filter(p => p._id !== currentId));
   } catch (e) {}
 }
 
-// ================= ADD TO CART (IMAGE FIX) =================
+// ================= ADD TO CART =================
 function addToCart() {
   if (!currentProduct) return;
 
@@ -1081,7 +1186,7 @@ function addToCart() {
 
   const exist = cart.find(p => p._id === currentProduct._id);
 
-  const productWithImage = {
+  const product = {
     ...currentProduct,
     quantity: qty,
     image: currentProduct.image?.startsWith("http")
@@ -1089,14 +1194,30 @@ function addToCart() {
       : `${BASE_URL}/uploads/${currentProduct.image}`
   };
 
-  if (exist) {
-    exist.quantity += qty;
-  } else {
-    cart.push(productWithImage);
-  }
+  if (exist) exist.quantity += qty;
+  else cart.push(product);
 
   saveCart(cart);
   updateCartCount();
+}
+
+// ================= BUY NOW =================
+function buyNow() {
+  if (!currentProduct) return;
+
+  const cart = [
+    {
+      ...currentProduct,
+      quantity: qty,
+      image: currentProduct.image?.startsWith("http")
+        ? currentProduct.image
+        : `${BASE_URL}/uploads/${currentProduct.image}`
+    }
+  ];
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  window.location.href = "checkout.html";
 }
 
 // ================= INIT =================
