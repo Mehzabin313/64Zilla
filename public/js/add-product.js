@@ -275,7 +275,7 @@ const sellerId = localStorage.getItem("sellerId");
 
 // form
 const form = document.getElementById("addProductForm");
-
+document.getElementById("sellerId").value = sellerId;
 if (form) {
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -313,8 +313,7 @@ if (form) {
             formData.append("size", size);
             formData.append("availability", availability);
             formData.append("image", image);
-             formData.append("sellerId", sellerId);
-
+           
             // ======================
             // BUTTON LOADING
             // ======================
