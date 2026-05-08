@@ -261,45 +261,46 @@ h2{
 }
 /* ===== JUST FOR YOU SECTION FIX ===== */
 
+/* MAIN PAGE */
+.home-page{
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+
+/* TANGAIL PAGE */
+.tan-page{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    padding-bottom:80px;
+}
+
+/* JUST FOR YOU */
 #productList{
     display:flex;
     flex-wrap:wrap;
     justify-content:center;
     gap:20px;
-    width:100%;
     margin-top:20px;
-    margin-bottom:50px;
-}
-
-/* ===== PAGE HEIGHT FIX ===== */
-
-.tan-page{
-    width:100%;
-    min-height:100vh;
-    padding-bottom:50px;
-}
-
-/* ===== PLACE OF VISIT FIX ===== */
-
-.tan-place{
-    width:100%;
-    margin-top:30px;
-    margin-bottom:40px;
-}
-
-.tan-placeimg{
-    display:flex;
-    flex-wrap:wrap;
-    gap:15px;
-    justify-content:center;
-}
-
-/* ===== FOOTER FIX ===== */
-
-.site-footer{
-    width:100%;
-    clear:both;
-    margin-top:50px;
+    margin-bottom:80px;
     position:relative;
+    z-index:2;
+}
+
+/* FOOTER FIX */
+.site-footer{
+    position:relative !important;
+    margin-top:80px !important;
+    clear:both;
+    width:100%;
     z-index:1;
+}
+
+/* REMOVE OVERLAP */
+.tan-place,
+.tan-des,
+.tan-section{
+    position:relative;
+    z-index:2;
 }
