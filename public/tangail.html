@@ -389,22 +389,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         `;
 
         // =====================
-        // OPEN PRODUCT DETAIL
-        // =====================
-        card.querySelector("img").addEventListener("click", () => {
-
-          window.location.href =
-            `product-detail.html?id=${item._id}`;
-
-        });
-
-        card.querySelector("h4").addEventListener("click", () => {
-
-          window.location.href =
-            `product-detail.html?id=${item._id}`;
-
-        });
-
+      card.addEventListener("click", () => {
+  window.location.href = `product-detail.html?id=${item._id}`;
+});
         // =====================
         // QUANTITY
         // =====================
