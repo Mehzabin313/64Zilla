@@ -664,6 +664,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });*/
+/*
 const BASE_URL = "https://six4zilla.onrender.com";
 
 let currentProduct = null;
@@ -909,6 +910,189 @@ function addToCart() {
         ? currentProduct.image
         : `${BASE_URL}/uploads/${currentProduct.image}`
     });
+  }
+
+  saveCart(cart);
+  updateCartCount();
+}
+
+// ================= INIT =================
+document.addEventListener("DOMContentLoaded", () => {
+  loadProduct();
+  updateCartCount();
+
+  const cartBtn = document.getElementById("cartdiv");
+  if (cartBtn) cartBtn.addEventListener("click", toggleCart);
+});*/
+const BASE_URL = "https://six4zilla.onrender.com";
+
+let currentProduct = null;
+let qty = 1;
+
+// ================= CART =================
+function getCart() {
+  return JSON.parse(localStorage.getItem("cart") || "[]");
+}
+
+function saveCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+// ================= CART COUNT =================
+function updateCartCount() {
+  const el = document.getElementById("cart-count");
+  if (!el) return;
+
+  const cart = getCart();
+  el.textContent = cart.reduce((s, i) => s + i.quantity, 0);
+
+  renderCart();
+}
+
+// ================= GET PRODUCT ID =================
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("id");
+
+// ================= LOAD PRODUCT =================
+async function loadProduct() {
+  try {
+    if (!productId) throw new Error("No product id");
+
+    let res = await fetch(`${BASE_URL}/products/${productId}`);
+
+    let item;
+
+    if (res.ok) {
+      item = await res.json();
+    } else {
+      const all = await fetch(`${BASE_URL}/products`).then(r => r.json());
+      item = all.find(p => p._id === productId);
+    }
+
+    if (!item) throw new Error("Product not found");
+
+    currentProduct = item;
+
+    // UI show
+    document.getElementById("loadingState").style.display = "none";
+    document.getElementById("detailCard").style.display = "grid";
+
+    // ================= FIX 1: PROPER PRODUCT RENDER ORDER =================
+    renderProduct(item);
+
+    // ================= FIX 2: RELATED PRODUCT CALL =================
+    loadAllProducts(item._id);
+
+  } catch (err) {
+    document.getElementById("loadingState").innerHTML =
+      `<p style="color:red">⚠️ Product load failed</p>`;
+  }
+}
+
+// ================= PRODUCT RENDER (ORDER FIXED) =================
+function renderProduct(item) {
+
+  // 🔥 1. NAME
+  document.getElementById("productName").textContent = item.name || "";
+
+  // 🔥 2. SELLER / ADDRESS (FIXED PLACE)
+  document.getElementById("shopName").textContent =
+    item.shopName || item.seller || item.district || "Seller";
+
+  // 🔥 3. PRICE
+  document.getElementById("productPrice").textContent = "৳ " + item.price;
+
+  // 🔥 4. WEIGHT / SIZE
+  document.getElementById("productWeight").textContent =
+    item.weight || item.size || item.quantity || "—";
+
+  // 🔥 5. CATEGORY
+  document.getElementById("productCategory").textContent =
+    item.category || item.type || "General";
+
+  // 🔥 6. DISTRICT
+  document.getElementById("productDistrict").textContent =
+    item.district || "—";
+
+  // 🔥 7. DESCRIPTION (FIXED LAST POSITION ISSUE)
+  document.getElementById("productDesc").textContent =
+    item.description ||
+    item.desc ||
+    `${item.name} — ${item.district || "Bangladesh"} product`;
+
+  // 🔥 8. IMAGE
+  document.getElementById("mainProductImg").src =
+    item.image?.startsWith("http")
+      ? item.image
+      : `${BASE_URL}/uploads/${item.image}`;
+}
+
+// ================= RELATED PRODUCTS FIX =================
+function loadRelated(products) {
+  const grid = document.getElementById("relatedGrid");
+  if (!grid) return;
+
+  grid.innerHTML = "";
+
+  const show = products.slice(0, 6);
+
+  show.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "related-card";
+
+    card.innerHTML = `
+      <img src="${
+        item.image?.startsWith("http")
+          ? item.image
+          : `${BASE_URL}/uploads/${item.image}`
+      }">
+
+      <div class="related-card-info">
+        <p>${item.name}</p>
+        <p>${item.district || ""}</p>
+        <p>৳ ${item.price}</p>
+      </div>
+    `;
+
+    card.onclick = () => {
+      window.location.href = `product-detail.html?id=${item._id}`;
+    };
+
+    grid.appendChild(card);
+  });
+
+  // 🔥 FIX: show section must be ON
+  document.getElementById("relatedSection").style.display = "block";
+}
+
+// ================= LOAD ALL PRODUCTS =================
+async function loadAllProducts(currentId) {
+  try {
+    const all = await fetch(`${BASE_URL}/products`).then(r => r.json());
+    loadRelated(all.filter(p => p._id !== currentId));
+  } catch (e) {}
+}
+
+// ================= ADD TO CART (IMAGE FIX) =================
+function addToCart() {
+  if (!currentProduct) return;
+
+  let cart = getCart();
+
+  const exist = cart.find(p => p._id === currentProduct._id);
+
+  const productWithImage = {
+    ...currentProduct,
+    quantity: qty,
+    image: currentProduct.image?.startsWith("http")
+      ? currentProduct.image
+      : `${BASE_URL}/uploads/${currentProduct.image}`
+  };
+
+  if (exist) {
+    exist.quantity += qty;
+  } else {
+    cart.push(productWithImage);
   }
 
   saveCart(cart);
