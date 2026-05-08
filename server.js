@@ -100,13 +100,6 @@ connect();
 
 
 
-// =====================
-// GET ORDERS (TEST)
-// =====================
-app.get("/orders", (req, res) => {
-  res.json(orders);
-});
-
 
 // ROUTES 
 //-----search product--------
