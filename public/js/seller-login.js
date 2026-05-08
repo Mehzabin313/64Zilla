@@ -40,7 +40,7 @@ form.addEventListener("submit", async (e) => {
     const password = document.getElementById("password").value;
 
     try {
-        const res = await fetch("/seller-login", {
+        const res = await fetch("https://six4zilla.onrender.com/seller-login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
