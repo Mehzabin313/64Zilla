@@ -97,7 +97,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
       container.innerHTML += `
-        <div style="border:1px solid #ccc; padding:10px; margin:10px;" id="cat-btn">
+        <div style="    min-width: 160px;
+    border-radius: 18px;
+    padding: 10px;
+    text-align: center;
+    color: #0a4d20;
+    flex-shrink: 0;
+    transition: 0.3s;
+    background: rgba(255, 255, 255, 0.596);" id="cat-btn">
           
           <img src="${img}" width="150"> 
           <h4>${item.name}</h4>
