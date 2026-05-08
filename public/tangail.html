@@ -229,504 +229,507 @@ Located close to Dhaka, Tangail serves as a bridge between tradition and moderni
 <!-- ================= TANGAIL PRODUCT SECTION START ================= -->
 
 <script>
+document.addEventListener("DOMContentLoaded", async () => {
 
-const BASE_URL = "https://six4zilla.onrender.com";
+  const BASE_URL = "https://six4zilla.onrender.com";
 
-document.addEventListener("DOMContentLoaded", () => {
+  let totalCart = 0;
+  let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
 
-    const cartCount =
-        document.getElementById("cart-count");
+  const cartCount = document.getElementById("cart-count");
+  const orderReview = document.getElementById("order-review");
+  const cartDiv = document.getElementById("cart");
+  const productList = document.getElementById("productList");
 
-    const orderReview =
-        document.getElementById("order-review");
+  // =========================
+  // LOAD TANGAIL PRODUCTS
+  // =========================
+  async function loadTangailProducts() {
 
-    const cartDiv =
-        document.getElementById("cartdiv");
+    try {
 
+      const res = await fetch(`${BASE_URL}/products`);
+      const products = await res.json();
 
+      // ONLY TANGAIL PRODUCTS
+      const tangailProducts = products.filter(item =>
+        item.district &&
+        item.district.toLowerCase().includes("tangail")
+      );
 
-    // ================= LOAD TANGAIL PRODUCTS =================
-    async function loadTangailProducts(){
+      productList.innerHTML = "";
 
-        try{
+      if(tangailProducts.length === 0){
+        productList.innerHTML = `
+          <p style="padding:20px;">No Tangail products found</p>
+        `;
+        return;
+      }
 
-            const res = await fetch(
-                `${BASE_URL}/products`
+      tangailProducts.forEach((item, index) => {
+
+        const image = item.image
+          ? (item.image.startsWith("http")
+              ? item.image
+              : `${BASE_URL}/uploads/${item.image}`)
+          : "images/default.png";
+
+        const card = document.createElement("div");
+
+        card.className = "product-card";
+
+        card.style.cssText = `
+          width:220px;
+          background:white;
+          border-radius:12px;
+          overflow:hidden;
+          box-shadow:0 2px 10px rgba(0,0,0,0.08);
+          margin:10px;
+          cursor:pointer;
+          padding-bottom:10px;
+        `;
+
+        card.innerHTML = `
+
+          <!-- PRODUCT IMAGE -->
+          <img 
+            src="${image}" 
+            style="
+              width:100%;
+              height:200px;
+              object-fit:cover;
+            "
+            onerror="this.src='images/default.png'"
+          >
+
+          <!-- PRODUCT INFO -->
+          <div style="padding:12px;">
+
+            <h4 style="
+              font-size:17px;
+              color:#02532B;
+              margin-bottom:8px;
+            ">
+              ${item.name}
+            </h4>
+
+            <p style="
+              color:gray;
+              font-size:14px;
+              margin-bottom:6px;
+            ">
+              ${item.district || ""}
+            </p>
+
+            <p style="
+              font-size:14px;
+              margin-bottom:10px;
+            ">
+              ${item.weight || ""}
+            </p>
+
+            <h3 style="
+              color:#1D9E75;
+              margin-bottom:12px;
+            ">
+              ৳ ${item.price}
+            </h3>
+
+            <!-- QTY -->
+            <div style="
+              display:flex;
+              align-items:center;
+              gap:10px;
+              margin-bottom:12px;
+            ">
+
+              <button class="minusBtn"
+                style="
+                  width:30px;
+                  height:30px;
+                  border:none;
+                  background:#eee;
+                  border-radius:5px;
+                  cursor:pointer;
+                "
+              >-</button>
+
+              <span class="qtyValue">1</span>
+
+              <button class="plusBtn"
+                style="
+                  width:30px;
+                  height:30px;
+                  border:none;
+                  background:#eee;
+                  border-radius:5px;
+                  cursor:pointer;
+                "
+              >+</button>
+
+            </div>
+
+            <!-- ADD TO CART -->
+            <button class="addCartBtn"
+              style="
+                width:100%;
+                padding:10px;
+                border:none;
+                background:#1D9E75;
+                color:white;
+                border-radius:8px;
+                cursor:pointer;
+                font-weight:bold;
+              "
+            >
+              Add To Cart
+            </button>
+
+          </div>
+        `;
+
+        // =====================
+        // OPEN PRODUCT DETAIL
+        // =====================
+        card.querySelector("img").addEventListener("click", () => {
+
+          window.location.href =
+            `product-detail.html?id=${item._id}`;
+
+        });
+
+        card.querySelector("h4").addEventListener("click", () => {
+
+          window.location.href =
+            `product-detail.html?id=${item._id}`;
+
+        });
+
+        // =====================
+        // QUANTITY
+        // =====================
+        let qty = 1;
+
+        const qtyValue = card.querySelector(".qtyValue");
+
+        card.querySelector(".plusBtn")
+          .addEventListener("click", (e) => {
+
+            e.stopPropagation();
+
+            qty++;
+
+            qtyValue.textContent = qty;
+
+        });
+
+        card.querySelector(".minusBtn")
+          .addEventListener("click", (e) => {
+
+            e.stopPropagation();
+
+            if(qty > 1){
+              qty--;
+            }
+
+            qtyValue.textContent = qty;
+
+        });
+
+        // =====================
+        // ADD TO CART
+        // =====================
+        card.querySelector(".addCartBtn")
+          .addEventListener("click", (e) => {
+
+            e.stopPropagation();
+
+            const existingItem =
+              cartItems.find(p => p._id === item._id);
+
+            if(existingItem){
+
+              existingItem.quantity += qty;
+
+            } else {
+
+              cartItems.push({
+                ...item,
+                quantity: qty,
+                image: image
+              });
+
+            }
+
+            localStorage.setItem(
+              "cart",
+              JSON.stringify(cartItems)
             );
 
-            const products = await res.json();
+            updateCartCount();
 
+            renderCart();
 
-            // ONLY TANGAIL PRODUCTS
-            const tangailProducts =
-                products.filter(item =>
-
-                    item.district &&
-                    item.district.toLowerCase()
-                    .includes("tangail")
-                );
-
-
-            const container =
-                document.getElementById("productList");
-
-
-            if(!container) return;
-
-
-            container.innerHTML = "";
-
-
-            tangailProducts.forEach(item => {
-
-                const row =
-                    document.createElement("div");
-
-
-                row.classList.add(
-                    "col-md-2",
-                    "col-6"
-                );
-
-
-
-                row.innerHTML = `
-
-                    <div class="product-card text-center">
-
-                        <img
-                            src="${getImage(item)}"
-
-                            class="img-fluid rounded"
-
-                            style="
-                                width:100%;
-                                height:220px;
-                                object-fit:cover;
-                                cursor:pointer;
-                            "
-                        >
-
-                        <h6>
-                            ${item.name}
-                        </h6>
-
-                        <h6>
-                            ${item.district || ""}
-                        </h6>
-
-                        <h6>
-                            ${item.weight || ""}
-                        </h6>
-
-                        <h6>
-                            ৳ ${item.price}
-                        </h6>
-
-                        <button
-                            class="add-cart-btn"
-                        >
-                            Add to Cart
-                        </button>
-
-                    </div>
-                `;
-
-
-
-                // ================= PRODUCT DETAIL =================
-                row.querySelector("img")
-                .addEventListener("click", ()=>{
-
-                    window.location.href =
-                    `product-detail.html?id=${item._id}`;
-                });
-
-
-
-
-                // ================= ADD TO CART =================
-                row.querySelector(".add-cart-btn")
-                .addEventListener("click", (e)=>{
-
-                    e.stopPropagation();
-
-                    let cart = JSON.parse(
-                        localStorage.getItem("cart")
-                        || "[]"
-                    );
-
-
-                    const exist = cart.find(
-                        p => p._id === item._id
-                    );
-
-
-                    if(exist){
-
-                        exist.quantity += 1;
-
-                    } else {
-
-                        cart.push({
-                            ...item,
-                            quantity:1
-                        });
-                    }
-
-
-                    localStorage.setItem(
-                        "cart",
-                        JSON.stringify(cart)
-                    );
-
-
-                    updateCartCount();
-
-                    renderCart();
-
-                    orderReview.style.display =
-                    "block";
-                });
-
-
-
-                container.appendChild(row);
-
-            });
-
-
-        } catch(err){
-
-            console.log(err);
-        }
-    }
-
-
-
-
-    // ================= IMAGE HELPER =================
-    function getImage(item){
-
-        if(!item.image){
-
-            return "images/default.png";
-        }
-
-        if(item.image.startsWith("http")){
-
-            return item.image;
-        }
-
-        return `${BASE_URL}/uploads/${item.image}`;
-    }
-
-
-
-
-    // ================= UPDATE CART COUNT =================
-    function updateCartCount(){
-
-        const cart = JSON.parse(
-            localStorage.getItem("cart")
-            || "[]"
-        );
-
-
-        let total = 0;
-
-
-        cart.forEach(item => {
-
-            total += item.quantity || 1;
-        });
-
-
-        cartCount.innerText = total;
-    }
-
-
-
-
-    // ================= RENDER CART =================
-    function renderCart(){
-
-        const cart = JSON.parse(
-            localStorage.getItem("cart")
-            || "[]"
-        );
-
-
-        orderReview.innerHTML = "";
-
-
-        let totalPrice = 0;
-
-
-
-        cart.forEach((item,index)=>{
-
-
-            const itemTotal =
-                item.price * item.quantity;
-
-
-            totalPrice += itemTotal;
-
-
-
-            const div =
-                document.createElement("div");
-
-
-            div.classList.add("cart-item");
-
-
-            div.innerHTML = `
-
-                <div style="
-                    display:flex;
-                    align-items:center;
-                    gap:10px;
-                    margin-bottom:10px;
-                    background:#f5f5f5;
-                    padding:10px;
-                    border-radius:8px;
-                ">
-
-                    <img
-                        src="${getImage(item)}"
-
-                        style="
-                            width:60px;
-                            height:60px;
-                            object-fit:cover;
-                            border-radius:8px;
-                        "
-                    >
-
-                    <div style="width:100%;">
-
-                        <h6 style="
-                            margin:0;
-                            color:#02532B;
-                            font-size:15px;
-                        ">
-                            ${item.name}
-                        </h6>
-
-                        <p style="margin:0;">
-                            Qty: ${item.quantity}
-                        </p>
-
-                        <p style="margin:0;">
-                            ৳ ${itemTotal}
-                        </p>
-
-                        <div style="
-                            display:flex;
-                            gap:5px;
-                            margin-top:5px;
-                        ">
-
-                            <button onclick="plusItem(${index})">
-                                +
-                            </button>
-
-                            <button onclick="minusItem(${index})">
-                                -
-                            </button>
-
-                            <button onclick="removeItem(${index})">
-                                Remove
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </div>
-            `;
-
-
-            orderReview.appendChild(div);
+            orderReview.style.display = "block";
 
         });
 
+        productList.appendChild(card);
 
+      });
 
+    } catch(err){
 
-        // ================= TOTAL =================
-        const totalDiv =
-            document.createElement("h4");
+      console.log(err);
 
-
-        totalDiv.innerText =
-            "Total: ৳ " + totalPrice;
-
-
-        orderReview.appendChild(totalDiv);
-
-
-
-
-        // ================= CHECKOUT =================
-        const checkoutBtn =
-            document.createElement("button");
-
-
-        checkoutBtn.innerText =
-            "Checkout";
-
-
-        checkoutBtn.style.width = "100%";
-        checkoutBtn.style.padding = "12px";
-        checkoutBtn.style.background =
-            "#02532B";
-
-        checkoutBtn.style.color = "white";
-        checkoutBtn.style.border = "none";
-        checkoutBtn.style.borderRadius =
-            "8px";
-
-        checkoutBtn.style.marginTop =
-            "10px";
-
-        checkoutBtn.style.cursor =
-            "pointer";
-
-
-        checkoutBtn.onclick = ()=>{
-
-            window.location.href =
-            "checkout.html";
-        };
-
-
-        orderReview.appendChild(checkoutBtn);
+      productList.innerHTML = `
+        <p style="padding:20px;color:red;">
+          Product load failed
+        </p>
+      `;
 
     }
 
+  }
 
+  // =========================
+  // UPDATE CART COUNT
+  // =========================
+  function updateCartCount(){
 
+    totalCart = 0;
 
-    // ================= PLUS ITEM =================
-    window.plusItem = function(index){
+    cartItems.forEach(item => {
+      totalCart += item.quantity;
+    });
 
-        let cart = JSON.parse(
-            localStorage.getItem("cart")
-            || "[]"
-        );
+    cartCount.textContent = totalCart;
 
+  }
 
-        cart[index].quantity++;
+  // =========================
+  // RENDER CART
+  // =========================
+  function renderCart(){
 
+    orderReview.innerHTML = "";
 
-        localStorage.setItem(
-            "cart",
-            JSON.stringify(cart)
-        );
+    if(cartItems.length === 0){
 
+      orderReview.innerHTML = `
+        <p style="text-align:center;">
+          Cart is empty
+        </p>
+      `;
 
-        updateCartCount();
+      return;
+    }
 
-        renderCart();
-    };
+    let totalPrice = 0;
 
+    cartItems.forEach((item, index) => {
 
+      const itemTotal =
+        item.price * item.quantity;
 
+      totalPrice += itemTotal;
 
+      const div = document.createElement("div");
 
-    // ================= MINUS ITEM =================
-    window.minusItem = function(index){
+      div.classList.add("cart-item");
 
-        let cart = JSON.parse(
-            localStorage.getItem("cart")
-            || "[]"
-        );
+      div.innerHTML = `
 
+        <div style="
+          display:flex;
+          gap:10px;
+          margin-bottom:15px;
+          background:#f5f5f5;
+          padding:10px;
+          border-radius:10px;
+        ">
 
-        if(cart[index].quantity > 1){
+          <img
+            src="${item.image}"
+            style="
+              width:60px;
+              height:60px;
+              object-fit:cover;
+              border-radius:8px;
+            "
+          >
 
-            cart[index].quantity--;
+          <div style="flex:1;">
 
-        } else {
+            <h5 style="
+              color:#02532B;
+              margin-bottom:5px;
+            ">
+              ${item.name}
+            </h5>
 
-            cart.splice(index,1);
-        }
+            <p style="font-size:13px;">
+              Qty: ${item.quantity}
+            </p>
 
+            <p style="
+              color:#1D9E75;
+              font-weight:bold;
+            ">
+              ৳ ${itemTotal}
+            </p>
 
-        localStorage.setItem(
-            "cart",
-            JSON.stringify(cart)
-        );
+            <div style="
+              display:flex;
+              gap:5px;
+              margin-top:5px;
+            ">
 
+              <button onclick="plusItem(${index})">+</button>
 
-        updateCartCount();
+              <button onclick="minusItem(${index})">-</button>
 
-        renderCart();
-    };
+              <button onclick="removeItem(${index})">
+                Remove
+              </button>
 
+            </div>
 
+          </div>
 
+        </div>
+      `;
 
-
-    // ================= REMOVE ITEM =================
-    window.removeItem = function(index){
-
-        let cart = JSON.parse(
-            localStorage.getItem("cart")
-            || "[]"
-        );
-
-
-        cart.splice(index,1);
-
-
-        localStorage.setItem(
-            "cart",
-            JSON.stringify(cart)
-        );
-
-
-        updateCartCount();
-
-        renderCart();
-    };
-
-
-
-
-
-    // ================= CART TOGGLE =================
-    cartDiv.addEventListener("click", ()=>{
-
-        if(orderReview.style.display ===
-            "block"){
-
-            orderReview.style.display =
-            "none";
-
-        } else {
-
-            orderReview.style.display =
-            "block";
-        }
+      orderReview.appendChild(div);
 
     });
 
+    // TOTAL
+    const totalDiv = document.createElement("div");
 
+    totalDiv.innerHTML = `
 
+      <h3 style="
+        margin-top:15px;
+        color:#02532B;
+      ">
+        Total: ৳ ${totalPrice}
+      </h3>
 
-    // ================= INIT =================
-    loadTangailProducts();
+      <button id="checkoutBtn"
+        style="
+          width:100%;
+          margin-top:10px;
+          padding:12px;
+          background:#1D9E75;
+          border:none;
+          color:white;
+          border-radius:8px;
+          font-size:16px;
+          cursor:pointer;
+        "
+      >
+        Checkout
+      </button>
+    `;
+
+    orderReview.appendChild(totalDiv);
+
+    // CHECKOUT
+    document.getElementById("checkoutBtn")
+      .addEventListener("click", () => {
+
+        window.location.href = "checkout.html";
+
+    });
+
+  }
+
+  // =========================
+  // CART FUNCTIONS
+  // =========================
+  window.plusItem = function(index){
+
+    cartItems[index].quantity++;
+
+    localStorage.setItem(
+      "cart",
+      JSON.stringify(cartItems)
+    );
 
     updateCartCount();
 
     renderCart();
 
-});
+  };
 
+  window.minusItem = function(index){
+
+    if(cartItems[index].quantity > 1){
+
+      cartItems[index].quantity--;
+
+    } else {
+
+      cartItems.splice(index, 1);
+
+    }
+
+    localStorage.setItem(
+      "cart",
+      JSON.stringify(cartItems)
+    );
+
+    updateCartCount();
+
+    renderCart();
+
+  };
+
+  window.removeItem = function(index){
+
+    cartItems.splice(index, 1);
+
+    localStorage.setItem(
+      "cart",
+      JSON.stringify(cartItems)
+    );
+
+    updateCartCount();
+
+    renderCart();
+
+  };
+
+  // =========================
+  // TOGGLE CART
+  // =========================
+  cartDiv.addEventListener("click", () => {
+
+    if(orderReview.style.display === "block"){
+
+      orderReview.style.display = "none";
+
+    } else {
+
+      renderCart();
+
+      orderReview.style.display = "block";
+
+    }
+
+  });
+
+  // =========================
+  // INIT
+  // =========================
+  updateCartCount();
+
+  renderCart();
+
+  loadTangailProducts();
+
+});
 </script>
 
 <!-- ================= TANGAIL PRODUCT SECTION END ================= -->
