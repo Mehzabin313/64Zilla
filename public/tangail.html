@@ -17,6 +17,94 @@
 
 </head>
 <body>
+   <!-- Navbar -->
+    <div class="nav">
+        <div class="logo">
+            <h4>64Zilla!</h4>
+        </div>
+
+        <div class="navmenu">
+           
+    
+    <div class="menu-toggle" id="mobile-menu">
+        <i class="fa-solid fa-bars"></i>
+    </div>
+            <ul class="navul">
+                <li class="navli"><a href="home.html">HOME</a></li>
+                <li class="navli"><a href="#main">SHOP</a></li>
+                <li class="navli"><a href="contact.html">CONTACT</a></li>
+                <li class="navli"><a href="faq.html">FAQ</a></li>
+                <li class="navli"><a href="seller-register.html">SELLER</a></li>
+                <li class="navli"><a href="profile.html">PROFILE</a></li>
+            </ul>
+
+            <div class="navbtn">
+                <button type="button" id="login-btn">LOGIN</button>
+            </div>
+        </div>
+    </div>
+<div class="home-page">
+    <!-- Second Menu -->
+    <div class="nav2">
+        <div class="menu">
+            <button id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+        </div>
+        <!--sidebar-->
+       
+<div id="sideMenu" class="side-menu">
+
+    <div class="side-header">
+        <div>
+            <h3>MENU</h3>
+            <p id="sb-name" style="margin:0;font-size:14px;color:gray;"></p>
+        </div>
+        <span onclick="closeMenu()">×</span>
+    </div>
+
+    <hr>
+
+    <a href="home.html">Home</a>
+    <a href="profile.html">Profile</a>
+    <a href="orders.html">Orders</a>
+    <a href="cart.html">Cart</a>
+    <a href="contact.html">Contact</a>
+    <a href="faq.html">FAQ</a>
+
+    <hr>
+
+    <a href="#" onclick="logout()">🚪 Logout</a>
+
+</div>
+
+<div id="menuOverlay" class="menu-overlay" onclick="closeMenu()"></div>
+        <!--search-->
+        <div class="search">
+            <input type="text" id="search" placeholder="Search">
+            <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+
+       <!--<div class="cart" id="cartdiv">
+    <button type="button" id="cart" >
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span id="cart-count">0</span>
+    </button>
+</div>--> 
+<div class="cart" id="cartdiv" style="position:relative;">
+    <button type="button" id="cart">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span id="cart-count">0</span>
+    </button>
+</div>
+
+<!-- Cart dropdown -->
+<div id="order-review" style="display:none; position:fixed;
+ top:50px; right:0; width:300px; max-height:400px; 
+ overflow-y:auto; background:white; border:1px solid #ccc;
+  padding:10px; z-index:1000;">
+  <!-- Cart items dynamically add hobe ekhane -->
+</div>
+
+    </div>
    <div class="tan-page">
        <div class="tan-section">
    <div class="tan-img">
@@ -98,7 +186,7 @@ Located close to Dhaka, Tangail serves as a bridge between tradition and moderni
            <img src="images/gerwbakpsj298.png">
         </div>
     </footer>-->
-<footer class="site-footer "style="margin-top:1400px">
+<footer class="site-footer " style="margin:top 20px">
     <div class="footer-top">
         <div class="footer-column brand-info">
             <h2>64Zilla</h2>
@@ -138,17 +226,312 @@ Located close to Dhaka, Tangail serves as a bridge between tradition and moderni
     </div>
 </footer>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
 
+  let totalCart = 0;
+  let cartItems = [];
+
+  const cartCount = document.getElementById("cart-count");
+  const orderReview = document.getElementById("order-review");
+  const cartDiv = document.getElementById("cart"); // Cart icon
+
+  const product2 = [
+    { name: "Chomchom", image: "images/Tangail-Chomchom.jpg", district:"Tangail", weight:"500gm", price:250},
+    { name: "Jamdani Saree", image: "images/jamdani.jpeg", district:"Dhaka", weight:"1 Piece", price:10000},
+    { name: "Nakshi Kantha", image: "images/nokshikatha.jpg", district:"Bogra", weight:"1 Piece", price:3000},
+    { name: "Rajsahi Am", image: "images/rajsahi am.jpeg", district:"Rajshahi", weight:"1kg", price:100},
+    { name: "Bogur Doi", image: "images/mistydoi.jpg", district:"Bogra", weight:"1kg", price:500},
+    { name: "Norshindi Lotkon", image: "images/lotkon.jpeg", district:"Norshindi", weight:"1kg", price:400}
+  ];
+
+  const container2 = document.getElementById('container2');
+  if (!container2) return;
+
+  // CREATE PRODUCTS
+  product2.forEach((item, index) => {
+    const row = document.createElement("div");
+    row.classList.add("col-md-2", "col-6");
+    row.innerHTML = `
+      <div class="product-card text-center">
+        <img src="${item.image}" class="img-fluid rounded">
+        <h6>${item.name}</h6>
+        <h6>${item.district}</h6>
+        <h6>${item.weight}</h6>
+        <h6>৳ ${item.price}</h6>
+        <div class="qty-box">
+          <button class="qty-btn" id="minus-${index}">-</button>
+          <span id="count-${index}">0</span>
+          <button class="qty-btn" id="plus-${index}">+</button>
+        </div>
+        <button id="add-${index}" class="add-cart-btn">Add to Cart</button>
+      </div>
+    `;
+    container2.appendChild(row);
+
+    let count = 0;
+    const plusBtn = document.getElementById(`plus-${index}`);
+    const minusBtn = document.getElementById(`minus-${index}`);
+    const countSpan = document.getElementById(`count-${index}`);
+    const addBtn = document.getElementById(`add-${index}`);
+    const carticon=document.getElementById('cartdiv');
+   
+
+    plusBtn.addEventListener("click", () => {
+      count++;
+      countSpan.textContent = count;
+    });
+    minusBtn.addEventListener("click", () => {
+      if (count > 0) { count--; countSpan.textContent = count; }
+    });
+    addBtn.addEventListener("click", () => {
+      let finalQty = count === 0 ? 1 : count;
+      let existingItem = cartItems.find(p => p.name === item.name);
+      if (existingItem) { existingItem.quantity += finalQty; } 
+      else { cartItems.push({ ...item, quantity: finalQty }); }
+      totalCart += finalQty;
+      cartCount.textContent = totalCart;
+      count = 0; countSpan.textContent = 0;
+      renderCart();
+      orderReview.style.display = "block"; // automatically open cart
+    });
+  });
+
+  // RENDER CART
+  function renderCart() {
+    orderReview.innerHTML = "";
+    let totalPrice = 0;
+    cartItems.forEach((item, index) => {
+      let itemTotal = item.price * item.quantity;
+      totalPrice += itemTotal;
+      const div = document.createElement("div");
+      div.classList.add("cart-item");
+      div.innerHTML = `
+        <div style="display:flex; align-items:center; gap:5px; margin-bottom:10px;font-size:15px;background:rgba(128, 128, 128, 0.285);width:100%;">
+          <img src="${item.image}" style="width:50px; height:50px; object-fit:cover;">
+          <div> 
+            <h6 style=" color:#02532B;font-size:15px;">${item.name}</h6> 
+            <p>District: ${item.district}</p>
+            <div style="display:flex; align-items:center;flex-direction:row; gap:15px;">
+           
+           
+            <p> ${item.weight}</p>
+            <p> ৳ ${itemTotal}</p>
+            <button onclick="plusItem(${index})">+</button>
+            <button onclick="minusItem(${index})">-</button>
+            <button onclick="removeItem(${index})">Remove</button>
+          </div>
+                </div>
+            
+        </div>
+        <hr>
+      `;
+      orderReview.appendChild(div);
+    });
+    const totalDiv = document.createElement("h4");
+    totalDiv.innerText = "Total: ৳ " + totalPrice;
+    orderReview.appendChild(totalDiv);
+   
+  }
+
+  // PLUS / MINUS / REMOVE
+  window.plusItem = function(index) { cartItems[index].quantity++; totalCart++; cartCount.textContent = totalCart; renderCart(); };
+  window.minusItem = function(index) { 
+    if(cartItems[index].quantity>1){cartItems[index].quantity--; totalCart--;}
+    else{totalCart-=1; cartItems.splice(index,1);}
+    cartCount.textContent=totalCart; renderCart(); 
+  };
+  window.removeItem = function(index){ totalCart-=cartItems[index].quantity; cartItems.splice(index,1); cartCount.textContent=totalCart; renderCart(); };
+
+  // CART ICON CLICK TOGGLE
+  cartDiv.addEventListener("click", () => {
+    orderReview.style.display = orderReview.style.display === "block" ? "none" : "block";
+  });
+
+});
+</script>
+
+
+<script>
+  const banners = [
+    "images/1.png",
+    "images/2.png",
+    "images/3.png",
+    
+    "images/mghmxbfgbb-1669634449.jpg",
+    "images/Making_of_Jamdani-8.webp",
+  ];
+
+  let index = 0;
+  const img = document.getElementById("bannerImg");
+
+  setInterval(() => {
+    index = (index + 1) % banners.length;
+    img.src = banners[index];
+  }, 3000); 
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const seeAllBtn = document.getElementById('seeAllBtn');
+    const mobileBtn = document.getElementById('mobileFilterBtn');
+    const categoryMenu = document.getElementById('categoryContent');
+
+   
+    if(seeAllBtn) {
+        seeAllBtn.addEventListener('click', function() {
+            const hiddenItems = document.querySelectorAll('.hidden-dist');
+            hiddenItems.forEach(item => {
+                item.classList.remove('hidden-dist');
+                item.style.display = 'flex'; 
+            });
+            this.style.display = 'none'; 
+        });
+    }
+
+
+    if(mobileBtn) {
+        mobileBtn.addEventListener('click', function() {
+            categoryMenu.classList.toggle('active-mobile');
+            const icon = this.querySelector('.fa-chevron-down');
+            icon.style.transform = categoryMenu.classList.contains('active-mobile') ? "rotate(180deg)" : "rotate(0deg)";
+        });
+    }
+});
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const mobileMenuIcon = document.getElementById('mobile-menu');
+    const navLinks = document.querySelector('.navul');
+
+    if (mobileMenuIcon && navLinks) {
+        mobileMenuIcon.addEventListener('click', function() {
+            
+            navLinks.classList.toggle('active');
+            
+            // আইকন চেঞ্জ (Bars থেকে X চিহ্ন)
+            const icon = this.querySelector('i');
+            if (navLinks.classList.contains('active')) {
+                icon.classList.replace('fa-bars', 'fa-xmark');
+            } else {
+                icon.classList.replace('fa-xmark', 'fa-bars');
+            }
+        });
+    }
+});
+</script>
+
+
+<script>
+let userData = null;
+
+
+async function checkUser(){
+    try {
+        const token = localStorage.getItem("token");
+
+        if(!token){
+            userData = null;
+            return false;
+        }
+
+        const res = await fetch("https://six4zilla.onrender.com/me", {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        if(data.success){
+            userData = data.user;
+
+            // sidebar name
+            const sbName = document.getElementById("sb-name");
+            if(sbName){
+                sbName.innerText = data.user.email || "User";
+            }
+
+            // login button → profile
+            const loginBtn = document.getElementById("login-btn");
+            if(loginBtn){
+               loginBtn.textContent = data.user.username || "PROFILE";
+                loginBtn.onclick = () => window.location.href = "profile.html";
+            }
+
+            return true;
+        } else {
+            userData = null;
+            return false;
+        }
+
+    } catch (err) {
+        console.log("AUTH ERROR:", err);
+        userData = null;
+        return false;
+    }
+}
+
+
+menuBtn.addEventListener("click", async () => {
+
+    const ok = await checkUser(); 
+
+    if(!ok){
+        alert("Please login first");
+        window.location.href = "login.html";
+        return;
+    }
+
+    sideMenu.classList.add("active");
+    overlay.style.display = "block";
+});
+
+function closeMenu(){
+    sideMenu.classList.remove("active");
+    overlay.style.display = "none";
+}
+
+function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+
+    userData = null;
+
+    const loginBtn = document.getElementById("login-btn");
+    if(loginBtn){
+        loginBtn.textContent = "LOGIN";
+        loginBtn.onclick = () => window.location.href = "login.html";
+    }
+
+    closeMenu();
+
+    window.location.href = "home.html";
+}
+
+
+window.addEventListener("load", checkUser);
+</script>
 <script src="js/district.js"></script>
+<script src="js/product.js"></script>
+<script src="js/discount-sale.js"></script>
+<script src="js/store.js"></script>
+<script src="js/container2.js"></script>
+<script src="js/add-product.js"></script>
+<script src="js/container.js"></script>
+
+<script src="js/search.js"></script>
+<script src="js/utils.js"></script>
+
 
 
 
 
     <script src="js/login.js"></script>
- <script src="js/index.js"></script>
- <script src="js/product.js" ></script>
-  <script src="js/discount-sale.js" ></script>
-  <script src="js/store.js"></script>
+ 
+ 
+  
+ 
   <script src="js/product-detail.js"></script>
   
 </body>
