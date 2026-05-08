@@ -287,7 +287,7 @@ app.post("/add-product", async(req, res) => {
       return res.status(500).json({ success: false, message: err.message });
     }
 
-    console.log("=== ADD PRODUCT HIT ===");
+   console.log("=== ADD PRODUCT HIT ===");
 console.log("BODY:", JSON.stringify(req.body));
 console.log("FILE:", JSON.stringify(req.file));
 
@@ -312,11 +312,11 @@ try {
 
   await product.save();
   return res.json({ success: true });
-
 } catch (err) {
   console.log("DB ERROR:", err.message);
   return res.status(500).json({ success: false, message: err.message });
 }
+
 
   });
 });
