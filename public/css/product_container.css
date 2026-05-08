@@ -5,25 +5,113 @@ h5{
     align-items: center;
     padding: 0 30px;
   }
-.product-heading{
+.product-heading {
     display: flex;
-    gap: 50%;
+    justify-content: space-between;
     align-items: center;
-    height: 50px;
     width: 100%;
-   
+    position: relative;
+    padding: 10px 0;
+    margin-top: 20px;
 }
-.category-buttons{
+.category-buttons {
     display: flex;
-    justify-content: center;
-    
+    gap: 8px;
+    align-items: center;
+    margin-right: 30px;
 }
-.cat-btn{
-    background:#e6f0e6;border:none;color:white;padding:6px 15px;margin-right:8px;border-radius:20px;cursor:pointer;transition:0.3s;font-weight:500}
+.mobile-category-icon {
+    display: none; /* পিসিতে লুকানো থাকবে */
+    background: #96D85D;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #0a4d20;
+    font-size: 18px;
+    margin-right: 20px;
+    z-index: 1001; /* সবার উপরে থাকবে */
+}
 .cat-btn:hover{
     background:#cce3cc}
-.cat-btn.active{
-    background:#0a4d20;color:#fff
+.cat-btn {
+    background: #e6f0e6;
+    border: 1px solid #cce3cc;
+    color: #0a4d20;
+    padding: 6px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.cat-btn.active {
+    background: #0a4d20;
+    color: #fff;
+    border-color: #0a4d20;
+}
+/* --- Media Query for Mobile (max-width: 768px) --- */
+@media (max-width: 768px) {
+   .product-heading {
+        padding: 0 15px; /* মোবাইলে সাইড প্যাডিং কমানো */
+    }
+
+   .category-buttons {
+        display: none; /* ডিফল্টভাবে লুকানো */
+        flex-direction: column;
+        position: absolute;
+        top: 45px; /* হেডিং এর ঠিক নিচে */
+        right: 15px;
+        background: #ffffff;
+        padding: 15px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        z-index: 1000;
+        border-radius: 12px;
+        width: 160px;
+        gap: 10px;
+        margin-right: 0;
+    }
+
+    .category-buttons::-webkit-scrollbar {
+        display: none; /* Chrome/Safari-তে স্ক্রলবার হাইড */
+    }
+.category-buttons.menu-open {
+        display: flex !important;
+    }
+    /* মোবাইলে মেনু আইকন দেখাবে */
+    .mobile-category-icon {
+        display: flex;
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        box-shadow: -5px 0 10px rgba(255,255,255,0.8);
+    }
+
+    /* মেনু ক্লিক করলে বাটনগুলো নিচে নিচে আসবে (Toggle logic) */
+    .category-buttons.menu-open {
+        position: absolute;
+        top: 55px;
+        left: 0;
+        width: 100%;
+        background: #f9fff9;
+        flex-wrap: wrap;
+        padding: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        z-index: 99;
+        justify-content: flex-start;
+        overflow-x: visible;
+    }
+
+    /* প্রোডাক্ট কার্ড সাইজ ঠিক করা */
+    .product-card {
+        min-width: 140px; /* মোবাইলে ২টা কার্ড পাশাপাশি সুন্দর দেখাবে */
+        width: 45%;
+    }
 }
 .product-row{
     display:flex;overflow-x:auto;gap:40px;padding-bottom:10px;justify-content: center;
@@ -99,14 +187,37 @@ max-height: 600px;
   color: #1a5d1a;
   margin: 5px 0;
 }
+.product-card h4 {
+ color:gray;
+      font-size:14px;
+      margin-bottom:6px;
+}
 
-/* Weight */
 .product-card p {
   font-size: 13px;
   margin: 3px 0;
   color: #555;
 }
-
+.product-card #plus-0,
+.product-card #minus-0,
+.product-card #count-0 {
+    background: green;
+    width: 28px;
+    
+    height: 28px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+.product-card button[id^="add-"] {
+    width: 100%;
+    background: green;
+    color: #fff;
+    padding: 6px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: 0.2s;
+}
 /* Price */
 .price {
   font-size: 18px;
