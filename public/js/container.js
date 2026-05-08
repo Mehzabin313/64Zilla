@@ -1124,7 +1124,7 @@ document.addEventListener("DOMContentLoaded", async () => {
          <img src="${imgSrc || 'images/default.png'}" alt="product">
 
           <h6>${item.name}</h6>
-          <h6>${item.district}</h6>
+          <h4>${item.district}</h6>
           <h6>৳ ${item.price}</h6>
 
           <div>
