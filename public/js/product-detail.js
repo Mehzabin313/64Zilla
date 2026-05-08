@@ -206,7 +206,7 @@
   loadProduct();*/
   //last 
   
-  const BASE_URL = "https://six4zilla.onrender.com";
+  /*const BASE_URL = "https://six4zilla.onrender.com";
 
 let currentProduct = null;
 let qty = 1;
@@ -435,5 +435,232 @@ document.addEventListener("DOMContentLoaded", () => {
   const cartBtn = document.getElementById("cartdiv");
   if (cartBtn) {
     cartBtn.addEventListener("click", toggleCart);
+  }
+});*/
+const BASE_URL = "https://six4zilla.onrender.com";
+
+let currentProduct = null;
+let qty = 1;
+
+// ================= CART GET =================
+// লোকাল স্টোরেজ থেকে cart আনা হচ্ছে
+function getCart() {
+  return JSON.parse(localStorage.getItem("cart") || "[]");
+}
+
+// cart save করা
+function saveCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+// ================= CART COUNT UPDATE =================
+// cart icon এর সংখ্যা update করা হচ্ছে
+function updateCartCount() {
+  const el = document.getElementById("cart-count");
+  if (!el) return;
+
+  const cart = getCart();
+
+  // total quantity যোগ করা হচ্ছে
+  el.textContent = cart.reduce((s, i) => s + i.quantity, 0);
+
+  // cart UI render
+  renderCart();
+}
+
+// ================= GET PRODUCT ID FROM URL =================
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("id");
+
+// ================= LOAD PRODUCT =================
+async function loadProduct() {
+  try {
+    if (!productId) throw new Error("No product id in URL");
+
+    // backend থেকে single product আনা
+    const res = await fetch(`${BASE_URL}/products/${productId}`);
+
+    let item;
+
+    if (res.ok) {
+      item = await res.json();
+    } else {
+      // fallback: full product list fetch
+      const all = await fetch(`${BASE_URL}/products`).then(r => r.json());
+
+      // id match করে product খোঁজা
+      item = all.find(p => p._id === productId);
+    }
+
+    if (!item) throw new Error("Product not found");
+
+    currentProduct = item;
+
+    // product UI render করা
+    renderProduct(item);
+
+    // related product load করা
+    loadRelatedProducts(item._id);
+
+    // loading hide
+    document.getElementById("loadingState").style.display = "none";
+    document.getElementById("detailCard").style.display = "grid";
+
+  } catch (err) {
+    console.log(err);
+
+    // error UI show
+    document.getElementById("loadingState").innerHTML = `
+      <p style="color:red">⚠️ Product load failed</p>
+    `;
+  }
+}
+
+// ================= PRODUCT RENDER =================
+function renderProduct(item) {
+
+  // product name set
+  document.getElementById("productName").textContent = item.name;
+
+  // price set
+  document.getElementById("productPrice").textContent = "৳ " + item.price;
+
+  // ================= DESCRIPTION FIX =================
+  const desc = document.getElementById("productDesc");
+  if (desc) {
+    desc.textContent =
+      item.description ||
+      item.desc ||
+      item.name + " — Traditional product";
+  }
+
+  // ================= IMAGE SET =================
+  const img = document.getElementById("mainProductImg");
+  if (img) {
+    img.src = item.image?.startsWith("http")
+      ? item.image
+      : `${BASE_URL}/uploads/${item.image}`;
+  }
+}
+
+// ================= RELATED PRODUCTS =================
+async function loadRelatedProducts(id) {
+  try {
+    const grid = document.getElementById("relatedGrid");
+    if (!grid) return;
+
+    const all = await fetch(`${BASE_URL}/products`).then(r => r.json());
+
+    // current product বাদ দিয়ে related বানানো
+    const related = all.filter(p => p._id !== id).slice(0, 6);
+
+    grid.innerHTML = "";
+
+    related.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "related-card";
+
+      div.innerHTML = `
+        <img src="${p.image}" style="width:100%;height:120px;object-fit:cover;">
+        <p>${p.name}</p>
+        <p>৳ ${p.price}</p>
+      `;
+
+      // click করলে product change
+      div.onclick = () => {
+        window.location.href = `product-detail.html?id=${p._id}`;
+      };
+
+      grid.appendChild(div);
+    });
+
+    // related section show করা
+    const sec = document.getElementById("relatedSection");
+    if (sec) sec.style.display = "block";
+
+  } catch (e) {
+    console.log("related error", e);
+  }
+}
+
+// ================= IMAGE HELPER =================
+function getImage(item) {
+  if (!item.image) return "images/default.png";
+
+  if (item.image.startsWith("http")) return item.image;
+
+  return `${BASE_URL}/uploads/${item.image}`;
+}
+
+// ================= ADD TO CART =================
+function addToCart() {
+  if (!currentProduct) return;
+
+  let cart = getCart();
+
+  const exist = cart.find(p => p._id === currentProduct._id);
+
+  if (exist) {
+    exist.quantity += qty; // যদি আগে থাকে quantity add হবে
+  } else {
+    cart.push({ ...currentProduct, quantity: qty });
+  }
+
+  saveCart(cart);
+
+  // cart count update
+  updateCartCount();
+}
+
+// ================= CART UI RENDER =================
+function renderCart() {
+  const box = document.getElementById("order-review");
+  if (!box) return;
+
+  const cart = getCart();
+
+  if (cart.length === 0) {
+    box.innerHTML = "<p>Cart empty</p>";
+    return;
+  }
+
+  let total = 0;
+
+  box.innerHTML = cart.map((i) => {
+    total += i.price * i.quantity;
+
+    return `
+      <div>
+        <p>${i.name}</p>
+        <p>Qty: ${i.quantity}</p>
+        <p>৳ ${i.price * i.quantity}</p>
+      </div>
+      <hr>
+    `;
+  }).join("");
+
+  box.innerHTML += `<h4>Total: ৳ ${total}</h4>`;
+}
+
+// ================= INIT =================
+document.addEventListener("DOMContentLoaded", () => {
+
+  // product load
+  loadProduct();
+
+  // cart sync
+  updateCartCount();
+
+  // cart toggle click
+  const cart = document.getElementById("cartdiv");
+
+  if (cart) {
+    cart.addEventListener("click", () => {
+      const box = document.getElementById("order-review");
+
+      if (!box) return;
+
+      box.style.display = box.style.display === "block" ? "none" : "block";
+    });
   }
 });
