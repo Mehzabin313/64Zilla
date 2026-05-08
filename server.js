@@ -84,7 +84,26 @@ mongoose.connect(mongo)
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.log(err));
 
-// ================= ROUTES =================
+// ROUTES 
+//-----search product--------
+app.get("/search-products", async (req, res) => {
+    try {
+        const key = req.query.q;
+
+        const products = await Product.find({
+            $or: [
+                { name: { $regex: key, $options: "i" } },
+                { district: { $regex: key, $options: "i" } },
+                { size: { $regex: key, $options: "i" } }
+            ]
+        });
+
+        res.json(products);
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 // HOME
 app.get('/', (req, res) => {
