@@ -22,15 +22,15 @@ const sellerSchema = mongoose.Schema({
         type: String, 
         required: true, 
         unique: true 
-    }, // NID ইউনিক হতে হবে
+    }, 
     district: { 
         type: String,
          required: true 
-        }, // জেলা
+        }, 
     productCategory: { 
         type: String, 
         required: true 
-    }, // কী বিক্রি করবে
+    }, 
     storeName: {
     type: String,
     default: "My Store"
