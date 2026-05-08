@@ -318,15 +318,15 @@ app.post("/add-product", (req, res) => {
     }
 
     const product = new Product({
-      sellerId: req.body.sellerId,
+       sellerId: req.body.sellerId,
       name: req.body.name,
       price: req.body.price,
       district: req.body.district,
       size: req.body.size,
       availability: req.body.availability,
       image: req.file.path,
-       storeName: seller.storeName,
-      sellerName: seller.username
+        storeName: seller.storeName || "",
+        sellerName: seller.username || ""
     });
 
     product.save()
@@ -439,6 +439,7 @@ const { customer, paymentMethod, bkashNumber, items, total } = req.body;
        return res.status(400).json({ success: false, message: "Customer details missing" });
     }
     const order = new Order({
+        userId: req.user?.id,
       customer: {
         name: req.body.customer?.name || "",
         phone: req.body.customer?.phone || "",
@@ -534,11 +535,24 @@ app.put("/orders/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+//seler order  dashboard--
 app.get("/orders", async (req, res) => {
   const orders = await Order.find();
   res.json(orders);
 });
+//user order-dashboard
+app.get("/orders/my", verifyToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
 
+    const orders = await Order.find({ userId }).sort({ date: -1 });
+
+    res.json(orders);
+
+  } catch (err) {
+    res.status(500).json({ success: false });
+  }
+});
 app.get("/users", async (req, res) => {
     try {
         const users = await User.find();
