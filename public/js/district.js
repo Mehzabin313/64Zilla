@@ -277,6 +277,10 @@ if (districtNameEl) {
 // load products
 async function loadProducts() {
   const container = document.getElementById("productList");
+   const plus = document.getElementById(`plus-${index}`);
+    const minus = document.getElementById(`minus-${index}`);
+    const countSpan = document.getElementById(`count-${index}`);
+    const addBtn = document.getElementById(`add-${index}`);
   if (!container) return;
 
   try {
