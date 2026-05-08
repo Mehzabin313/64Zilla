@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+/*document.addEventListener("DOMContentLoaded", () => {
   const data = [
     {
       percent: "20%",
@@ -62,4 +62,79 @@ document.addEventListener("DOMContentLoaded", () => {
 
     container.appendChild(card);
   });
+});*/
+document.addEventListener("DOMContentLoaded", () => {
+
+  const data = [
+    {
+      items: "3+ Items",
+      percent: "10%",
+      bg: "#FFDD57",
+      pColor: "#C62828",
+      tColor: "#8E0000",
+      img: "images/dis3.avif"
+    },
+    {
+      items: "6+ Items",
+      percent: "20%",
+      bg: "#B8FF5C",
+      pColor: "#027717",
+      tColor: "#013C0C",
+      img: "images/dis5.avif"
+    },
+    {
+      items: "15+ Items",
+      percent: "50%",
+      bg: "#C62828",
+      pColor: "#FFEB3B",
+      tColor: "#FFE07A",
+      img: "images/dis4.avif"
+    },
+    {
+      items: "1-2 Items",
+      percent: "No Discount",
+      bg: "#002F66",
+      pColor: "#B3E5FF",
+      tColor: "#E6F7FF",
+      img: "images/dis2.avif"
+    }
+  ];
+
+  const container = document.getElementById("container3");
+
+  if (!container) {
+    console.error("container3 not found in DOM");
+    return;
+  }
+
+  container.innerHTML = ""; // clean old content
+
+  data.forEach(item => {
+
+    const card = document.createElement("div");
+    card.classList.add("card");
+    card.style.background = item.bg;
+
+    card.innerHTML = `
+      <h2 style="color:${item.pColor}">${item.percent}</h2>
+
+      <p style="color:${item.tColor}">
+        ${item.items} Order Discount Available
+      </p>
+
+      <img 
+        src="${item.img}" 
+        alt="Discount Image"
+        style="
+          width: 200px;
+          height: 150px;
+          object-fit: contain;
+          margin-top: 10px;
+        "
+      >
+    `;
+
+    container.appendChild(card);
+  });
+
 });
