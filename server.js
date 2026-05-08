@@ -280,6 +280,25 @@ app.get("/products/district/:district", async (req, res) => {
 
     res.json(products);
 });
+app.get("/seller/orders/:sellerId", async (req, res) => {
+  try {
+
+    const sellerId = req.params.sellerId;
+
+    const orders = await Order.find().sort({ date: -1 });
+
+    const filtered = orders.filter(order =>
+      order.items.some(item =>
+        String(item.sellerId) === String(sellerId)
+      )
+    );
+
+    res.json(filtered);
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 
 // ================= START SERVER =================
