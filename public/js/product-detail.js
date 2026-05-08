@@ -924,6 +924,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const cartBtn = document.getElementById("cartdiv");
   if (cartBtn) cartBtn.addEventListener("click", toggleCart);
 });*/
+/*
 const BASE_URL = "https://six4zilla.onrender.com";
 
 let currentProduct = null;
@@ -1221,6 +1222,248 @@ function buyNow() {
 }
 
 // ================= INIT =================
+document.addEventListener("DOMContentLoaded", () => {
+  loadProduct();
+  updateCartCount();
+
+  const cartBtn = document.getElementById("cartdiv");
+  if (cartBtn) cartBtn.addEventListener("click", toggleCart);
+});*/
+const BASE_URL = "https://six4zilla.onrender.com";
+
+let currentProduct = null;
+let qty = 1;
+
+/* ================= CART ================= */
+function getCart() {
+  return JSON.parse(localStorage.getItem("cart") || "[]");
+}
+
+function saveCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+/* ================= CART COUNT ================= */
+function updateCartCount() {
+  const el = document.getElementById("cart-count");
+  if (!el) return;
+
+  const cart = getCart();
+  el.textContent = cart.reduce((s, i) => s + i.quantity, 0);
+
+  renderCart();
+}
+
+/* ================= CART RENDER ================= */
+function renderCart() {
+  const box = document.getElementById("order-review");
+  if (!box) return;
+
+  const cart = getCart();
+
+  box.innerHTML = `
+    <div class="cart-header">
+      <h4>🛒 Cart</h4>
+      <button onclick="toggleCart()" class="close-btn">×</button>
+    </div>
+  `;
+
+  if (cart.length === 0) {
+    box.innerHTML += "<p style='padding:10px'>Cart is empty</p>";
+    return;
+  }
+
+  let total = 0;
+
+  cart.forEach((item, i) => {
+    const price = item.price * item.quantity;
+    total += price;
+
+    box.innerHTML += `
+      <div class="cart-item">
+        <img src="${
+          item.image?.startsWith("http")
+            ? item.image
+            : `${BASE_URL}/uploads/${item.image}`
+        }" class="cart-img"/>
+
+        <div>
+          <p>${item.name}</p>
+          <p>Qty: ${item.quantity}</p>
+          <p>৳ ${price}</p>
+
+          <button onclick="inc(${i})">+</button>
+          <button onclick="dec(${i})">-</button>
+          <button onclick="removeItem(${i})">×</button>
+        </div>
+      </div>
+    `;
+  });
+
+  box.innerHTML += `
+    <h4>Total: ৳ ${total}</h4>
+    <button onclick="checkout()" style="width:100%;padding:10px;background:green;color:#fff;">
+      Checkout
+    </button>
+  `;
+}
+
+/* ================= CART ACTION ================= */
+window.inc = function (i) {
+  let cart = getCart();
+  cart[i].quantity++;
+  saveCart(cart);
+  updateCartCount();
+};
+
+window.dec = function (i) {
+  let cart = getCart();
+
+  if (cart[i].quantity > 1) cart[i].quantity--;
+  else cart.splice(i, 1);
+
+  saveCart(cart);
+  updateCartCount();
+};
+
+window.removeItem = function (i) {
+  let cart = getCart();
+  cart.splice(i, 1);
+  saveCart(cart);
+  updateCartCount();
+};
+
+/* ================= TOGGLE CART ================= */
+function toggleCart() {
+  const box = document.getElementById("order-review");
+  if (!box) return;
+  box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
+/* ================= CHECKOUT FIX ================= */
+function checkout() {
+  window.location.href = "checkout.html";
+}
+
+/* IMPORTANT: global access fix */
+window.checkout = checkout;
+
+/* ================= PRODUCT ID ================= */
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("id");
+
+/* ================= LOAD PRODUCT ================= */
+async function loadProduct() {
+  try {
+    if (!productId) throw new Error("No product id");
+
+    const res = await fetch(`${BASE_URL}/products/${productId}`);
+
+    let item;
+
+    if (res.ok) {
+      item = await res.json();
+    } else {
+      const all = await fetch(`${BASE_URL}/products`).then(r => r.json());
+      item = all.find(p => p._id === productId);
+    }
+
+    if (!item) throw new Error("Not found");
+
+    currentProduct = item;
+
+    document.getElementById("loadingState").style.display = "none";
+    document.getElementById("detailCard").style.display = "grid";
+
+    /* ===== BASIC INFO ===== */
+    document.getElementById("productName").textContent = item.name;
+    document.getElementById("productPrice").textContent = "৳ " + item.price;
+
+    document.getElementById("mainProductImg").src =
+      item.image?.startsWith("http")
+        ? item.image
+        : `${BASE_URL}/uploads/${item.image}`;
+
+    /* ===== EXTRA INFO ===== */
+    const shop = document.getElementById("shopName");
+    if (shop) shop.textContent = item.shopName || item.seller || item.district;
+
+    const desc = document.getElementById("productDesc");
+    if (desc) desc.textContent = item.description || item.desc || item.name;
+
+    const stock = document.getElementById("productStock");
+    if (stock) {
+      stock.textContent = item.stock ? "In Stock" : "Out of Stock";
+      stock.style.color = item.stock ? "green" : "red";
+    }
+
+    loadAllProducts(item._id);
+  } catch (err) {
+    document.getElementById("loadingState").innerHTML =
+      "<p style='color:red'>Failed to load product</p>";
+  }
+}
+
+/* ================= RELATED ================= */
+function loadRelated(products) {
+  const grid = document.getElementById("relatedGrid");
+  if (!grid) return;
+
+  grid.innerHTML = "";
+
+  products.slice(0, 6).forEach(p => {
+    const div = document.createElement("div");
+
+    div.innerHTML = `
+      <img src="${
+        p.image?.startsWith("http")
+          ? p.image
+          : `${BASE_URL}/uploads/${p.image}`
+      }" style="width:100%;height:120px;object-fit:cover"/>
+      <p>${p.name}</p>
+      <p>৳ ${p.price}</p>
+    `;
+
+    div.onclick = () => {
+      window.location.href = `product-detail.html?id=${p._id}`;
+    };
+
+    grid.appendChild(div);
+  });
+
+  document.getElementById("relatedSection").style.display = "block";
+}
+
+/* ================= ALL PRODUCTS ================= */
+async function loadAllProducts(id) {
+  const all = await fetch(`${BASE_URL}/products`).then(r => r.json());
+  loadRelated(all.filter(p => p._id !== id));
+}
+
+/* ================= ADD TO CART ================= */
+function addToCart() {
+  if (!currentProduct) return;
+
+  let cart = getCart();
+
+  const exist = cart.find(p => p._id === currentProduct._id);
+
+  const product = {
+    ...currentProduct,
+    quantity: qty,
+    image: currentProduct.image?.startsWith("http")
+      ? currentProduct.image
+      : `${BASE_URL}/uploads/${currentProduct.image}`
+  };
+
+  if (exist) exist.quantity += qty;
+  else cart.push(product);
+
+  saveCart(cart);
+  updateCartCount();
+}
+
+/* ================= INIT ================= */
 document.addEventListener("DOMContentLoaded", () => {
   loadProduct();
   updateCartCount();
