@@ -187,12 +187,8 @@ max-height: 600px;
   color: #1a5d1a;
   margin: 5px 0;
 }
-.product-card h4 {
- color:gray;
-      font-size:14px;
-      margin-bottom:6px;
-}
 
+/* Weight */
 .product-card p {
   font-size: 13px;
   margin: 3px 0;
