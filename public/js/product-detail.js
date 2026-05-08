@@ -209,7 +209,7 @@
 let currentProduct = null;
 let qty = 1;
 
-// ================= CART =================
+// ================= CART HELPERS =================
 function getCart() {
   return JSON.parse(localStorage.getItem("cart") || "[]");
 }
@@ -218,7 +218,7 @@ function saveCart(cart) {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-// 🔥 UPDATE CART COUNT
+// ================= CART COUNT =================
 function updateCartCount() {
   let cart = getCart();
   let total = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -226,19 +226,25 @@ function updateCartCount() {
   const cartCount = document.getElementById("cart-count");
   if (cartCount) cartCount.textContent = total;
 
-  renderCart(); // 🔥 cart UI update
+  renderCart();
 }
 
-// ================= CART RENDER =================
+// ================= CART UI =================
 function renderCart() {
-  const orderReview = document.getElementById("order-review");
-  if (!orderReview) return;
+  const box = document.getElementById("order-review");
+  if (!box) return;
 
   let cart = getCart();
-  orderReview.innerHTML = "";
+
+  box.innerHTML = `
+    <div class="cart-header">
+      <h4>🛒 Your Cart</h4>
+      <button onclick="toggleCart()" class="close-btn">×</button>
+    </div>
+  `;
 
   if (cart.length === 0) {
-    orderReview.innerHTML = "<p>Your cart is empty</p>";
+    box.innerHTML += "<p style='padding:10px'>Cart is empty</p>";
     return;
   }
 
@@ -248,11 +254,9 @@ function renderCart() {
     let itemTotal = item.price * item.quantity;
     totalPrice += itemTotal;
 
-    const div = document.createElement("div");
-    div.style.marginBottom = "10px";
-    div.innerHTML = `
-      <div style="display:flex; gap:10px; align-items:center;">
-        <img src="${item.image}" style="width:50px;height:50px;">
+    box.innerHTML += `
+      <div class="cart-item">
+        <img src="${item.image}">
         <div>
           <p>${item.name}</p>
           <p>Qty: ${item.quantity}</p>
@@ -265,51 +269,42 @@ function renderCart() {
       </div>
       <hr>
     `;
-    orderReview.appendChild(div);
   });
 
-  const totalDiv = document.createElement("h4");
-  totalDiv.innerText = "Total: ৳ " + totalPrice;
-  orderReview.appendChild(totalDiv);
-
-  // Checkout Button
-  const btn = document.createElement("button");
-  btn.innerText = "Checkout";
-  btn.style.width = "100%";
-  btn.style.padding = "10px";
-  btn.style.marginTop = "10px";
-
-  btn.onclick = () => {
-    window.location.href = "checkout.html";
-  };
-
-  orderReview.appendChild(btn);
+  box.innerHTML += `
+    <div class="cart-footer">
+      <h4>Total: ৳ ${totalPrice}</h4>
+      <button onclick="checkout()" style="width:100%;padding:10px;margin-top:10px;background:green;color:white;border:none;">
+        Checkout
+      </button>
+    </div>
+  `;
 }
 
 // ================= CART ACTIONS =================
-window.increase = function (index) {
+window.increase = function (i) {
   let cart = getCart();
-  cart[index].quantity++;
+  cart[i].quantity++;
   saveCart(cart);
   updateCartCount();
 };
 
-window.decrease = function (index) {
+window.decrease = function (i) {
   let cart = getCart();
 
-  if (cart[index].quantity > 1) {
-    cart[index].quantity--;
+  if (cart[i].quantity > 1) {
+    cart[i].quantity--;
   } else {
-    cart.splice(index, 1);
+    cart.splice(i, 1);
   }
 
   saveCart(cart);
   updateCartCount();
 };
 
-window.removeItem = function (index) {
+window.removeItem = function (i) {
   let cart = getCart();
-  cart.splice(index, 1);
+  cart.splice(i, 1);
   saveCart(cart);
   updateCartCount();
 };
@@ -322,27 +317,40 @@ function toggleCart() {
   box.style.display = box.style.display === "block" ? "none" : "block";
 }
 
-// ================= LOAD PRODUCT =================
+// ================= CHECKOUT =================
+function checkout() {
+  window.location.href = "checkout.html";
+}
+
+// ================= PRODUCT LOAD =================
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("id");
 
 async function loadProduct() {
   try {
     const res = await fetch(`${BASE_URL}/products/${productId}`);
+
+    if (!res.ok) throw new Error("Not found");
+
     const item = await res.json();
 
     currentProduct = item;
+
+    document.getElementById("loadingState").style.display = "none";
+    document.getElementById("detailCard").style.display = "grid";
 
     document.getElementById("productName").textContent = item.name;
     document.getElementById("productPrice").textContent = "৳ " + item.price;
 
     document.getElementById("mainProductImg").src =
-      item.image.startsWith("http")
+      item.image?.startsWith("http")
         ? item.image
         : `${BASE_URL}/uploads/${item.image}`;
 
   } catch (err) {
     console.log(err);
+    document.getElementById("loadingState").innerHTML =
+      "<p>Product load failed</p>";
   }
 }
 
@@ -360,7 +368,7 @@ function addToCart() {
     cart.push({
       ...currentProduct,
       quantity: qty,
-      image: currentProduct.image.startsWith("http")
+      image: currentProduct.image?.startsWith("http")
         ? currentProduct.image
         : `${BASE_URL}/uploads/${currentProduct.image}`
     });
@@ -375,7 +383,6 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProduct();
   updateCartCount();
 
-  // cart icon click
   const cartDiv = document.getElementById("cartdiv");
   if (cartDiv) {
     cartDiv.addEventListener("click", toggleCart);
