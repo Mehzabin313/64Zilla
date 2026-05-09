@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", async () => {
 
   const BASE_URL = "https://six4zilla.onrender.com";
@@ -13,30 +12,45 @@ document.addEventListener("DOMContentLoaded", async () => {
   // =========================
   // LOAD PRODUCTS
   // =========================
-  async function loadTangailProducts() {
+  async function loadDistrictProducts() {
 
     try {
 
       const res = await fetch(`${BASE_URL}/products`);
       const products = await res.json();
 
-      const tangailProducts = products.filter(item =>
+      // =========================
+      // GET PAGE NAME
+      // =========================
+      const currentPage =
+        window.location.pathname
+          .split("/")
+          .pop()
+          .replace(".html", "")
+          .toLowerCase();
+
+      // =========================
+      // FILTER DISTRICT PRODUCTS
+      // =========================
+      const districtProducts = products.filter(item =>
         item.district &&
-        item.district.toLowerCase().includes("tangail")
+        item.district.toLowerCase().includes(currentPage)
       );
 
       productList.innerHTML = "";
 
-      if (tangailProducts.length === 0) {
+      if (districtProducts.length === 0) {
 
         productList.innerHTML = `
-          <p style="padding:20px;">No Tangail products found</p>
+          <p style="padding:20px;">
+            No products found
+          </p>
         `;
 
         return;
       }
 
-      tangailProducts.forEach(item => {
+      districtProducts.forEach(item => {
 
         const image = item.image
           ? (item.image.startsWith("http")
@@ -262,9 +276,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-
+  // =========================
   // UPDATE CART COUNT
-
+  // =========================
   function updateCartCount() {
 
     let totalCart = 0;
@@ -278,11 +292,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     cartCount.textContent = totalCart;
   }
 
- function renderCart() {
-
+  // =========================
+  // RENDER CART
+  // =========================
+  function renderCart() {
 
     // HEADER
-    
     orderReview.innerHTML = `
 
       <div style="
@@ -317,7 +332,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     `;
 
-  
     // CLOSE BUTTON
     document
       .getElementById("closeCartBtn")
@@ -327,7 +341,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     });
 
-   
+    // EMPTY CART
     if (cartItems.length === 0) {
 
       orderReview.innerHTML += `
@@ -423,9 +437,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     });
 
-    // =========================
     // TOTAL + CHECKOUT
-    // =========================
     const totalDiv = document.createElement("div");
 
     totalDiv.innerHTML = `
@@ -456,9 +468,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     orderReview.appendChild(totalDiv);
 
-    // =========================
-    // CHECKOUT BUTTON
-    // =========================
+    // CHECKOUT
     document
       .getElementById("checkoutBtn")
       .addEventListener("click", (e) => {
@@ -526,7 +536,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderCart();
 
   };
- 
+
   // =========================
   // TOGGLE CART
   // =========================
@@ -553,17 +563,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   // =========================
   document.addEventListener("click", (e) => {
 
-    // checkout button click ignore
     if (e.target.id === "checkoutBtn") {
       return;
     }
 
-    // cart area click ignore
     if (orderReview.contains(e.target)) {
       return;
     }
 
-    // cart button click ignore
     if (cartBtn.contains(e.target)) {
       return;
     }
@@ -579,6 +586,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   renderCart();
 
-  loadTangailProducts();
+  loadDistrictProducts();
 
 });
