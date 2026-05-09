@@ -758,6 +758,7 @@
             </div>
         </div>
     </div>
+    
 <div class="home-page" style="margin-top: 20px;">
    
  
@@ -991,5 +992,17 @@ async function placeOrder(method) {
 selectPayment("Online");
 renderCart();
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+    const loginBtn = document.getElementById("login-btn");
+
+    if (loginBtn) {
+        loginBtn.addEventListener("click", () => {
+            window.location.href = "login.html";
+        });
+    }
+});
+</script>
+<script src="js/user-profile.js"></script>
 </body>
 </html>
