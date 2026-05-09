@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,18 +7,114 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>64Zilla.com</title>
     
-    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/home.css"> 
+     <link rel="stylesheet" href="css/footer.css">
      <link rel="stylesheet" href="css/product_container.css">
         <link rel="stylesheet" href="css/discount-sale.css">
          <link rel="stylesheet" href="css/store.css">
          <link rel="stylesheet" href="css/tangail.css">
-         <link rel="stylesheet" href="css/footer.css">
+       
  
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
 
 </head>
 <body>
-   <div class="tan-page">
+   <!-- Navbar -->
+    <div class="nav">
+        <div class="logo">
+            <h4>64Zilla!</h4>
+        </div>
+
+        <div class="navmenu">
+           
+    
+    <div class="menu-toggle" id="mobile-menu">
+        <i class="fa-solid fa-bars"></i>
+    </div>
+            <ul class="navul">
+                <li class="navli"><a href="home.html">HOME</a></li>
+                <li class="navli"><a href="#main">SHOP</a></li>
+                <li class="navli"><a href="contact.html">CONTACT</a></li>
+                <li class="navli"><a href="faq.html">FAQ</a></li>
+                <li class="navli"><a href="seller-register.html">SELLER</a></li>
+                <li class="navli"><a href="profile.html">PROFILE</a></li>
+            </ul>
+
+            <div class="navbtn">
+                <button type="button" id="login-btn">LOGIN</button>
+            </div>
+        </div>
+    </div>
+<div class="home-page">
+    <!-- Second Menu -->
+    <div class="nav2">
+        <div class="menu">
+            <button id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+        </div>
+        <!--sidebar-->
+       
+<div id="sideMenu" class="side-menu">
+
+    <div class="side-header">
+        <div>
+            <h3>MENU</h3>
+            <p id="sb-name" style="margin:0;font-size:14px;color:gray;"></p>
+        </div>
+        <span onclick="closeMenu()">×</span>
+    </div>
+
+    <hr>
+
+    <a href="home.html">Home</a>
+    <a href="profile.html">Profile</a>
+    <a href="orders.html">Orders</a>
+    <a href="cart.html">Cart</a>
+    <a href="contact.html">Contact</a>
+    <a href="faq.html">FAQ</a>
+
+    <hr>
+
+    <a href="#" onclick="logout()">🚪 Logout</a>
+
+</div>
+
+<div id="menuOverlay" class="menu-overlay" onclick="closeMenu()"></div>
+        <!--search-->
+        <div class="search">
+            <input type="text" id="search" placeholder="Search">
+            <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+
+       <!--<div class="cart" id="cartdiv">
+    <button type="button" id="cart" >
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span id="cart-count">0</span>
+    </button>
+</div>--> 
+<div class="cart" id="cartdiv" style="position:relative;">
+    <button type="button" id="cart">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span id="cart-count">0</span>
+    </button>
+</div>
+
+<!-- Cart dropdown -->
+<div id="order-review" style="display:none; position:fixed;
+ top:50px; right:0; width:300px; max-height:400px; 
+ overflow-y:auto; background:white; border:1px solid #ccc;
+  padding:10px; z-index:1000;">
+  <!-- Cart items dynamically add hobe ekhane -->
+</div>
+
+    </div>
+<div class="tan-page">
+       <div class="tan-section">
+   <div class="tan-img">
+    <img src  ="images/dhakalogo.webp" alt="Tangail atiya-jame-mosjid" class="img-section"> 
+   </div> 
+      <p>Dhaka</p>   
+ </div>
+  <div class="tan-page">
        <div class="tan-section">
    <div class="tan-img">
     <img src="images/bogura12.jpg" alt="The ancient archaeological site of Gokul Medh in Bogra, Bangladesh" class="img-section"> 
@@ -44,71 +142,22 @@
  <h2> just for you</h2>
 
 
-<div id="productList"></div>
+<div id="productList" style="display: flex;flex-direction: row;justify-content: center;width: 100%;"></div>
 
-<div id="container2" class="row"></div>
-<div id="store-section" class="store">
-  <div class="store-menu">
-      <h2>Featured store</h2>
-      <h2>View all store</h2>
-  </div>
-    <div id="store" class="row2"></div>
-</div>
 
-<div id="store-grid"></div>
+
    </div>
-   <!--footer
- <footer class="site-footer">
-        <div class="footer-top">
-            <div class="footer-column brand-info">
-                
-                <h2>Hatbondhu</h2>
-                <p>Premium Fruits (PF) is an Agritech fruit chain initiative by BD Assistant Ltd. Started from North Bengal. We supply premium quality fruits directly from our contracted and registered fruit farmers.</p>
-                <p>e-TIN **61486639816**</p>
-                <p>Trade License No **2303JR/2400040011**</p>
-                <p class="join-community">JOIN OUR COMMUNITY</p>
-            </div>
-
-            <div class="contact-us">
-                <h2>Contact Us</h2>
-                <div class="contact-details">
-                    <p>Head Office</p>
-                    <p>House #108, Road #01, Station Road (Near Rangpur Shapla Chattar), Guptapara, Alamnagar, Kotowali Thana, Rangpur-5400, Bangladesh.</p>
-                    <p>Dhaka Warehouse: Millennium City, Ghatarchar, Keraniganj, Dhaka-1312, Bangladesh</p>
-                    <p>+88 09677**67,</p>
-                    <p>Hatbondhu@gmail.com</p>
-                </div>
-            </div>
-
-            <div class="useful-link">
-                <h2 style="color:#A5F927">Useful Link</h2>
-                <ul>
-                    <li><a href="#">FAQs</a></li>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                    <li><a href="#">Terms & Condition</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Refund Policy</a></li>
-                </ul>
-            </div>
-        </div>
-        
-        <hr class="separator-line">
-
-        <div class="footer-bottom">
-           <img src="images/gerwbakpsj298.png">
-        </div>
-    </footer>-->
-<footer class="site-footer "style="margin-top:1400px">
+  
+<footer class="site-footer " >
     <div class="footer-top">
         <div class="footer-column brand-info">
-            <h2>Hatbondhu</h2>
+            <h2>64Zilla</h2>
             <p>Premium Fruits (PF) is an Agritech fruit chain initiative by BD Assistant Ltd...</p>
 
             <p>e-TIN **61486639816**</p>
             <p>Trade License No **2303JR/2400040011**</p>
 
-            <p class="join-community">JOIN OUR COMMUNITY</p>
+            <p class="join-community"><a href="register_user.html">JOIN OUR COMMUNITY</a></p>
         </div>
 
         <div class="contact-us">
@@ -116,15 +165,15 @@
             <p>Head Office: House #108, Road #01, Rangpur-5400</p>
             <p>Dhaka Warehouse: Millennium City, Keraniganj</p>
             <p>+88 09677**67</p>
-            <p>Hatbondhu@gmail.com</p>
+            <p>64zilla@gmail.com</p>
         </div>
 
         <div class="useful-link">
             <h2 style="color:#A5F927">Useful Link</h2>
             <ul>
-                <li><a href="#">FAQs</a></li>
+                <li><a href="faq.html">FAQs</a></li>
                 <li><a href="#">About Us</a></li>
-                <li><a href="#">Contact Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
                 <li><a href="#">Terms & Condition</a></li>
                 <li><a href="#">Privacy Policy</a></li>
                 <li><a href="#">Refund Policy</a></li>
@@ -141,15 +190,19 @@
 
 
 <script src="js/district.js"></script>
+<script src="js/district-cart.js"></script>
+<script src="js/user-profile.js"></script>
+<script src="js/product.js"></script>
+<script src="js/discount-sale.js"></script>
+<script src="js/store.js"></script>
+<script src="js/container2.js"></script>
+<script src="js/add-product.js"></script>
+<script src="js/container.js"></script>
 
-
-
-
+<script src="js/search.js"></script>
     <script src="js/login.js"></script>
- <script src="js/index.js"></script>
- <script src="js/product.js" ></script>
-  <script src="js/discount-sale.js" ></script>
-  <script src="js/store.js"></script>
+ 
+  <script src="js/product-detail.js"></script>
   
 </body>
 </html>
