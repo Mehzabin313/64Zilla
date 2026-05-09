@@ -335,7 +335,8 @@ const allowed = [
   "narsingdi",
   "barisal",
   "jamalpur",
-  "khulna"
+  "khulna",
+  "chittagong"
 ];
 
 if (!district || !allowed.includes(district.toLowerCase())) {
