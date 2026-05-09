@@ -1251,61 +1251,82 @@ transition:1s;
 /* --- Desktop Styles (Default) --- */
 
 
-
+/* ================= MOBILE NAVBAR ================= */
 .menu-toggle {
-    display: none; /* পিসিতে আইকন থাকবে না */
+    display: none;
     cursor: pointer;
-    font-size: 10px;
+    font-size: 22px;
     color: white;
 }
 
-/* --- Mobile Media Query (max-width: 768px) --- */
 @media (max-width: 768px) {
+
+    body{
+        padding: 0;
+        overflow-x: hidden;
+    }
+
+    .home-page{
+        padding: 0 10px;
+    }
+
     .menu-toggle {
-        display: block; /* মোবাইলে আইকন দেখাবে */
-        padding-left: 20px;
+        display: block;
+        padding-left: 15px;
     }
 
-    .navul {
-        display: none; /* শুরুতে মেনু হাইড থাকবে */
-       
-        position: absolute;
-        top: 150px; /* Navbar এর হাইট অনুযায়ী */
-       left: 0;
-        min-height: 100px;
-        width: 100%;
-        
-        background:#02532B;
-        padding: 20px 0;
-        text-align: center;
-        box-shadow: 0 10px 15px rgba(0,0,0,0.05);
-        z-index: 1999;
-    }
-
-    /* যখন মেনু ওপেন হবে */
-    .navul.active {
-        display: flex;
-    }
-
-    .navli {
-        padding: 10px 0;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-    }
     .nav{
-      display: flex;
-      align-items: center;
-      justify-content: center;
+        height: 60px;
+        justify-content: space-between;
+        padding: 0 15px;
+        gap: 0;
     }
 
-    /* লগইন বাটন মোবাইলে হাইড রাখা বা মেনুর ভেতর নিতে পারেন */
-    .navbtn {
-        display: none; /* মোবাইলে মেইন বাটন হাইড করে দিলাম */
+    .logo{
+        width: auto;
+        padding-right: 0;
+        font-size: 18px;
     }
 
-    /* যদি লগইন বাটন মেনুর নিচে দেখাতে চান */
-    .navul.active::after {
-        content: ""; /* এখানে আপনি লগইন বাটনের স্টাইল কপি করতে পারেন */
+    .navmenu{
+        padding-right: 0;
+    }
+
+    .navul{
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+
+        position: absolute;
+        top: 60px;
+        left: 0;
+
+        width: 100%;
+        background: #02532B;
+
+        padding: 20px 0;
+        margin: 0;
+
+        z-index: 9999;
+    }
+
+    .navul.active{
+        display: flex;
+    }
+
+    .navli{
+        width: 100%;
+        text-align: center;
+        padding: 12px 0;
+    }
+
+    .navli a{
+        font-size: 15px;
+        color: white;
+    }
+
+    .navbtn{
+        display: none;
     }
 }
