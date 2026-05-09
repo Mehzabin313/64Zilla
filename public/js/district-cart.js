@@ -26,7 +26,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     .replace(".html", "")
     .toLowerCase();
 
-
+function normalize(text) {
+  return text
+    .toLowerCase()
+    .replace(/\s+/g, "")  
+    .replace(/-/g, "");    
+}
 
 const districtProducts = products.filter(item =>
   item.district &&
