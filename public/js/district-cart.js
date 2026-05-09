@@ -19,23 +19,21 @@ document.addEventListener("DOMContentLoaded", async () => {
       const res = await fetch(`${BASE_URL}/products`);
       const products = await res.json();
 
-      // =========================
-      // GET PAGE NAME
-      // =========================
-      const currentPage =
-        window.location.pathname
-          .split("/")
-          .pop()
-          .replace(".html", "")
-          .toLowerCase();
+    const currentPage =
+  window.location.pathname
+    .split("/")
+    .pop()
+    .replace(".html", "")
+    .toLowerCase();
 
-      // =========================
-      // FILTER DISTRICT PRODUCTS
-      // =========================
-      const districtProducts = products.filter(item =>
-        item.district &&
-        item.district.toLowerCase().includes(currentPage)
-      );
+const normalize = (text) =>
+  text.toLowerCase()
+    .replace(/\s/g, "");
+
+const districtProducts = products.filter(item =>
+  item.district &&
+  normalize(item.district).includes(normalize(currentPage))
+);
 
       productList.innerHTML = "";
 
