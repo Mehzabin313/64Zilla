@@ -1,4 +1,6 @@
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +20,95 @@
 
 </head>
 <body>
-   <div class="tan-page">
+   <!-- Navbar -->
+    <div class="nav">
+        <div class="logo">
+            <h4>64Zilla!</h4>
+        </div>
+
+        <div class="navmenu">
+           
+    
+    <div class="menu-toggle" id="mobile-menu">
+        <i class="fa-solid fa-bars"></i>
+    </div>
+            <ul class="navul">
+                <li class="navli"><a href="home.html">HOME</a></li>
+                <li class="navli"><a href="#main">SHOP</a></li>
+                <li class="navli"><a href="contact.html">CONTACT</a></li>
+                <li class="navli"><a href="faq.html">FAQ</a></li>
+                <li class="navli"><a href="seller-register.html">SELLER</a></li>
+                <li class="navli"><a href="profile.html">PROFILE</a></li>
+            </ul>
+
+            <div class="navbtn">
+                <button type="button" id="login-btn">LOGIN</button>
+            </div>
+        </div>
+    </div>
+<div class="home-page">
+    <!-- Second Menu -->
+    <div class="nav2">
+        <div class="menu">
+            <button id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+        </div>
+        <!--sidebar-->
+       
+<div id="sideMenu" class="side-menu">
+
+    <div class="side-header">
+        <div>
+            <h3>MENU</h3>
+            <p id="sb-name" style="margin:0;font-size:14px;color:gray;"></p>
+        </div>
+        <span onclick="closeMenu()">×</span>
+    </div>
+
+    <hr>
+
+    <a href="home.html">Home</a>
+    <a href="profile.html">Profile</a>
+    <a href="orders.html">Orders</a>
+    <a href="cart.html">Cart</a>
+    <a href="contact.html">Contact</a>
+    <a href="faq.html">FAQ</a>
+
+    <hr>
+
+    <a href="#" onclick="logout()">🚪 Logout</a>
+
+</div>
+
+<div id="menuOverlay" class="menu-overlay" onclick="closeMenu()"></div>
+        <!--search-->
+        <div class="search">
+            <input type="text" id="search" placeholder="Search">
+            <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+
+       <!--<div class="cart" id="cartdiv">
+    <button type="button" id="cart" >
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span id="cart-count">0</span>
+    </button>
+</div>--> 
+<div class="cart" id="cartdiv" style="position:relative;">
+    <button type="button" id="cart">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span id="cart-count">0</span>
+    </button>
+</div>
+
+<!-- Cart dropdown -->
+<div id="order-review" style="display:none; position:fixed;
+ top:50px; right:0; width:300px; max-height:400px; 
+ overflow-y:auto; background:white; border:1px solid #ccc;
+  padding:10px; z-index:1000;">
+  <!-- Cart items dynamically add hobe ekhane -->
+</div>
+
+    </div>
+ <div class="tan-page">
        <div class="tan-section">
    <div class="tan-img">
     <img src="images/beautiful-greenish-view-beach-sky-guliakhali-beach-muradpur-sitakunda-chittagong-bangladesh-rainy-season-most-popular-tourist-spot-bangladesh_94678-1778.avif" alt="Beauty of Shitakundo Chittagong" class="img-section"> 
@@ -44,13 +134,13 @@
  </div>
  <h2> Just for you</h2>
 
-
 <div id="productList" style="display: flex;flex-direction: row;justify-content: center;width: 100%;"></div>
 
-<div id="container2" class="row"></div>
 
-   
-<footer class="site-footer "style="margin-top:20px">
+
+   </div>
+  
+<footer class="site-footer " >
     <div class="footer-top">
         <div class="footer-column brand-info">
             <h2>64Zilla</h2>
@@ -92,15 +182,18 @@
 
 
 <script src="js/district.js"></script>
+<script src="js/district-cart.js"></script>
+<script src="js/user-profile.js"></script>
+<script src="js/product.js"></script>
+<script src="js/discount-sale.js"></script>
+<script src="js/store.js"></script>
+<script src="js/container2.js"></script>
+<script src="js/add-product.js"></script>
+<script src="js/container.js"></script>
 
-
-
-
+<script src="js/search.js"></script>
     <script src="js/login.js"></script>
- <script src="js/index.js"></script>
- <script src="js/product.js" ></script>
-  <script src="js/discount-sale.js" ></script>
-  <script src="js/store.js"></script>
+ 
   <script src="js/product-detail.js"></script>
   
 </body>
