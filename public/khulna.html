@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>64Zilla.com</title>
+    
+    <link rel="stylesheet" href="css/home.css"> 
+     <link rel="stylesheet" href="css/footer.css">
+     <link rel="stylesheet" href="css/product_container.css">
+        <link rel="stylesheet" href="css/discount-sale.css">
+         <link rel="stylesheet" href="css/store.css">
+         <link rel="stylesheet" href="css/tangail.css">
+       
+ 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+
+</head>
+<body>
+   <!-- Navbar -->
+    <div class="nav">
+        <div class="logo">
+            <h4>64Zilla!</h4>
+        </div>
+
+        <div class="navmenu">
+           
+    
+    <div class="menu-toggle" id="mobile-menu">
+        <i class="fa-solid fa-bars"></i>
+    </div>
+            <ul class="navul">
+                <li class="navli"><a href="home.html">HOME</a></li>
+                <li class="navli"><a href="#main">SHOP</a></li>
+                <li class="navli"><a href="contact.html">CONTACT</a></li>
+                <li class="navli"><a href="faq.html">FAQ</a></li>
+                <li class="navli"><a href="seller-register.html">SELLER</a></li>
+                <li class="navli"><a href="profile.html">PROFILE</a></li>
+            </ul>
+
+            <div class="navbtn">
+                <button type="button" id="login-btn">LOGIN</button>
+            </div>
+        </div>
+    </div>
+<div class="home-page">
+    <!-- Second Menu -->
+    <div class="nav2">
+        <div class="menu">
+            <button id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+        </div>
+        <!--sidebar-->
+       
+<div id="sideMenu" class="side-menu">
+
+    <div class="side-header">
+        <div>
+            <h3>MENU</h3>
+            <p id="sb-name" style="margin:0;font-size:14px;color:gray;"></p>
+        </div>
+        <span onclick="closeMenu()">×</span>
+    </div>
+
+    <hr>
+
+    <a href="home.html">Home</a>
+    <a href="profile.html">Profile</a>
+    <a href="orders.html">Orders</a>
+    <a href="cart.html">Cart</a>
+    <a href="contact.html">Contact</a>
+    <a href="faq.html">FAQ</a>
+
+    <hr>
+
+    <a href="#" onclick="logout()">🚪 Logout</a>
+
+</div>
+
+<div id="menuOverlay" class="menu-overlay" onclick="closeMenu()"></div>
+        <!--search-->
+        <div class="search">
+            <input type="text" id="search" placeholder="Search">
+            <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+
+       <!--<div class="cart" id="cartdiv">
+    <button type="button" id="cart" >
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span id="cart-count">0</span>
+    </button>
+</div>--> 
+<div class="cart" id="cartdiv" style="position:relative;">
+    <button type="button" id="cart">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span id="cart-count">0</span>
+    </button>
+</div>
+
+<!-- Cart dropdown -->
+<div id="order-review" style="display:none; position:fixed;
+ top:50px; right:0; width:300px; max-height:400px; 
+ overflow-y:auto; background:white; border:1px solid #ccc;
+  padding:10px; z-index:1000;">
+  <!-- Cart items dynamically add hobe ekhane -->
+</div>
+
+    </div>
+   <div class="tan-page">
+       <div class="tan-section">
+   <div class="tan-img">
+    <img src="images\khullan1.jpg" alt="Khulna Sundorban" class="img-section"> 
+   </div> 
+      <p>Khulna</p>   
+ </div>
+ <div class="tan-des">
+   <h2 style="text-align:center; margin-bottom:10px;color: #02532B;">
+      Khulna — The Gateway to the Sundarbans and the Industrial Hub</h2>
+   <p style="text-align: justify; line-height: 1.8; font-size: 14px;">
+     Khulna is a major divisional city located in the southwestern part of Bangladesh, sitting along the banks of the Rupsha and Bhairab rivers. It is most famous for being the primary gateway to the Sundarbans, the largest mangrove forest in the world and the home of the majestic Royal Bengal Tiger. The city serves as a vital link between the untamed wilderness of the south and the country's booming industrial sector.
+
+Historically known as a center for the jute and shrimp industries, Khulna offers a unique mix of urban energy and natural serenity. From the architectural marvel of the Sixty Dome Mosque in nearby Bagerhat to the tranquil river views at the Rupsha Bridge, the region is rich in heritage and biodiversity. Khulna’s quiet, laid-back atmosphere compared to other major cities makes it a peaceful yet essential destination for those looking to explore the ecological wonders of the delta.</p>
+ </div>
+ <div class="tan-place">
+   <h3 style=" margin-bottom:10px;color: #02532B;">Place of Visit</h3>
+   <div class="tan-placeimg">
+      <img class="img-tan" src="images/khullan.jpg">
+      <img class="img-tan"src="images/khu2.jpg">
+      <img class="img-tan" src="images/khul3.jpg">
+       <img class="img-tan" src="images/khul4.jpg">
+     
+   </div>
+ </div>
+ <h2> just for you</h2>
+
+
+<div id="productList" style="display: flex;flex-direction: row;justify-content: center;width: 100%;"></div>
+
+
+   </div>
+  
+<footer class="site-footer " >
+    <div class="footer-top">
+        <div class="footer-column brand-info">
+            <h2>64Zilla</h2>
+            <p>Premium Fruits (PF) is an Agritech fruit chain initiative by BD Assistant Ltd...</p>
+
+            <p>e-TIN **61486639816**</p>
+            <p>Trade License No **2303JR/2400040011**</p>
+
+            <p class="join-community"><a href="register_user.html">JOIN OUR COMMUNITY</a></p>
+        </div>
+
+        <div class="contact-us">
+            <h2>Contact Us</h2>
+            <p>Head Office: House #108, Road #01, Rangpur-5400</p>
+            <p>Dhaka Warehouse: Millennium City, Keraniganj</p>
+            <p>+88 09677**67</p>
+            <p>64zilla@gmail.com</p>
+        </div>
+
+        <div class="useful-link">
+            <h2 style="color:#A5F927">Useful Link</h2>
+            <ul>
+                <li><a href="faq.html">FAQs</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="#">Terms & Condition</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Refund Policy</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <hr class="separator-line">
+
+    <div class="footer-bottom">
+        <img src="images/gerwbakpsj298.png">
+    </div>
+</footer>
+
+
+<script src="js/district.js"></script>
+<script src="js/district-cart.js"></script>
+<script src="js/user-profile.js"></script>
+<script src="js/product.js"></script>
+<script src="js/discount-sale.js"></script>
+<script src="js/store.js"></script>
+<script src="js/container2.js"></script>
+<script src="js/add-product.js"></script>
+<script src="js/container.js"></script>
+
+<script src="js/search.js"></script>
+    <script src="js/login.js"></script>
+ 
+  <script src="js/product-detail.js"></script>
+  
+</body>
+</html>
