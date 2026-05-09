@@ -84,14 +84,17 @@
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
+
   const menu = document.querySelector(".menu-icon");
   const sidebar = document.querySelector(".sidebar");
 
-  menu.addEventListener("click", () => {
-    sidebar.classList.toggle("active");
-  });
-});
+  if (menu && sidebar) {
+    menu.addEventListener("click", () => {
+      sidebar.classList.toggle("active");
+    });
+  }
 
+});
 </script>
 
 </body>
