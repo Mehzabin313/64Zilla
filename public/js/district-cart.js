@@ -377,7 +377,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     });
 
+    // =========================
     // TOTAL + CHECKOUT
+    // =========================
     const totalDiv = document.createElement("div");
 
     totalDiv.innerHTML = `
@@ -408,9 +410,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     orderReview.appendChild(totalDiv);
 
+    // =========================
+    // CHECKOUT BUTTON
+    // =========================
     document
       .getElementById("checkoutBtn")
-      .addEventListener("click", () => {
+      .addEventListener("click", (e) => {
+
+        e.stopPropagation();
 
         window.location.href = "checkout.html";
 
@@ -500,14 +507,22 @@ document.addEventListener("DOMContentLoaded", async () => {
   // =========================
   document.addEventListener("click", (e) => {
 
-    if (
-      !orderReview.contains(e.target) &&
-      !cartBtn.contains(e.target)
-    ) {
-
-      orderReview.style.display = "none";
-
+    // checkout button click ignore
+    if (e.target.id === "checkoutBtn") {
+      return;
     }
+
+    // cart area click ignore
+    if (orderReview.contains(e.target)) {
+      return;
+    }
+
+    // cart button click ignore
+    if (cartBtn.contains(e.target)) {
+      return;
+    }
+
+    orderReview.style.display = "none";
 
   });
 
