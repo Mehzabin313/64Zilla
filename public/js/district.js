@@ -338,6 +338,8 @@ const allowed = [
   "khulna",
   "chittagong",
   "cumilla",
+  
+  "sylhet"
 ];
 
 if (!district || !allowed.includes(district.toLowerCase())) {
