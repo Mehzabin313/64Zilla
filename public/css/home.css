@@ -1252,81 +1252,50 @@ transition:1s;
 
 
 /* ================= MOBILE NAVBAR ================= */
-.menu-toggle {
-    display: none;
-    cursor: pointer;
-    font-size: 22px;
-    color: white;
+/* ================= MOBILE NAVBAR ================= */
+
+.menu-toggle{
+    display:none;
 }
 
-@media (max-width: 768px) {
+@media screen and (width < 768px){
 
-    body{
-        padding: 0;
-        overflow-x: hidden;
-    }
-
-    .home-page{
-        padding: 0 10px;
-    }
-
-    .menu-toggle {
-        display: block;
-        padding-left: 15px;
-    }
-
-    .nav{
-        height: 60px;
-        justify-content: space-between;
-        padding: 0 15px;
-        gap: 0;
-    }
-
-    .logo{
-        width: auto;
-        padding-right: 0;
-        font-size: 18px;
-    }
-
-    .navmenu{
-        padding-right: 0;
+    .menu-toggle{
+        display:block;
+        font-size:22px;
+        cursor:pointer;
+        color:white;
     }
 
     .navul{
-        display: none;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
+        display:none !important;
 
-        position: absolute;
-        top: 60px;
-        left: 0;
+        flex-direction:column;
+        position:absolute;
 
-        width: 100%;
-        background: #02532B;
+        top:60px;
+        left:0;
 
-        padding: 20px 0;
-        margin: 0;
+        width:100%;
+        background:#02532B;
 
-        z-index: 9999;
+        padding:20px 0;
+        margin:0;
+
+        z-index:9999;
     }
 
     .navul.active{
-        display: flex;
+        display:flex !important;
     }
 
     .navli{
-        width: 100%;
-        text-align: center;
-        padding: 12px 0;
-    }
-
-    .navli a{
-        font-size: 15px;
-        color: white;
+        width:100%;
+        text-align:center;
+        padding:12px 0;
     }
 
     .navbtn{
-        display: none;
+        display:none;
     }
 }
