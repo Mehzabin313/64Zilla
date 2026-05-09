@@ -262,9 +262,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // =========================
+
   // UPDATE CART COUNT
-  // =========================
+
   function updateCartCount() {
 
     let totalCart = 0;
@@ -278,45 +278,66 @@ document.addEventListener("DOMContentLoaded", async () => {
     cartCount.textContent = totalCart;
   }
 
-  // =========================
-  // RENDER CART
-  // =========================
-  function renderCart() {
+ function renderCart() {
 
-    orderReview.innerHTML = "";
 
+    // HEADER
+    
+    orderReview.innerHTML = `
+
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:10px;
+        border-bottom:1px solid #ddd;
+        padding-bottom:10px;
+      ">
+
+        <h3 style="
+          margin:0;
+          color:#02532B;
+        ">
+          My Cart
+        </h3>
+
+        <button id="closeCartBtn"
+          style="
+            border:none;
+            background:none;
+            font-size:24px;
+            cursor:pointer;
+            color:#02532B;
+          "
+        >
+          ×
+        </button>
+
+      </div>
+
+    `;
+
+  
+    // CLOSE BUTTON
+    document
+      .getElementById("closeCartBtn")
+      .addEventListener("click", () => {
+
+        orderReview.style.display = "none";
+
+    });
+
+   
     if (cartItems.length === 0) {
 
-      orderReview.innerHTML = `
-        <p style="text-align:center;">
+      orderReview.innerHTML += `
+        <p style="
+          text-align:center;
+          padding:20px 0;
+        ">
           Cart is empty
         </p>
-        <h3 style="
-      margin:0;
-      color:#02532B;
-    ">
-      My Cart
-    </h3>
-          <button id="closeCartBtn"
-      style="
-        border:none;
-        background:none;
-        font-size:22px;
-        cursor:pointer;
-        color:#02532B;
-      "
-    >
-      ×
-    </button>
       `;
-       document
-  .getElementById("closeCartBtn")
-  .addEventListener("click", () => {
-
-    orderReview.style.display = "none";
-
-});
-
 
       return;
     }
