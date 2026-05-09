@@ -40,7 +40,18 @@
     </div>
 <!-- MUST SAME ID -->
 <div id="result-container"></div>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+    const loginBtn = document.getElementById("login-btn");
 
+    if (loginBtn) {
+        loginBtn.addEventListener("click", () => {
+            window.location.href = "login.html";
+        });
+    }
+});
+</script>
+<script src="js/user-profile.js"></script>
 <script src="js/search-result.js"></script>
 <script src="js/utils.js"></script>
 
