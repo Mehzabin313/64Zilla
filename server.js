@@ -154,7 +154,6 @@ app.post('/register', async (req, res) => {
     }
 });
 
-
 app.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -376,7 +375,42 @@ app.get("/seller/orders/:sellerId", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+app.get("/seller/:id", async (req,res)=>{
+    const seller = await Seller.findById(req.params.id);
+    res.json(seller);
+});
+app.get("/users", async (req, res) => {
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+app.get("/sellers", async (req, res) => {
+    try {
+        const sellers = await Seller.find();
+        res.json(sellers);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+app.put("/seller/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
 
+        await Seller.findByIdAndUpdate(id, {
+            username: req.body.username,
+            storeName: req.body.storeName,
+            district: req.body.district
+        });
+
+        res.json({ success: true });
+
+    } catch (err) {
+        res.status(500).json({ success: false });
+    }
+});
 
 // ================= START SERVER =================
 app.listen(port, () => {
