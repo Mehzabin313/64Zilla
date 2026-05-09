@@ -291,7 +291,32 @@ document.addEventListener("DOMContentLoaded", async () => {
         <p style="text-align:center;">
           Cart is empty
         </p>
+        <h3 style="
+      margin:0;
+      color:#02532B;
+    ">
+      My Cart
+    </h3>
+          <button id="closeCartBtn"
+      style="
+        border:none;
+        background:none;
+        font-size:22px;
+        cursor:pointer;
+        color:#02532B;
+      "
+    >
+      ×
+    </button>
       `;
+       document
+  .getElementById("closeCartBtn")
+  .addEventListener("click", () => {
+
+    orderReview.style.display = "none";
+
+});
+
 
       return;
     }
@@ -480,7 +505,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderCart();
 
   };
-
+ 
   // =========================
   // TOGGLE CART
   // =========================
