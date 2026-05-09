@@ -412,7 +412,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       .getElementById("checkoutBtn")
       .addEventListener("click", () => {
 
-        window.location.href = "cart.html";
+        window.location.href = "checkout.html";
 
     });
 
