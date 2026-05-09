@@ -738,6 +738,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+    const loginBtn = document.getElementById("login-btn");
+
+    if (loginBtn) {
+        loginBtn.addEventListener("click", () => {
+            window.location.href = "login.html";
+        });
+    }
+});
+</script>
+<script src="js/user-profile.js"></script>
 <script src="js/product-detail.js"></script>
 <script src="js/product.js"></script>
 <script src="js/discount-sale.js"></script>
